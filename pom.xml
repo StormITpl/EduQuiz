@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.stormit</groupId>
-    <artifactId>EduQuiz</artifactId>
+    <artifactId>eduquiz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>EduQuiz</name>
     <description>EduQuiz</description>
