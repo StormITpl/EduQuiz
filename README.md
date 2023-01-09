@@ -13,8 +13,8 @@ The project aims to broaden the knowledge and skills acquired at Tomasz Wolińsk
 
 ## Technologies Used
 ### Development
-- [Java 18](https://openjdk.org/projects/jdk/18/)
-- [Spring Boot 2](https://spring.io/projects/spring-boot)
+- [Java 19](https://openjdk.org/projects/jdk/19/)
+- [Spring Boot 3.0.1](https://spring.io/projects/spring-boot)
 - [Spring Data](https://spring.io/projects/spring-data)
 - [Maven 3.x](https://maven.apache.org/)
 - [Git](https://git-scm.com/)
@@ -27,9 +27,13 @@ The project aims to broaden the knowledge and skills acquired at Tomasz Wolińsk
 ## Prerequisites
 The following tools are required to start the application:
 
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/),
-- [Java 18](https://openjdk.org/projects/jdk/18/)
-- [Maven 3.x](https://maven.apache.org/download.cgi),
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+- [Java 19](https://openjdk.org/projects/jdk/19/)
+- [Maven 3.x](https://maven.apache.org/download.cgi)
+- [Lombok](https://projectlombok.org/)
+- [H2](https://www.h2database.com/html/main.html)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
 
 ## Authors
 Created by StormIT community:
@@ -40,3 +44,4 @@ Created by StormIT community:
 - [BartoszKarp](https://github.com/BartoszKarp)
 - [smario-7](https://github.com/smario-7)
 - [tyrontundrom](https://github.com/tyrontundrom)
+- [Margeb](https://github.com/Margeb)
