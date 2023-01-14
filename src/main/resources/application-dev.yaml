@@ -1,23 +1,23 @@
 spring:
   jpa:
-    hibernate.ddl-auto: validate
+    hibernate.ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect:
         format_sql: false
     show-sql: true
     defer-datasource-initialization: false
 
   datasource:
-    url: jdbc:h2:file:./eduquiz-db
+    url:
 
   liquibase:
-    change-log: db/changelog-dev.yml
+    change-log: db/changelog-dev.yaml
 
   h2:
     console:
       enabled: true
-      path: /eduquiz-h2
+      path:
 
 server:
-  port: 8080
+  port: 8081

@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate.ddl-auto: validate
+    properties:
+      hibernate:
+        dialect:
+        format_sql: false
+    show-sql: true
+
+  datasource:
+    url:
+    username:
+    password:
+
+  liquibase:
+    change-log: db/changelog-prod.yaml

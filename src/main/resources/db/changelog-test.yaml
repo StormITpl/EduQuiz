@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/version/test/001-create-test-table.sql
+  - include:
+      file: db/version/test/001-insert-into-test-table.sql
