@@ -1,5 +1,3 @@
 databaseChangeLog:
   - include:
-      file: db/version/prod/001-create-prod-table.sql
-  - include:
-      file: db/version/prod/001-insert-into-prod-table.sql
+      file: db/version/prod.sql

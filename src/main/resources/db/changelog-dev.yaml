@@ -1,5 +1,3 @@
 databaseChangeLog:
   - include:
-      file: db/version/dev/001-create-dev-table.sql
-  - include:
-      file: db/version/dev/001-insert-into-dev-table.sql
+      file: db/version/dev.sql

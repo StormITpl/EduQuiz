@@ -3,14 +3,14 @@ spring:
     hibernate.ddl-auto: validate
     properties:
       hibernate:
-        dialect:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
         format_sql: false
     show-sql: true
 
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/eduquiz
+    username: postgres
+    password: password
 
   liquibase:
     change-log: db/changelog-prod.yaml

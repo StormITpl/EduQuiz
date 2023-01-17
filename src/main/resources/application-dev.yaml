@@ -3,13 +3,13 @@ spring:
     hibernate.ddl-auto: create
     properties:
       hibernate:
-        dialect:
+        dialect: org.hibernate.dialect.H2Dialect
         format_sql: false
     show-sql: true
     defer-datasource-initialization: false
 
   datasource:
-    url:
+    url: jdbc:h2:file:./eduquiz
 
   liquibase:
     change-log: db/changelog-dev.yaml
@@ -17,7 +17,7 @@ spring:
   h2:
     console:
       enabled: true
-      path:
+      path: /eduquiz
 
 server:
-  port: 8081
+  port: 8080

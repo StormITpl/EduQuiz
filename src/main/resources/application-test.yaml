@@ -1,6 +1,6 @@
 spring:
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -20,4 +20,4 @@ spring:
       path: /eduquiz
 
 server:
-  port: 8080
+  port: 8081
