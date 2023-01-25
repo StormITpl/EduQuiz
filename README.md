@@ -7,6 +7,7 @@ EduQuiz - an application for creating and solving educational quizzes individual
 * [General Information](#general-information)
 * [Technologies Used](#technologies-used)
 * [Prerequisites](#prerequisites)
+* [Setup](#setup)
 * [Authors](#authors)
 
 ## General Information
@@ -40,6 +41,21 @@ The following tools are required to start the application:
 - [H2](https://www.h2database.com/html/main.html)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
+
+
+## Setup
+
+Before run application you should configurate your database and db server in few step:
+
+- Create database connection with Docker pasting in command line:
+
+docker run --name eduquizdev -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres
+
+- Connect with server:
+
+Login: postgres
+
+Password: password
 
 ## Authors
 
