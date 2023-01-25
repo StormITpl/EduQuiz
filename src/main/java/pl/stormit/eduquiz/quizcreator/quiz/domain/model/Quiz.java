@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.category.domain.model.Category;
+import pl.stormit.eduquiz.quizcreator.user.domain.model.User;
 
 import java.util.UUID;
 
@@ -20,6 +21,9 @@ public class Quiz {
     private String name;
     @ManyToOne
     private Category category;
+
+    @ManyToOne
+    private User user;
 
     public Quiz() {
         this.id = UUID.randomUUID();

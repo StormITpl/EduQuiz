@@ -26,4 +26,13 @@ public class Answer {
         this.id = UUID.randomUUID();
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", question=" + question +
+                '}';
+    }
 }

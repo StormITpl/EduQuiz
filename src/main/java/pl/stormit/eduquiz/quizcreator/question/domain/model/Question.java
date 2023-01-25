@@ -6,6 +6,7 @@ import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.category.domain.model.Category;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 
