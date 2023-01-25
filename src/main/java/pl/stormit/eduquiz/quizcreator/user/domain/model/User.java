@@ -2,11 +2,14 @@ package pl.stormit.eduquiz.quizcreator.user.domain.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +23,9 @@ public class User {
     private UUID id;
 
     private String nickname;
+
+    @OneToMany(mappedBy = "user")
+    List<Quiz> quizzes;
 
     public User() {
         this.id = UUID.randomUUID();
