@@ -15,6 +15,8 @@ public class Answer {
     @Id
     private UUID id;
     private String name;
+
+    boolean isCorrect;
     @ManyToOne
     private Question question;
 
@@ -26,13 +28,5 @@ public class Answer {
         this.id = UUID.randomUUID();
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", question=" + question +
-                '}';
-    }
 }
+
