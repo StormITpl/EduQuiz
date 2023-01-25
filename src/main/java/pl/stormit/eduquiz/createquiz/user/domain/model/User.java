@@ -21,15 +21,12 @@ public class User {
 
     private String nickname;
 
-    private String createQuiz;
-
     public User() {
         this.id = UUID.randomUUID();
     }
 
-    public User(String nickname, String createQuiz) {
+    public User(String nickname) {
         this();
         this.nickname = nickname;
-        this.createQuiz = createQuiz;
     }
 }

@@ -27,24 +27,22 @@ public class UserService {
     }
 
     @Transactional
-    public User createQuiz(User userRequest) {
+    public User createUser(User userRequest) {
         User user = new User();
         user.setNickname(userRequest.getNickname());
-        user.setCreateQuiz(user.getCreateQuiz());
         return userRepository.save(user);
     }
 
     @Transactional
-    public User updateQuiz(UUID id, User userRequest) {
+    public User updateUser(UUID id, User userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow();
         user.setNickname(userRequest.getNickname());
-        user.setCreateQuiz(userRequest.getCreateQuiz());
         return userRepository.save(user);
     }
 
     @Transactional
-    public void deleteQuiz(UUID id) {
+    public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
 }
