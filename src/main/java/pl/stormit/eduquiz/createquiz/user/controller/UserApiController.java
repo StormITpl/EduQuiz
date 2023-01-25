@@ -29,19 +29,19 @@ public class UserApiController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    User createQuiz(@RequestBody User user) {
+    User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("{id}")
-    User updateQuiz(@PathVariable UUID id, @RequestBody User user) {
+    User updateUser(@PathVariable UUID id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
-    void deleteQuiz(@PathVariable UUID id) {
+    void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
     }
 }
