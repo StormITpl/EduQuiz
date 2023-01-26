@@ -7,5 +7,5 @@ import pl.stormit.eduquiz.game.domain.entity.Game;
 import java.util.UUID;
 
 @Repository
-public interface GameRepository extends JpaRepository<UUID, Game> {
+public interface GameRepository extends JpaRepository<Game, UUID> {
 }
