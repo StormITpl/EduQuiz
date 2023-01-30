@@ -45,4 +45,3 @@ public class CategoryApiController {
         categoryService.deleteCategory(id);
     }
 }
-

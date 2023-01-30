@@ -1,14 +1,13 @@
 package pl.stormit.eduquiz.quizcreator.quiz.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.category.domain.model.Category;
+import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 import pl.stormit.eduquiz.quizcreator.user.domain.model.User;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +23,9 @@ public class Quiz {
 
     @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "quiz")
+    private List<Question> question;
 
     public Quiz() {
         this.id = UUID.randomUUID();

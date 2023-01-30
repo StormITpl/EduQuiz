@@ -6,7 +6,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
 public class User {
 
     @Id
@@ -25,7 +23,7 @@ public class User {
     private String nickname;
 
     @OneToMany(mappedBy = "user")
-    List<Quiz> quizzes;
+    private List<Quiz> quizzes;
 
     public User() {
         this.id = UUID.randomUUID();

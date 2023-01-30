@@ -3,7 +3,6 @@ package pl.stormit.eduquiz.quizcreator.answer.domain.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 
 import java.util.UUID;
@@ -12,7 +11,6 @@ import java.util.UUID;
 @Table(name = "answers")
 @Getter
 @Setter
-@ToString
 public class Answer {
     @Id
     private UUID id;

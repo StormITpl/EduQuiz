@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
-import pl.stormit.eduquiz.quizcreator.category.domain.model.Category;
+import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,10 +17,12 @@ public class Question {
     @Id
     private UUID id;
     private String content;
+
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+
     @ManyToOne
-    private Category category;
+    private Quiz quiz;
 
     public Question() {
         this.id = UUID.randomUUID();
