@@ -31,7 +31,7 @@ public class QuestionService {
     public Question createQuestion(Question questionRequest) {
         Question question = new Question();
 
-        question.setName(questionRequest.getName());
+        question.setContent(questionRequest.getContent());
 
         return questionRepository.save(question);
     }
@@ -40,7 +40,7 @@ public class QuestionService {
     public Question updateQuestion(UUID id, Question questionRequest) {
         Question question = questionRepository.getById(id);
 
-        question.setName(questionRequest.getName());
+        question.setContent(questionRequest.getContent());
 
         return questionRepository.save(question);
     }

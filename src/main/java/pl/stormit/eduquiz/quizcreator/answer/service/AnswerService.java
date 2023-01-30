@@ -35,7 +35,7 @@ public class AnswerService {
     @Transactional
     public Answer updateAnswer(UUID answerId, Answer answerRequest) {
         Answer answer = answerRepository.getById(answerId);
-        answer.setName(answerRequest.getName());
+        answer.setContent(answerRequest.getContent());
 
         return answerRepository.save(answer);
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Table(name = "categories")
 @Getter
 @Setter
+@ToString
 public class Category {
     @Id
     private UUID id;

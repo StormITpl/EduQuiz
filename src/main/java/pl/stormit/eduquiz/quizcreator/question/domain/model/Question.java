@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Question {
     @Id
     private UUID id;
-    private String name;
+    private String content;
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
     @ManyToOne
@@ -29,6 +29,6 @@ public class Question {
 
     public Question(String name) {
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.content = name;
     }
 }

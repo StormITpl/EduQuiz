@@ -3,6 +3,7 @@ package pl.stormit.eduquiz.quizcreator.answer.domain.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 
 import java.util.UUID;
@@ -11,10 +12,11 @@ import java.util.UUID;
 @Table(name = "answers")
 @Getter
 @Setter
+@ToString
 public class Answer {
     @Id
     private UUID id;
-    private String name;
+    private String content;
     @ManyToOne
     private Question question;
 
@@ -24,15 +26,6 @@ public class Answer {
 
     public Answer(String name) {
         this.id = UUID.randomUUID();
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", question=" + question +
-                '}';
+        this.content = name;
     }
 }
