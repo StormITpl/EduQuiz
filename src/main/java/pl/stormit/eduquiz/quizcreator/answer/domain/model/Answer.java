@@ -15,6 +15,8 @@ public class Answer {
     @Id
     private UUID id;
     private String content;
+
+    private boolean isCorrect;
     @ManyToOne
     private Question question;
 
@@ -22,8 +24,9 @@ public class Answer {
         this.id = UUID.randomUUID();
     }
 
-    public Answer(String name) {
+    public Answer(String name, boolean isCorrect) {
         this.id = UUID.randomUUID();
         this.content = name;
+        this.isCorrect = isCorrect;
     }
 }

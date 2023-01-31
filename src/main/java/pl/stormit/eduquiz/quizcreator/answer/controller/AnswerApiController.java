@@ -28,6 +28,12 @@ public class AnswerApiController {
         return answerService.getAnswer(answerId);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    Answer createAnswer(@RequestBody Answer answer) {
+        return answerService.createAnswer(answer);
+    }
+
     @PutMapping("{answer-id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     Answer updateAnswer(@PathVariable("question-id") UUID questionId, @PathVariable("answer-id") UUID answerId,
