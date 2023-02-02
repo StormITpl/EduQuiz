@@ -1,10 +1,10 @@
 package pl.stormit.eduquiz.result.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 
 import java.util.UUID;
 
@@ -18,4 +18,10 @@ public class Result {
     private UUID id;
 
     private Integer score;
+
+    @OneToOne
+    private Game game;
+
+    @ManyToOne
+    private Quiz quiz;
 }
