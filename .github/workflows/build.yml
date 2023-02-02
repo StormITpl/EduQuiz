@@ -34,13 +34,13 @@ jobs:
         username: ${{ github.actor}}
         password: ${{ secrets.GITHUB_TOKEN}}
         
-    - name: Build and push docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        push: true
-        tags: |
-          ghcr.io/stormit/eduquiz:latest
+#    - name: Build and push docker image
+#      uses: docker/build-push-action@v3
+#      with:
+#        context: .
+#        push: true
+#        tags: |
+#          ghcr.io/stormit/eduquiz:latest
           
     - name: Deploy application on remote host
       uses: appleboy/ssh-action@master
@@ -48,4 +48,4 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        script: ./deploy.sh
+#        script: ./deploy.sh
