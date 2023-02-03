@@ -44,7 +44,7 @@ jobs:
 
     - name: Get host from AWS Parameter Store
       id: get_host
-      uses: aws-actions/aws-cli@v1
+      uses: jacekrg/action-aws-cli@v1.1
       with:
         args: |
           ssm get-parameters
@@ -59,7 +59,7 @@ jobs:
        
     - name: Get host from AWS Parameter Store
       id: get_username
-      uses: aws-actions/aws-cli@v1
+      uses: jacekrg/action-aws-cli@v1.1
       with:
         args: |
           ssm get-parameters
@@ -74,7 +74,7 @@ jobs:
        
     - name: Get host from AWS Parameter Store
       id: get_password
-      uses: aws-actions/aws-cli@v1
+      uses: jacekrg/action-aws-cli@v1.1
       with:
         args: |
           ssm get-parameters
