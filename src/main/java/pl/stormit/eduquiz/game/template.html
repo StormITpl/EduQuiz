@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Play EduQuiz</title>
+</head>
+<body>
+
+<h1>Play EduQuiz</h1>
+
+<form action="#" th:action="@{/submitAnswer/{id}(id=${quiz.id})}" th:object="${quiz}" method="post">
+
+    <div th:each="question, iterStat : ${quiz.questions}" th:if="${iterStat.index == currentQuestionIndex}">
+        <p th:text="${question.question}"></p>
+
+        <div th:each="answer : ${question.answers}">
+            <input type="radio" th:field="*{answers[question.id]}" th:value="${answer.id}" />
+            <label th:text="${answer.answer}"></label><br />
+        </div>
+    </div>
+
+    <button type="sendAnswer">Send Answer</button>
+
+</form>
+
+</body>
+</html>
