@@ -41,11 +41,56 @@ jobs:
 #        push: true
 #        tags: |
 #          ghcr.io/stormit/eduquiz:latest
+
+    - name: Get host from AWS Parameter Store
+      id: get_host
+      uses: aws-actions/aws-cli@v1
+      with:
+        args: |
+          ssm get-parameters
+          --names "host"
+          --with-decryption
+          --query "Parameters[0].Value"
+          --output text
+          
+      env:
+       AWS_REGION: Frankfurt
+       AWS_PROFILE: 672727997648
+       
+    - name: Get host from AWS Parameter Store
+      id: get_username
+      uses: aws-actions/aws-cli@v1
+      with:
+        args: |
+          ssm get-parameters
+          --names "username"
+          --with-decryption
+          --query "Parameters[0].Value"
+          --output text
+          
+      env:
+       AWS_REGION: Frankfurt
+       AWS_PROFILE: 672727997648
+       
+    - name: Get host from AWS Parameter Store
+      id: get_password
+      uses: aws-actions/aws-cli@v1
+      with:
+        args: |
+          ssm get-parameters
+          --names "password"
+          --with-decryption
+          --query "Parameters[0].Value"
+          --output text
+          
+      env:
+       AWS_REGION: Frankfurt
+       AWS_PROFILE: 672727997648
           
     - name: Deploy application on remote host
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+        host: ${{ steps.get_host.outputs.result }}
+        username: ${{ steps.get_username.outputs.result }}
+        password: ${{ steps.get_password.outputs.result }}
 #        script: ./deploy.sh
