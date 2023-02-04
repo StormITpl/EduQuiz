@@ -49,6 +49,7 @@ public class GameService {
     }
 
     public List<Question> findAllQuizQuestions(UUID id) {
+
         return questionRepository.findQuestionsByQuizId(id);
     }
 
@@ -66,6 +67,7 @@ public class GameService {
     }
 
     public List<Answer> findAllAnswersForQuestion(UUID id) {
+
         return answerRepository.findByQuestionId(id);
     }
 
