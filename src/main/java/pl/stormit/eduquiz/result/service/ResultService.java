@@ -1,12 +1,15 @@
 package pl.stormit.eduquiz.result.service;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
+import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -17,14 +20,24 @@ public class ResultService {
 
     private final GameRepository gameRepository;
 
-
-    public Optional<Result> getResult(UUID id) {
-        return resultRepository.findById(id);
+    @Transactional(readOnly = true)
+    public Result getResult(UUID id) {
+        return resultRepository.getById(id);
     }
 
-    private Integer getScore(UUID gameId) {
-
+    private Integer getScore(Game game, Quiz quiz) {
         return 0;
     }
 
+    @Transactional
+    public Result createResult(@NotNull Game game, @NotNull Quiz quiz) {
+        Result result = new Result();
+        result.setId(game.getId());
+        result.setGame(game);
+        result.setQuiz(quiz);
+        int score = this.getScore(game, quiz);
+        result.setScore(score);
+
+        return resultRepository.save(result);
+    }
 }
