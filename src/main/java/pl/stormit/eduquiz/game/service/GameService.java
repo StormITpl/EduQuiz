@@ -3,10 +3,8 @@ package pl.stormit.eduquiz.game.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.answer.domain.repository.AnswerRepository;
-import pl.stormit.eduquiz.quizcreator.category.domain.model.Category;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 import pl.stormit.eduquiz.quizcreator.question.domain.repository.QuestionRepository;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
@@ -21,60 +19,47 @@ import java.util.UUID;
 public class GameService {
 
     private final QuizRepository quizRepository;
-
     private final QuestionRepository questionRepository;
-
     private final AnswerRepository answerRepository;
+    private List<Answer> userAnswers = new ArrayList<>();
 
     public Quiz chooseQuiz(Quiz quiz) {
         return quizRepository.findById(quiz.getId()).orElseThrow(() -> {
-            throw new MissingQuizException("The quiz by id does not exist.");;
+            throw new RuntimeException("The quiz by id does not exist.");
         });
-//        List<Question> questionsList = chosenQuiz.getQuestion();
     }
 
-    public Game newUserGame(){
-
-        List<Answer> userAnswers = userAnswer();
+    public Game newUserGame(Quiz quiz) {
+        Quiz selectedQuiz = chooseQuiz(quiz);
         Game game = new Game();
-        game.setQuiz(quiz);
+        game.setQuiz(selectedQuiz);
         game.setUserAnswers(userAnswers);
-
-        return null;
+        return game;
     }
 
-    public List<Answer> userAnswer() {
+    public List<Question> findAllQuizQuestions(UUID quizId) {
 
-        return null;
+        return questionRepository.findQuestionsByQuizId(quizId);
     }
 
-    public List<Question> findAllQuizQuestions(UUID id) {
-
-        return questionRepository.findQuestionsByQuizId(id);
-    }
-
-    public String showQuestionAndAnswers(Question questionRequest){
-        Question question = singleQuestion(questionRequest.getId());
-        List<Answer> answers = findAllAnswersForQuestion(questionRequest.getId());
-
+    public String showQuestionAndAnswers(Question questionRequest) {
+        Question question = findQuestionById(questionRequest.getId());
+        List<Answer> allAnswers = findAllAnswersForQuestion(questionRequest.getId());
         return question.getContent();
     }
 
-
-
-    public Question singleQuestion(UUID id){
-        return null;
+    public Question findQuestionById(UUID questionId) {
+        return questionRepository.findById(questionId).orElseThrow(() ->
+                new RuntimeException("The question with id " + questionId + " does not exist."));
     }
 
-    public List<Answer> findAllAnswersForQuestion(UUID id) {
+    public List<Answer> findAllAnswersForQuestion(UUID questionId) {
 
-        return answerRepository.findByQuestionId(id);
+        return answerRepository.findByQuestionId(questionId);
     }
-
-    List<Answer> answers = new ArrayList<>();
 
     public List<Answer> addUserAnswer(Answer answerRequest) {
-        answers.add(answerRequest);
-        return answers;
+        userAnswers.add(answerRequest);
+        return userAnswers;
     }
 }
