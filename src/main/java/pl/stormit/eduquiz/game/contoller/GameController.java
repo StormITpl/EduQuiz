@@ -1,7 +1,12 @@
 package pl.stormit.eduquiz.game.contoller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
@@ -16,6 +21,8 @@ import java.util.UUID;
 public class GameController {
 
     private final GameService gameService;
+
+    //Wybieramy quiz <-> tworzymy encje Game -> przypisujemy konkretny quiz do Game
 
     @PostMapping
     Quiz chosenQuiz(@RequestBody Quiz quiz) {

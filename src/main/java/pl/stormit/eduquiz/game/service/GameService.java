@@ -9,6 +9,7 @@ import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 import pl.stormit.eduquiz.quizcreator.question.domain.repository.QuestionRepository;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.repository.QuizRepository;
+import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class GameService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private List<Answer> userAnswers = new ArrayList<>();
+    private List<String> userAnswers = new ArrayList<>();
 
     public Quiz chooseQuiz(Quiz quiz) {
         return quizRepository.findById(quiz.getId()).orElseThrow(() -> {
@@ -29,8 +30,8 @@ public class GameService {
         });
     }
 
-    public Game newUserGame(Quiz quiz) {
-        Quiz selectedQuiz = chooseQuiz(quiz);
+    public Game createGame(QuizDto quizRequest) {
+        QuizDto selectedQuiz = chooseQuiz(quizRequest);
         Game game = new Game();
         game.setQuiz(selectedQuiz);
         game.setUserAnswers(userAnswers);

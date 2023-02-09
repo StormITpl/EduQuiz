@@ -25,7 +25,7 @@ public class Game {
     private UUID id;
 
     @ElementCollection
-    private List<Answer> userAnswers;
+    private List<String> userAnswers;
 
     @OneToOne
     private Quiz quiz;
