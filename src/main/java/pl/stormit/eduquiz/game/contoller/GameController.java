@@ -10,7 +10,7 @@ import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
-import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
+import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +25,13 @@ public class GameController {
     //Wybieramy quiz <-> tworzymy encje Game -> przypisujemy konkretny quiz do Game
 
     @PostMapping
-    Quiz chosenQuiz(@RequestBody Quiz quiz) {
-        return gameService.chooseQuiz(quiz);
+    public ResponseEntity<GameDto> createGame(@Valid @RequestBody QuizDto quizRequest) {
+
+        GameDto createGame = gameService.createGame(quizRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The new game has been successfully created");
+
+        return new ResponseEntity<>(createGame, headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/quiz/{quiz-id}")

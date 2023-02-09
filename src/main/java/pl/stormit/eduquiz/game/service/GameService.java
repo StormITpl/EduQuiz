@@ -24,8 +24,8 @@ public class GameService {
     private final AnswerRepository answerRepository;
     private List<String> userAnswers = new ArrayList<>();
 
-    public Quiz chooseQuiz(Quiz quiz) {
-        return quizRepository.findById(quiz.getId()).orElseThrow(() -> {
+    public QuizDto chooseQuiz(QuizDto quizRequest) {
+        return quizRepository.findById(quizRequest.getId()).orElseThrow(() -> {
             throw new RuntimeException("The quiz by id does not exist.");
         });
     }
