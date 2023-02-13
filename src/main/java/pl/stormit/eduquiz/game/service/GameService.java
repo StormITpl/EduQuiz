@@ -3,7 +3,9 @@ package pl.stormit.eduquiz.game.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameDto;
+import pl.stormit.eduquiz.game.dto.GameMapper;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.answer.domain.repository.AnswerRepository;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
@@ -11,6 +13,7 @@ import pl.stormit.eduquiz.quizcreator.question.domain.repository.QuestionReposit
 import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 import pl.stormit.eduquiz.quizcreator.quiz.domain.repository.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,11 @@ public class GameService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+
+    private final GameRepository gameRepository;
+    private final GameMapper gameMapper;
+    private final QuizMapper quizMapper;
+
     private List<String> userAnswers = new ArrayList<>();
 
 //    public QuizDto chooseQuiz(QuizDto quizRequest) {
@@ -31,8 +39,10 @@ public class GameService {
 //        });
 //    }
 
+
+    // To be changed
     public GameDto createGame(QuizDto quiz) {
-        Quiz chosenQuiz = quizRepository.findById(quiz.id())
+        Quiz chosenQuiz = quizRepository.findById(quizMapper.mapQuizDtoToQuizEntity(quiz).getId())
                 .orElseThrow(() -> {
                     throw new RuntimeException("The quiz by id does not exist.");
                 });
@@ -41,18 +51,19 @@ public class GameService {
         game.setUserAnswers(chosenAnswer(chosenQuiz.getId()));
 
         //current save without mapper - but return should be DTO
-        return gameRepository.save(game);
+//        return gameRepository.save(game);
 
         //correctly method response with mapper used
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 
-    public List<Answer> chosenAnswer(UUID id){
+    public List<String> chosenAnswer(UUID id){
+        // Here - choosing the Answer must happen
+        // Some kind of event maybe ?
         return null;
     }
 
     public List<Question> findAllQuizQuestions(UUID quizId) {
-
         return questionRepository.findQuestionsByQuizId(quizId);
     }
 
@@ -68,12 +79,12 @@ public class GameService {
     }
 
     public List<Answer> findAllAnswersForQuestion(UUID questionId) {
-
         return answerRepository.findByQuestionId(questionId);
     }
 
-    public List<Answer> addUserAnswer(Answer answerRequest) {
-        userAnswers.add(answerRequest);
+    public List<String> addUserAnswer(Answer answerRequest) {
+        String answerString = answerRequest.getContent();
+        userAnswers.add(answerString);
         return userAnswers;
     }
 }

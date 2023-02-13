@@ -7,4 +7,6 @@ import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
 public interface QuizMapper {
 
     QuizDto mapQuizEntityToQuizDto(Quiz quiz);
+
+    Quiz mapQuizDtoToQuizEntity(QuizDto quizDto);
 }
