@@ -3,6 +3,7 @@ package pl.stormit.eduquiz.game.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
 import pl.stormit.eduquiz.quizcreator.answer.domain.repository.AnswerRepository;
 import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
@@ -24,18 +25,30 @@ public class GameService {
     private final AnswerRepository answerRepository;
     private List<String> userAnswers = new ArrayList<>();
 
-    public QuizDto chooseQuiz(QuizDto quizRequest) {
-        return quizRepository.findById(quizRequest.getId()).orElseThrow(() -> {
-            throw new RuntimeException("The quiz by id does not exist.");
-        });
+//    public QuizDto chooseQuiz(QuizDto quizRequest) {
+//        return quizRepository.findById(quizRequest.getId()).orElseThrow(() -> {
+//            throw new RuntimeException("The quiz by id does not exist.");
+//        });
+//    }
+
+    public GameDto createGame(QuizDto quiz) {
+        Quiz chosenQuiz = quizRepository.findById(quiz.id())
+                .orElseThrow(() -> {
+                    throw new RuntimeException("The quiz by id does not exist.");
+                });
+
+        Game game = new Game();
+        game.setUserAnswers(chosenAnswer(chosenQuiz.getId()));
+
+        //current save without mapper - but return should be DTO
+        return gameRepository.save(game);
+
+        //correctly method response with mapper used
+        return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 
-    public Game createGame(QuizDto quizRequest) {
-        QuizDto selectedQuiz = chooseQuiz(quizRequest);
-        Game game = new Game();
-        game.setQuiz(selectedQuiz);
-        game.setUserAnswers(userAnswers);
-        return game;
+    public List<Answer> chosenAnswer(UUID id){
+        return null;
     }
 
     public List<Question> findAllQuizQuestions(UUID quizId) {
