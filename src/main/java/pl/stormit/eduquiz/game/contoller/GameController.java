@@ -24,7 +24,7 @@ public class GameController {
 
     //Wybieramy quiz <-> tworzymy encje Game -> przypisujemy konkretny quiz do Game
 
-    @PostMapping
+    @PostMapping("/singleGame")
     public ResponseEntity<GameDto> createGame(@Valid @RequestBody QuizDto quizRequest) {
 
         GameDto createGame = gameService.createGame(quizRequest);
@@ -32,6 +32,11 @@ public class GameController {
         headers.add("message", "The new game has been successfully created");
 
         return new ResponseEntity<>(createGame, headers, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/multiGame")
+    public ResponseEntity<GameDto> createMultiGame() {
+        return null;
     }
 
     @GetMapping("/quiz/{quiz-id}")
