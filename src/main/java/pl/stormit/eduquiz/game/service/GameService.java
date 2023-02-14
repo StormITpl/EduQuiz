@@ -31,7 +31,7 @@ public class GameService {
     private final GameMapper gameMapper;
     private final QuizMapper quizMapper;
 
-    private List<String> userAnswers = new ArrayList<>();
+    private List<Answer> userAnswers = new ArrayList<>();
 
 //    public QuizDto chooseQuiz(QuizDto quizRequest) {
 //        return quizRepository.findById(quizRequest.getId()).orElseThrow(() -> {
@@ -57,7 +57,7 @@ public class GameService {
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 
-    public List<String> chosenAnswer(UUID id){
+    public List<Answer> chosenAnswer(UUID id){
         // Here - choosing the Answer must happen
         // Some kind of event maybe ?
         return null;
@@ -82,9 +82,9 @@ public class GameService {
         return answerRepository.findByQuestionId(questionId);
     }
 
-    public List<String> addUserAnswer(Answer answerRequest) {
-        String answerString = answerRequest.getContent();
-        userAnswers.add(answerString);
+    public List<Answer> addUserAnswer(Answer answerRequest) {
+//        String answerString = answerRequest.getContent();
+        userAnswers.add(answerRequest);
         return userAnswers;
     }
 }

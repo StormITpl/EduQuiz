@@ -24,8 +24,8 @@ public class Game {
     @GeneratedValue
     private UUID id;
 
-    @ElementCollection
-    private List<String> userAnswers;
+    @OneToMany
+    private List<Answer> userAnswers;
 
     @OneToOne
     private Quiz quiz;

@@ -53,7 +53,7 @@ public class GameController {
     }
 
     @PostMapping("/quiz/questions/{question-id}/answers")
-    public List<String> chosenAnswer(@PathVariable("question-id") UUID id, @RequestBody Answer answerRequest) {
+    public List<Answer> chosenAnswer(@PathVariable("question-id") UUID id, @RequestBody Answer answerRequest) {
         return gameService.addUserAnswer(answerRequest);
     }
 }
