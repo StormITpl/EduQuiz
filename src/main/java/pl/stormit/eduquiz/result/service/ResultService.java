@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
-import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 
@@ -30,7 +30,7 @@ public class ResultService {
     }
 
     @Transactional
-    public Result createResult(@NotNull Game game, @NotNull Quiz quiz) {
+    public Result createResult(@NotNull Game game, Quiz quiz) {
         Result result = new Result();
         result.setId(game.getId());
         result.setGame(game);

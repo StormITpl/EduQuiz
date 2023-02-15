@@ -21,7 +21,7 @@ quizzes. It is an excellent tool for consolidating knowledge individually or in 
 ### Development
 
 - [Java 19](https://openjdk.org/projects/jdk/19/)
-- [Spring Boot 3.0.1](https://spring.io/projects/spring-boot)
+- [Spring Boot 3.0.2](https://spring.io/projects/spring-boot)
 - [Spring Data](https://spring.io/projects/spring-data)
 - [Maven 3.x](https://maven.apache.org/)
 - [Git](https://git-scm.com/)
