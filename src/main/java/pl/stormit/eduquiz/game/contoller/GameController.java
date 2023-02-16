@@ -5,17 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import pl.stormit.eduquiz.game.domain.entity.Game;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.game.dto.GameDto;
-import pl.stormit.eduquiz.game.dto.GameMapper;
 import pl.stormit.eduquiz.game.service.GameService;
-import pl.stormit.eduquiz.quizcreator.answer.domain.model.Answer;
-import pl.stormit.eduquiz.quizcreator.question.domain.model.Question;
 import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +19,6 @@ import java.util.UUID;
 public class GameController {
 
     private final GameService gameService;
-    private final GameMapper gameMapper;
-
-    //Wybieramy quiz <-> tworzymy encje Game -> przypisujemy konkretny quiz do Game
 
     @PostMapping("/singleGame")
     public ResponseEntity<GameDto> createGame(@Valid @RequestBody QuizDto quizRequest) {
@@ -35,25 +28,5 @@ public class GameController {
         headers.add("message", "The new game has been successfully created");
 
         return new ResponseEntity<GameDto>(createGame, headers, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/multiGame")
-    public ResponseEntity<GameDto> createMultiGame() {
-        return null;
-    }
-
-    @GetMapping("/quiz/{quiz-id}")
-    public List<Question> findAllQuizQuestions(@PathVariable("quiz-id") UUID id) {
-        return gameService.findAllQuizQuestions(id);
-    }
-
-    @GetMapping("/quiz/questions/{question-id}")
-    public List<Answer> findAllAnswersForQuestion(@PathVariable("question-id") UUID id) {
-        return gameService.findAllAnswersForQuestion(id);
-    }
-
-    @PostMapping("/quiz/questions/{question-id}/answers")
-    public List<String> chosenAnswer(@PathVariable("question-id") UUID id, @RequestBody Answer answerRequest) {
-        return gameService.addUserAnswer(answerRequest);
     }
 }

@@ -8,5 +8,4 @@ public interface QuizMapper {
 
     QuizDto mapQuizEntityToQuizDto(Quiz quiz);
 
-    Quiz mapQuizDtoToQuizEntity(QuizDto quizDto);
 }
