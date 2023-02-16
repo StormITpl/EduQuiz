@@ -12,7 +12,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GameService {
 
-    // To be changed
     public GameDto createGame(QuizDto quizRequest) {
         return new GameDto(UUID.randomUUID(), List.of(UUID.randomUUID()));
     }
