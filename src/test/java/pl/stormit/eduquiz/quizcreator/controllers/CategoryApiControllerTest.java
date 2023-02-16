@@ -58,25 +58,24 @@ class CategoryApiControllerTest {
                 .andExpect(content().string(containsString("Biology")));
     }
 
-//    @Test
-//    void shouldCreateCategory() throws Exception {
-//
-//        String postContent = "name=Economy";
-//
-//        MockHttpServletRequestBuilder request =
-//                post("/api/v1/categories")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(postContent));
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isCreated());
-//
-//        Category exemplaryCategory = new Category("Economy");
-//
-//        Mockito.verify(categoryService, Mockito.times(1)).createCategory(exemplaryCategory);
-//
-//    }
+    @Test
+    void shouldCreateCategory() throws Exception {
 
+        String postContent = "name=Economy";
+
+        MockHttpServletRequestBuilder request =
+                post("/api/v1/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postContent));
+
+        mockMvc.perform(request)
+                .andExpect(status().isCreated());
+
+        Category exemplaryCategory = new Category("Economy");
+
+        Mockito.verify(categoryService, Mockito.times(1)).createCategory(exemplaryCategory);
+
+    }
 
     @Test
     void shouldUpdateCategory() {
