@@ -1,4 +1,9 @@
 package pl.stormit.eduquiz.game.dto;
 
-public class GameDto {
-}
+import java.util.List;
+import java.util.UUID;
+
+public record GameDto(
+        UUID id,
+        List<UUID> userAnswers
+) {}

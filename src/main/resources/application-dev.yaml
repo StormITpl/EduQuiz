@@ -15,6 +15,7 @@ spring:
 
   liquibase:
     change-log: db/changelog-dev.yaml
+    contexts: dev
 
 server:
   port: 8080

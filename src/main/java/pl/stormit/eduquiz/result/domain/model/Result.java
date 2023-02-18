@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.UUID;
 

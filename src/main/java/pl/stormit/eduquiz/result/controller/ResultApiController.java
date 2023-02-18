@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.service.ResultService;
 
