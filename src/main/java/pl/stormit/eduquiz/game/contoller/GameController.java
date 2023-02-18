@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
-import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
 @RestController
 @RequiredArgsConstructor

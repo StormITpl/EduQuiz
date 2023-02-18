@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
-import pl.stormit.eduquiz.quizcreator.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
 import java.util.Collections;
 import java.util.List;
