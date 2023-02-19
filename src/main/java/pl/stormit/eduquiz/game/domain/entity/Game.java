@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.stormit.eduquiz.quizcreator.quiz.domain.model.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,4 +34,7 @@ public class Game {
     @OneToOne
     private Quiz quiz;
 
+    public Game(Quiz quiz) {
+        this.quiz = quiz;
+    }
 }
