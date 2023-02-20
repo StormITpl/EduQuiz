@@ -1,10 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
@@ -18,6 +15,7 @@ import java.util.UUID;
 public class Answer {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     private String content;
@@ -25,7 +23,7 @@ public class Answer {
     private boolean isCorrect;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
 
     public Answer() {

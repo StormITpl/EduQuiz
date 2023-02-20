@@ -1,10 +1,13 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
+import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,16 +30,17 @@ public class CategoryApiController {
         return categoryService.getCategory(id);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+
     @PostMapping
-    Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
+        CategoryDto createdCategory = categoryService.createCategory(categoryRequest);
+        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("{id}")
-    Category updateCategory(@PathVariable UUID id, @RequestBody Category category) {
-        return categoryService.updateCategory(id, category);
+    ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @RequestBody CategoryDto categoryRequest) {
+        CategoryDto createdCategory = categoryService.updateCategory(id, categoryRequest);
+        return new ResponseEntity<>(createdCategory, HttpStatus.ACCEPTED);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

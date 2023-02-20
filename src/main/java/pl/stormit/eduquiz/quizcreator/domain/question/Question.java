@@ -2,6 +2,7 @@ package pl.stormit.eduquiz.quizcreator.domain.question;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,16 +19,17 @@ import java.util.UUID;
 public class Question {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     private String content;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
 
     public Question() {

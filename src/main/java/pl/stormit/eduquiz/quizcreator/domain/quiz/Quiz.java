@@ -21,20 +21,21 @@ import java.util.UUID;
 public class Quiz {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     private String name;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questions;
 
     public Quiz() {
@@ -44,6 +45,19 @@ public class Quiz {
     public Quiz(String name) {
         this();
         this.name = name;
+    }
+
+    public Quiz(String name, Category category, List<Question> questions) {
+        this.name = name;
+        this.category = category;
+        this.questions = questions;
+    }
+
+    public Quiz(String name, Category category, User user, List<Question> questions) {
+        this.name = name;
+        this.category = category;
+        this.user = user;
+        this.questions = questions;
     }
 
     @Override

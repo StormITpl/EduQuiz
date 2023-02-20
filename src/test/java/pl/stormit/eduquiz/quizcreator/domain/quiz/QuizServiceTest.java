@@ -5,12 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizCreationDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizEditingDto;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -53,24 +54,27 @@ class QuizServiceTest {
     void shouldCreateQuiz() {
         //given
         Quiz quiz = new Quiz("Special");
+        QuizCreationDto quizCreationDto = new QuizCreationDto(
+                quiz.getName(), quiz.getCategory(), quiz.getUser(), quiz.getQuestions());
         //when
-        Quiz createdQuiz = quizService.createQuiz(quiz);
+        QuizCreationDto createdQuiz = quizService.createQuiz(quizCreationDto);
         //then
-        assertEquals(createdQuiz.getName(), quiz.getName());
+        assertEquals(createdQuiz.name(), quiz.getName());
     }
 
     @Test
     void shouldUpdateQuiz() {
         //given
-        Quiz quiz = new Quiz("Special");
+        Quiz quiz = new Quiz("Special", null, List.of());
         quizRepository.save(quiz);
-        Quiz quizToUpdate = quizService.getQuiz(quiz.getId());
-        quizToUpdate.setName("Pro");
+        QuizEditingDto quizToUpdate = new QuizEditingDto("Pro", quiz.getCategory(), quiz.getQuestions());
+
         //when
-        Quiz updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);
+        QuizEditingDto updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);
         //then
-        assertEquals(updatedQuiz.getName(), "Pro");
-        assertEquals(updatedQuiz.getId(), quiz.getId());
+        assertEquals(updatedQuiz.name(), "Pro");
+        assertNull(updatedQuiz.category());
+        assertEquals(updatedQuiz.questions(), List.of());
     }
 
     @Test

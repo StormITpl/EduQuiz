@@ -1,10 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
@@ -24,7 +21,7 @@ public class User {
     private String nickname;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
 
     public User() {
