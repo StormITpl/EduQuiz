@@ -1,10 +1,13 @@
-package pl.stormit.eduquiz.quizcreator.domain.quiz;
+package pl.quizcreator.domain.quiz;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizCreationDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizEditingDto;
 

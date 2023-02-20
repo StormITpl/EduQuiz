@@ -1,4 +1,4 @@
-package pl.stormit.eduquiz.quizcreator.controllers;
+package pl.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import pl.stormit.eduquiz.quizcreator.controllers.CategoryApiController;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
@@ -49,6 +50,7 @@ class CategoryApiControllerTest {
                 .andExpect(content().string(containsString("Biology")));
 
     }
+
 
     @Test
     void shouldReturnOneCategoryById() throws Exception {
