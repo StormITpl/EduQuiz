@@ -1,4 +1,4 @@
 package pl.stormit.eduquiz.quizcreator.domain.user.dto;
 
-public record UserDto() {
+public record UserDto(String nickname) {
 }
