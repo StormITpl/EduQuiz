@@ -10,6 +10,8 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class GameService {
@@ -27,5 +29,9 @@ public class GameService {
         Game game = new Game(quiz);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
+    }
+
+    public void deleteGame(UUID gameId) {
+        gameRepository.deleteById(gameId);
     }
 }
