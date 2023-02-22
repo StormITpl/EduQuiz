@@ -49,7 +49,7 @@ Before run application you should configurate your database and db server in few
 
 - Create database connection with Docker pasting in command line:
 
-docker run --name eduquizdev -e POSTGRES_PASSWORD=password -d -p 5432:5432 eduquizdev
+docker run --name eduquizdev -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres
 
 - Connect with server:
 
