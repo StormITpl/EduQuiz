@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +18,8 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
 import java.util.List;
+import java.util.UUID;
+
 import java.util.UUID;
 
 @RestController
@@ -44,5 +47,11 @@ public class GameController {
         headers.add("message", "The game has been successfully started");
 
         return new ResponseEntity<>(game, headers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{gameId}/delete")
+    public ResponseEntity<Void> deleteGame(@PathVariable UUID gameId) {
+        gameService.deleteGame(gameId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

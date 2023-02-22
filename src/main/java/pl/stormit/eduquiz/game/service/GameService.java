@@ -51,4 +51,8 @@ public class GameService {
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
+
+    public void deleteGame(UUID gameId) {
+        gameRepository.deleteById(gameId);
+    }
 }
