@@ -3,4 +3,4 @@ spring:
     banner-mode: log
 
   profiles:
-    active: test
+    active: dev
