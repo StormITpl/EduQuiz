@@ -40,4 +40,9 @@ public class ResultService {
 
         return resultRepository.save(result);
     }
+
+    @Transactional
+    public void deleteResult(UUID id) {
+        resultRepository.deleteById(id);
+    }
 }
