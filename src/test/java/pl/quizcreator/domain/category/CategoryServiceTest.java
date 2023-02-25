@@ -1,10 +1,14 @@
-package pl.stormit.eduquiz.quizcreator.domain.category;
+package pl.quizcreator.domain.category;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.category.Category;
+import pl.stormit.eduquiz.quizcreator.domain.category.CategoryRepository;
+import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
+import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
 
@@ -52,11 +56,11 @@ class CategoryServiceTest {
     @Test
     void shouldCreateCategory() {
         //given
-        Category category = new Category("Math");
+        CategoryDto  categoryRequestDto = new CategoryDto("Math");
         //when
-        Category createdCategory = categoryService.createCategory(category);
+        CategoryDto createdCategory = categoryService.createCategory(categoryRequestDto);
         //then
-        assertEquals(createdCategory.getName(), category.getName());
+        assertEquals(createdCategory.name(), categoryRequestDto.name());
     }
 
     @Test
@@ -66,11 +70,11 @@ class CategoryServiceTest {
         categoryRepository.save(category);
         Category categoryToUpdate = categoryService.getCategory(category.getId());
         categoryToUpdate.setName("Economy");
+        CategoryDto categoryToUpdateDto = new CategoryDto(categoryToUpdate.getName());
         //when
-        Category updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdate);
+        CategoryDto updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdateDto);
         //then
-        assertEquals(updatedCategory.getName(), "Economy");
-        assertEquals(updatedCategory.getId(), category.getId());
+        assertEquals(updatedCategory.name(), "Economy");
     }
 
     @Test

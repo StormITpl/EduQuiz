@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,8 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public List<User> getUsers() {
@@ -26,10 +30,9 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(@NotNull User userRequest) {
-        User user = new User();
-        user.setNickname(userRequest.getNickname());
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userRequest) {
+        User user = new User(userRequest.nickname());
+        return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
 
     @Transactional

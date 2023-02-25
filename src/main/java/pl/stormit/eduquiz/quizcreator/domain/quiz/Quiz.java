@@ -2,7 +2,13 @@ package pl.stormit.eduquiz.quizcreator.domain.quiz;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
@@ -21,20 +27,21 @@ import java.util.UUID;
 public class Quiz {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     private String name;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questions;
 
     public Quiz() {
@@ -44,6 +51,19 @@ public class Quiz {
     public Quiz(String name) {
         this();
         this.name = name;
+    }
+
+    public Quiz(String name, Category category, List<Question> questions) {
+        this.name = name;
+        this.category = category;
+        this.questions = questions;
+    }
+
+    public Quiz(String name, Category category, User user, List<Question> questions) {
+        this.name = name;
+        this.category = category;
+        this.user = user;
+        this.questions = questions;
     }
 
     @Override
