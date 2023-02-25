@@ -6,9 +6,14 @@ import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.dto.GameMapper;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,24 @@ public class GameService {
             throw new RuntimeException("The quiz does not exist");
         });
         Game game = new Game(quiz);
+        List<UUID> userAnswers = new ArrayList<>();
+        game.setUserAnswers(userAnswers);
+
+        return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
+    }
+
+    public GameDto playGame(UUID gameId, List<AnswerDto> answers) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> {
+                    throw new RuntimeException("The quiz does not exist");
+                });
+
+        List<UUID> userAnswers = game.getUserAnswers();
+        List<UUID> collect = answers.stream()
+                .map(AnswerDto::id)
+                .toList();
+        userAnswers.addAll(collect);
+        game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
