@@ -1,4 +1,4 @@
-package pl.quizcreator.domain.category;
+package pl.stormit.eduquiz.quizcreator.domain.category;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;

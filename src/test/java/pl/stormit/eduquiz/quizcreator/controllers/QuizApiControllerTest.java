@@ -1,4 +1,4 @@
-package pl.quizcreator.controllers;
+package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
