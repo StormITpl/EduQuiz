@@ -5,13 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +34,15 @@ public class GameController {
         headers.add("message", "The new game has been successfully created");
 
         return new ResponseEntity<GameDto>(createGame, headers, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{gameId}/playGame")
+    public ResponseEntity<GameDto> playGame(@PathVariable UUID gameId, @RequestBody List<AnswerDto> answersDto) {
+
+        GameDto game = gameService.playGame(gameId, answersDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The game has been successfully started");
+
+        return new ResponseEntity<>(game, headers, HttpStatus.OK);
     }
 }
