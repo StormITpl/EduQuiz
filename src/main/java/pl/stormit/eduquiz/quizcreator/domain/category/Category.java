@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -26,6 +27,7 @@ public class Category {
 
     private String name;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonBackReference
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;

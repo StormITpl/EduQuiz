@@ -1,5 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
@@ -17,6 +19,8 @@ public class User {
 
     private String nickname;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
 
