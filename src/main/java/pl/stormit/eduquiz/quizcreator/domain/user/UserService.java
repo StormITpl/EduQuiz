@@ -19,28 +19,29 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getUsers() {
+        return userMapper.mapUserEntityToUsersDtoList(userRepository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public User getUser(UUID id) {
-        return userRepository.findById(id)
-                .orElseThrow();
+    public UserDto getUser(UUID id) {
+        return userMapper.mapUserEntityToUserDto(userRepository.findById(id)
+                .orElseThrow());
     }
 
     @Transactional
-    public UserDto createUser(UserDto userRequest) {
-        User user = new User(userRequest.nickname());
+    public UserDto createUser(@NotNull UserDto userRequest) {
+        User user = new User();
+        user.setNickname(userRequest.nickname());
         return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
 
     @Transactional
-    public User updateUser(UUID id, @NotNull User userRequest) {
+    public UserDto updateUser(UUID id, @NotNull UserDto userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow();
-        user.setNickname(userRequest.getNickname());
-        return userRepository.save(user);
+        user.setNickname(userRequest.nickname());
+        return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
 
     @Transactional

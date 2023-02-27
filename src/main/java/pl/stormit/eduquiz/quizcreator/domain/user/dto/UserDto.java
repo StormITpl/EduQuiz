@@ -1,4 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.user.dto;
 
-public record UserDto(String nickname) {
+import java.util.UUID;
+
+public record UserDto(UUID id, String nickname) {
 }
