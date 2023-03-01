@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +30,7 @@ public class Answer {
 
     private boolean isCorrect;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
