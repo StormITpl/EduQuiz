@@ -6,6 +6,5 @@ import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-
     CategoryDto mapCategoryEntityToCategoryDto(Category category);
 }

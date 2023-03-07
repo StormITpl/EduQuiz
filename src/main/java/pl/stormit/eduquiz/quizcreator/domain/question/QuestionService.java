@@ -3,6 +3,8 @@ package pl.stormit.eduquiz.quizcreator.domain.question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionDto;
+import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+
+    private final QuestionMapper questionMapper;
 
     @Transactional(readOnly = true)
     public List<Question> getQuestions() {
@@ -24,10 +28,9 @@ public class QuestionService {
     }
 
     @Transactional
-    public Question createQuestion(Question questionRequest) {
-        Question question = new Question();
-        question.setContent(questionRequest.getContent());
-        return questionRepository.save(question);
+    public QuestionDto createQuestion(QuestionDto questionRequest) {
+        Question question = new Question(questionRequest.content());
+        return questionMapper.mapQuestionEntityToQuestionDto(questionRepository.save(question));
     }
 
     @Transactional
