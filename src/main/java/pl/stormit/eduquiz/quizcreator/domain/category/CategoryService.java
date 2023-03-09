@@ -3,6 +3,8 @@ package pl.stormit.eduquiz.quizcreator.domain.category;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
+import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,9 +12,11 @@ import java.util.UUID;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper  categoryMapper;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @Transactional(readOnly = true)
@@ -27,18 +31,17 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category createCategory(@NotNull Category categoryRequest) {
-        Category category = new Category();
-        category.setName(categoryRequest.getName());
-        return categoryRepository.save(category);
+    public CategoryDto createCategory(@NotNull CategoryDto categoryRequest) {
+        Category category = new Category(categoryRequest.name());
+        return categoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
     }
 
     @Transactional
-    public Category updateCategory(UUID id, @NotNull Category categoryRequest) {
+    public CategoryDto updateCategory(UUID id, @NotNull CategoryDto categoryRequest) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow();
-        category.setName(categoryRequest.getName());
-        return categoryRepository.save(category);
+        category.setName(categoryRequest.name());
+        return categoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
     }
 
     @Transactional

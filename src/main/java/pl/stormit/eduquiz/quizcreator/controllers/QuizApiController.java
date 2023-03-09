@@ -1,10 +1,22 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizCreationDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizEditingDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,21 +39,21 @@ public class QuizApiController {
         return quizService.getQuiz(id);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    Quiz createQuiz(@RequestBody Quiz quiz) {
-        return quizService.createQuiz(quiz);
+    ResponseEntity<QuizCreationDto> createQuiz(@Valid @RequestBody QuizCreationDto quizRequest) {
+        QuizCreationDto createdQuiz = quizService.createQuiz(quizRequest);
+        return new ResponseEntity<>(createdQuiz, HttpStatus.CREATED);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("{id}")
-    Quiz updateQuiz(@PathVariable UUID id, @RequestBody Quiz quiz) {
-        return quizService.updateQuiz(id, quiz);
+    @PutMapping("{quizId}")
+    ResponseEntity<QuizEditingDto> updateQuiz(@PathVariable UUID quizId, @RequestBody QuizEditingDto quizRequest) {
+        QuizEditingDto updatedQuiz = quizService.updateQuiz(quizId, quizRequest);
+        return new ResponseEntity<>(updatedQuiz, HttpStatus.ACCEPTED);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{id}")
-    void deleteQuiz(@PathVariable UUID id) {
-        quizService.deleteQuiz(id);
+    @DeleteMapping("{quizId}")
+    void deleteQuiz(@PathVariable UUID quizId) {
+        quizService.deleteQuiz(quizId);
     }
 }
