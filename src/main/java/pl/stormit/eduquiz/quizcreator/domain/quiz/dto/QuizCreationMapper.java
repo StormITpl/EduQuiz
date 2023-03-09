@@ -5,7 +5,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 
 @Mapper(componentModel = "spring")
-public interface QuizMapper {
+public interface QuizCreationMapper {
 
-    QuizDto mapQuizEntityToQuizDto(Quiz quiz);
+    QuizCreationDto mapQuizEntityToQuizCreationDto(Quiz quiz);
 }

@@ -1,10 +1,21 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
+import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,16 +38,17 @@ public class CategoryApiController {
         return categoryService.getCategory(id);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+
     @PostMapping
-    Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
+        CategoryDto createdCategory = categoryService.createCategory(categoryRequest);
+        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("{id}")
-    Category updateCategory(@PathVariable UUID id, @RequestBody Category category) {
-        return categoryService.updateCategory(id, category);
+    ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @RequestBody CategoryDto categoryRequest) {
+        CategoryDto createdCategory = categoryService.updateCategory(id, categoryRequest);
+        return new ResponseEntity<>(createdCategory, HttpStatus.ACCEPTED);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

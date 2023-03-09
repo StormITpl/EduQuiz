@@ -28,4 +28,10 @@ public class ResultApiController {
         return resultService.getResult(id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{id}")
+    void deleteResult(@PathVariable UUID id){
+        resultService.deleteResult(id);
+    }
+
 }
