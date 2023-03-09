@@ -22,6 +22,7 @@ public class GameService {
 
     private final GameMapper gameMapper;
 
+
     public GameDto createGame(QuizDto quizRequest) {
         Quiz quiz = quizRepository.findById(quizRequest.id()).orElseThrow(() -> {
             throw new RuntimeException("The quiz does not exist");
