@@ -1,12 +1,9 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.Data;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.List;
@@ -14,8 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 public class User {
 
     @Id
@@ -23,8 +19,9 @@ public class User {
 
     private String nickname;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonBackReference
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
 
     public User() {

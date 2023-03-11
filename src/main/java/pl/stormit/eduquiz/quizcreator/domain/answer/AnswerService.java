@@ -1,8 +1,11 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
 import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
@@ -16,6 +19,14 @@ public class AnswerService {
 
     private final QuestionRepository questionRepository;
 
+    private final AnswerMapper answerMapper;
+
+    @Transactional
+    public AnswerDto createAnswer(@NotNull AnswerDto answerRequest) {
+        Answer answer = new Answer(answerRequest.content(), answerRequest.isCorrect());
+        return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
+    }
+
     @Transactional(readOnly = true)
     public List<Answer> getAnswers(UUID questionId) {
         return answerRepository.findByQuestionId(questionId);
@@ -27,11 +38,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer updateAnswer(UUID answerId, Answer answerRequest) {
+    public AnswerDto updateAnswer(UUID answerId, AnswerDto answerRequest) {
         Answer answer = answerRepository.getReferenceById(answerId);
-        answer.setContent(answerRequest.getContent());
+        answer.setContent(answerRequest.content());
         answer.setCorrect(answerRequest.isCorrect());
-        return answerRepository.save(answer);
+        return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
     @Transactional

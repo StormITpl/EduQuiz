@@ -1,6 +1,6 @@
 spring:
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
