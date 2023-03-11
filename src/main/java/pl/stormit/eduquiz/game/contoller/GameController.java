@@ -34,7 +34,7 @@ public class GameController {
         return new ResponseEntity<GameDto>(createGame, headers, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{gameId}/delete")
+    @DeleteMapping("/{gameId}")
     public ResponseEntity<Void> deleteGame(@PathVariable UUID gameId) {
         gameService.deleteGame(gameId);
         return new ResponseEntity<>(HttpStatus.OK);
