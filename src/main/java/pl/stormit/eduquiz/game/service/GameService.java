@@ -13,9 +13,10 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
+import java.util.UUID;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -26,6 +27,7 @@ public class GameService {
     private final GameRepository gameRepository;
 
     private final GameMapper gameMapper;
+
 
     List<UUID> userAnswers = new ArrayList<>();
 
