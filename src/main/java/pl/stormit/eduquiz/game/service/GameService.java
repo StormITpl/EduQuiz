@@ -1,6 +1,8 @@
 package pl.stormit.eduquiz.game.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
@@ -16,22 +18,22 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class GameService {
-
     private final QuizRepository quizRepository;
 
     private final GameRepository gameRepository;
 
     private final GameMapper gameMapper;
 
+    List<UUID> userAnswers = new ArrayList<>();
 
     public GameDto createGame(QuizDto quizRequest) {
         Quiz quiz = quizRepository.findById(quizRequest.id()).orElseThrow(() -> {
             throw new RuntimeException("The quiz does not exist");
         });
         Game game = new Game(quiz);
-        List<UUID> userAnswers = new ArrayList<>();
         game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
@@ -43,11 +45,11 @@ public class GameService {
                     throw new RuntimeException("The quiz does not exist");
                 });
 
-        List<UUID> userAnswers = game.getUserAnswers();
-        List<UUID> collect = answers.stream()
+        userAnswers = game.getUserAnswers();
+        List<UUID> collectedAnswers = answers.stream()
                 .map(AnswerDto::id)
                 .toList();
-        userAnswers.addAll(collect);
+        userAnswers.addAll(collectedAnswers);
         game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
