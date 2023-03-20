@@ -28,6 +28,7 @@ public class GameService {
 
     private final GameMapper gameMapper;
 
+    Game playGame;
 
     List<UUID> userAnswers = new ArrayList<>();
 
@@ -41,20 +42,26 @@ public class GameService {
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 
-    public GameDto playGame(UUID gameId, List<AnswerDto> answers) {
-        Game game = gameRepository.findById(gameId)
+    public GameDto playGame(UUID gameId, AnswerDto answer) {
+        playGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> {
                     throw new RuntimeException("The quiz does not exist");
                 });
 
-        userAnswers = game.getUserAnswers();
-        List<UUID> collectedAnswers = answers.stream()
-                .map(AnswerDto::id)
-                .toList();
-        userAnswers.addAll(collectedAnswers);
-        game.setUserAnswers(userAnswers);
+        userAnswers.add(answer.id());
+        playGame.setUserAnswers(userAnswers);
 
-        return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
+        return gameMapper.mapGameEntityToGameDto(playGame);
+    }
+
+    public GameDto completeGame(UUID gameId) {
+        Game updateGame = gameRepository.findById(gameId)
+                .orElseThrow(() -> {
+                    throw new RuntimeException("The game does not exist");
+                });
+        updateGame.setUserAnswers(playGame.getUserAnswers());
+
+        return gameMapper.mapGameEntityToGameDto(gameRepository.save(updateGame));
     }
 
     public void deleteGame(UUID gameId) {
