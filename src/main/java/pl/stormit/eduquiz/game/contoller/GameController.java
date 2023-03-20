@@ -40,11 +40,21 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<GameDto> playGame(@PathVariable UUID gameId, @RequestBody List<AnswerDto> answersDto) {
+    public ResponseEntity<GameDto> playGame(@PathVariable UUID gameId, @RequestBody AnswerDto answerDto) {
 
-        GameDto game = gameService.playGame(gameId, answersDto);
+        GameDto game = gameService.playGame(gameId, answerDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The game has been successfully started");
+
+        return new ResponseEntity<>(game, headers, HttpStatus.OK);
+    }
+
+    @PutMapping("{gameId}")
+    public ResponseEntity<GameDto> completeGame(@PathVariable UUID gameId){
+
+        GameDto game = gameService.completeGame(gameId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The game has been successfully completed");
 
         return new ResponseEntity<>(game, headers, HttpStatus.OK);
     }
