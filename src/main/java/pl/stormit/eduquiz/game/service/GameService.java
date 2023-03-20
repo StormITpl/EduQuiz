@@ -47,7 +47,7 @@ public class GameService {
     public GameDto playGame(UUID gameId, AnswerDto answer) {
         playGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("The quiz does not exist");
+                    throw new ResourceAccessException("The quiz does not exist");
                 });
 
         userAnswers.add(answer.id());
@@ -59,7 +59,7 @@ public class GameService {
     public GameDto completeGame(UUID gameId) {
         Game updateGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("The game does not exist");
+                    throw new ResourceAccessException("The game does not exist");
                 });
         updateGame.setUserAnswers(playGame.getUserAnswers());
 
