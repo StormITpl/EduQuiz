@@ -17,8 +17,9 @@ import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
-import java.util.List;
 import java.util.UUID;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +38,12 @@ public class GameController {
         return new ResponseEntity<GameDto>(createGame, headers, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<Void> deleteGame(@PathVariable UUID gameId) {
+        gameService.deleteGame(gameId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{gameId}")
     public ResponseEntity<GameDto> playGame(@PathVariable UUID gameId, @RequestBody List<AnswerDto> answersDto) {
 
@@ -45,11 +52,5 @@ public class GameController {
         headers.add("message", "The game has been successfully started");
 
         return new ResponseEntity<>(game, headers, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{gameId}")
-    public ResponseEntity<Void> deleteGame(@PathVariable UUID gameId) {
-        gameService.deleteGame(gameId);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
