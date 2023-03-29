@@ -1,11 +1,10 @@
 package pl.stormit.eduquiz.game.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.context.WebApplicationContext;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameDto;
@@ -15,13 +14,12 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
-import java.util.UUID;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class GameService {
     private final QuizRepository quizRepository;
@@ -30,7 +28,7 @@ public class GameService {
 
     private final GameMapper gameMapper;
 
-    Game playGame;
+    private Game playGame;
 
     List<UUID> userAnswers = new ArrayList<>();
 
