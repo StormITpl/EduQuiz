@@ -49,7 +49,7 @@ public class GameController {
         return new ResponseEntity<>(game, headers, HttpStatus.OK);
     }
 
-    @PutMapping("{gameId}")
+    @PutMapping("/complete/{gameId}")
     public ResponseEntity<GameDto> completeGame(@PathVariable UUID gameId){
 
         GameDto game = gameService.completeGame(gameId);
