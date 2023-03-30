@@ -73,38 +73,7 @@ public class PlayGameIntegrationTest {
         assertEquals(1, gameRepository.findAll().size());
         assertEquals(gameId, body.id());
     }
-
-    @Test
-    void shouldPlayGameCorrectly() {
-        //given
-        Quiz quiz = new Quiz("First quiz");
-        Quiz quizSaved = quizRepository.save(quiz);
-        UUID quizId = quizSaved.getId();
-        QuizDto quizDto = new QuizDto(quizId, "First quiz");
-
-        HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto);
-        URI createGameUri = URI.create("/api/v1/games/singleGame");
-        restTemplate.exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
-        UUID gameId = gameRepository.findAll().get(0).getId();
-
-        AnswerDto answerDto1 = new AnswerDto(UUID.randomUUID(), "Abc", true);
-        AnswerDto answerDto2 = new AnswerDto(UUID.randomUUID(), "Def", false);
-
-        //when
-        HttpEntity<AnswerDto> playEntity1 = new HttpEntity<>(answerDto1);
-        HttpEntity<AnswerDto> playEntity2 = new HttpEntity<>(answerDto2);
-        URI playUri = URI.create("/api/v1/games/" + gameId);
-        restTemplate.exchange(playUri, HttpMethod.PUT, playEntity1, GameDto.class);
-        ResponseEntity<GameDto> playResponseEntity = restTemplate.exchange(playUri, HttpMethod.PUT, playEntity2, GameDto.class);
-
-        GameDto updatedGameDto = playResponseEntity.getBody();
-
-        //then
-        assertEquals(HttpStatus.OK, playResponseEntity.getStatusCode());
-        assertEquals(gameId, updatedGameDto.id());
-        assertEquals(2, updatedGameDto.userAnswers().size());
-    }
-
+    
     @Test
     void shouldPassEntireGameCorrectly() {
         //given
@@ -137,9 +106,11 @@ public class PlayGameIntegrationTest {
         Optional<Game> game = gameRepository.findById(gameId);
 
         //then
+        assertEquals(HttpStatus.OK, playResponseEntity.getStatusCode());
         assertEquals(gameId, updatedGameDto.id());
         assertEquals(2, updatedGameDto.userAnswers().size());
         assertEquals(HttpStatus.OK, completeResponseEntity.getStatusCode());
+        assertEquals(quizId, game.get().getQuiz().getId());
         assertEquals(2, game.get().getUserAnswers().size());
     }
 }
