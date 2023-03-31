@@ -8,9 +8,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.stormit.eduquiz.game.domain.entity.Game;
@@ -73,43 +75,51 @@ public class PlayGameIntegrationTest {
         assertEquals(1, gameRepository.findAll().size());
         assertEquals(gameId, body.id());
     }
-    
+
     @Test
-    void shouldPassEntireGameCorrectly() {
+    void shouldPlayGameCorrectly() {
         //given
-        Quiz quiz = new Quiz("First quiz");
+        Quiz quiz = new Quiz();
+        quiz.setName("First quiz");
         Quiz quizSaved = quizRepository.save(quiz);
         UUID quizId = quizSaved.getId();
         QuizDto quizDto = new QuizDto(quizId, "First quiz");
 
-        HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto);
+        MockHttpSession session = new MockHttpSession();
+        String sessionId = session.getId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", "JSESSIONID=" + sessionId);
+
+        HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto, headers);
         URI createGameUri = URI.create("/api/v1/games/singleGame");
         restTemplate.exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
         UUID gameId = gameRepository.findAll().get(0).getId();
 
-        AnswerDto firstAnswerDto = new AnswerDto(UUID.randomUUID(), "Abc", true);
-        AnswerDto secondAnswerDto = new AnswerDto(UUID.randomUUID(), "Def", false);
+        AnswerDto answerDto1 = new AnswerDto(UUID.randomUUID(), "Abc", true);
+        AnswerDto answerDto2 = new AnswerDto(UUID.randomUUID(), "Def", false);
 
         //when
-        HttpEntity<AnswerDto> firstPlayEntity = new HttpEntity<>(firstAnswerDto);
-        HttpEntity<AnswerDto> secondPlayEntity = new HttpEntity<>(secondAnswerDto);
-        URI playUri = URI.create("/api/v1/games/" + gameId);
-        restTemplate.exchange(playUri, HttpMethod.PUT, firstPlayEntity, GameDto.class);
-        ResponseEntity<GameDto> playResponseEntity = restTemplate.exchange(playUri, HttpMethod.PUT, secondPlayEntity, GameDto.class);
+        URI playedGameUri = URI.create("/api/v1/games/" + gameId);
+
+        HttpEntity<AnswerDto> playedGameEntity1 = new HttpEntity<>(answerDto1, headers);
+        HttpEntity<AnswerDto> playedGameEntity2 = new HttpEntity<>(answerDto2, headers);
+
+        restTemplate.exchange(playedGameUri, HttpMethod.PUT, playedGameEntity1, GameDto.class);
+        ResponseEntity<GameDto> playResponseEntity = restTemplate.exchange(playedGameUri, HttpMethod.PUT, playedGameEntity2, GameDto.class);
+
+        URI completedGameUri = URI.create("/api/v1/games/complete/" + gameId);
+        HttpEntity<UUID> completedGameEntity = new HttpEntity<>(gameId, headers);
+        ResponseEntity<GameDto> completedGameDto = restTemplate.exchange(completedGameUri, HttpMethod.PUT, completedGameEntity, GameDto.class);
 
         GameDto updatedGameDto = playResponseEntity.getBody();
-
-        URI completeUri = URI.create("/api/v1/games/complete/" + gameId);
-        ResponseEntity<GameDto> completeResponseEntity = restTemplate
-                .exchange(completeUri, HttpMethod.PUT, entity, GameDto.class);
-
         Optional<Game> game = gameRepository.findById(gameId);
 
         //then
         assertEquals(HttpStatus.OK, playResponseEntity.getStatusCode());
         assertEquals(gameId, updatedGameDto.id());
         assertEquals(2, updatedGameDto.userAnswers().size());
-        assertEquals(HttpStatus.OK, completeResponseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, completedGameDto.getStatusCode());
         assertEquals(quizId, game.get().getQuiz().getId());
         assertEquals(2, game.get().getUserAnswers().size());
     }
