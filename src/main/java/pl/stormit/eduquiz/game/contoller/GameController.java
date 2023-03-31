@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.annotation.SessionScope;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
@@ -19,12 +20,10 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
 import java.util.UUID;
 
-import java.util.List;
-
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/games")
+@SessionScope
 public class GameController {
 
     private final GameService gameService;

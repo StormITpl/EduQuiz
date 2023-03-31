@@ -1,8 +1,6 @@
 package pl.stormit.eduquiz.game.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import pl.stormit.eduquiz.game.domain.entity.Game;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class GameService {
     private final QuizRepository quizRepository;
