@@ -3,9 +3,10 @@ package pl.stormit.eduquiz.game.domain.entity;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,10 +29,10 @@ public class Game {
     @GeneratedValue
     private UUID id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<UUID> userAnswers;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
 
     public Game(Quiz quiz) {
