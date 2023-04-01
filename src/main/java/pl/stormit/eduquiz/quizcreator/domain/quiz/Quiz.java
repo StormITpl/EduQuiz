@@ -9,10 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.user.User;
@@ -47,6 +49,11 @@ public class Quiz {
     @JsonBackReference
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questions;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonBackReference
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
+    private List<Game> games;
 
     public Quiz() {
         this.id = UUID.randomUUID();
