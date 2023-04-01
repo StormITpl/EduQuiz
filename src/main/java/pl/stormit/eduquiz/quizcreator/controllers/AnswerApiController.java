@@ -2,6 +2,7 @@ package pl.stormit.eduquiz.quizcreator.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +29,13 @@ public class AnswerApiController {
     private final AnswerService answerService;
 
     @GetMapping
-    List<Answer> getAnswers(@PathVariable("question-id") UUID questionId) {
-        return answerService.getAnswers(questionId);
+    ResponseEntity<List<AnswerDto>> getAnswers(@PathVariable("question-id") UUID questionId) {
+
+        List<AnswerDto> answersDtoList = answerService.getAnswers(questionId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The list of answers has been successfully found");
+
+        return new ResponseEntity<>(answersDtoList, headers, HttpStatus.OK);
     }
 
     @GetMapping("{answer-id}")

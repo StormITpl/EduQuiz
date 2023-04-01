@@ -10,6 +10,7 @@ import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,13 +24,17 @@ public class AnswerService {
 
     @Transactional
     public AnswerDto createAnswer(@NotNull AnswerDto answerRequest) {
-        Answer answer = new Answer(answerRequest.content(), answerRequest.isCorrect());
+        Answer answer = new Answer();
+        answer.setContent(answerRequest.content());
+        answer.setCorrect(answerRequest.isCorrect());
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
     @Transactional(readOnly = true)
-    public List<Answer> getAnswers(UUID questionId) {
-        return answerRepository.findByQuestionId(questionId);
+    public List<AnswerDto> getAnswers(UUID questionId) {
+        return answerRepository.findByQuestionId(questionId).stream()
+                .map(answerMapper::mapAnswerEntityToAnswerDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
