@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResourceAccessException;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
 import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,8 +39,11 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Answer getAnswer(UUID id) {
-        return answerRepository.getReferenceById(id);
+    public AnswerDto getAnswer(UUID id) {
+        Answer answer = answerRepository.findById(id).orElseThrow(() -> {
+            throw new ResourceAccessException("The answer by id: " + id + ", does not exist.");
+        });
+        return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
 
     @Transactional

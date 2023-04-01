@@ -39,8 +39,13 @@ public class AnswerApiController {
     }
 
     @GetMapping("{answer-id}")
-    Answer getAnswer(@PathVariable("question-id") UUID questionId, @PathVariable("answer-id") UUID answerId) {
-        return answerService.getAnswer(answerId);
+    ResponseEntity<AnswerDto> getAnswer(@PathVariable("question-id") UUID questionId, @PathVariable("answer-id") UUID answerId) {
+
+        AnswerDto answerDto = answerService.getAnswer(answerId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The answer has been successfully found");
+
+        return new ResponseEntity<>(answerDto, headers, HttpStatus.OK);
     }
 
     @PostMapping

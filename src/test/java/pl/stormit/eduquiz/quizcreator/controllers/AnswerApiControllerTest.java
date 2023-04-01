@@ -56,12 +56,17 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void getAnswer() {
+    void shouldReturnAnswerById() throws Exception {
         //given
+        AnswerDto firstAnswer = new AnswerDto(firstAnswerId, "Poland", true);
+        given(answerService.getAnswer(firstAnswerId)).willReturn(firstAnswer);
 
         //when
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId));
 
         //then
+        result.andExpect(status().isOk());
+        result.andExpect(content().string(containsString("Poland")));
     }
 
     @Test
