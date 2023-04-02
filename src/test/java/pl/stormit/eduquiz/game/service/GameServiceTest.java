@@ -18,7 +18,8 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -87,12 +88,16 @@ class GameServiceTest {
 
     @Test
     void shouldDeleteGame() {
+
+        //given
         Quiz quiz = new Quiz("Quiz");
         quiz.setId(ID_1);
         Game game = new Game(ID_1, null, quiz);
 
+        //when
         Mockito.doNothing().when(gameRepository).deleteById(game.getId());
 
+        //then
         gameService.deleteGame(game.getId());
         Mockito.verify(gameRepository, Mockito.times(1)).deleteById(game.getId());
         Mockito.verifyNoMoreInteractions(gameRepository);
