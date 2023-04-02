@@ -29,7 +29,8 @@ public class AnswerApiController {
     private final AnswerService answerService;
 
     @GetMapping
-    ResponseEntity<List<AnswerDto>> getAnswers(@PathVariable("question-id") UUID questionId) {
+    ResponseEntity<List<AnswerDto>> getAnswers(@Valid
+                                               @PathVariable("question-id") UUID questionId) {
 
         List<AnswerDto> answersDtoList = answerService.getAnswers(questionId);
         HttpHeaders headers = new HttpHeaders();
@@ -39,7 +40,9 @@ public class AnswerApiController {
     }
 
     @GetMapping("{answer-id}")
-    ResponseEntity<AnswerDto> getAnswer(@PathVariable("question-id") UUID questionId, @PathVariable("answer-id") UUID answerId) {
+    ResponseEntity<AnswerDto> getAnswer(@Valid
+                                        @PathVariable("question-id") UUID questionId,
+                                        @PathVariable("answer-id") UUID answerId) {
 
         AnswerDto answerDto = answerService.getAnswer(answerId);
         HttpHeaders headers = new HttpHeaders();
@@ -60,10 +63,17 @@ public class AnswerApiController {
         return new ResponseEntity<>(createdAnswer, headers, HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
-    ResponseEntity<AnswerDto> updateAnswer(@PathVariable UUID id, @RequestBody AnswerDto answerRequest) {
-        AnswerDto createdAnswer = answerService.updateAnswer(id, answerRequest);
-        return new ResponseEntity<>(createdAnswer, HttpStatus.ACCEPTED);
+    @PutMapping("{answer-id}")
+    ResponseEntity<AnswerDto> updateAnswer(@Valid
+                                           @PathVariable("question-id") UUID questionId,
+                                           @PathVariable("answer-id") UUID answerId,
+                                           @RequestBody AnswerDto answerRequest) {
+
+        AnswerDto updateAnswer = answerService.updateAnswer(answerId, answerRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The answer has been successfully updated");
+
+        return new ResponseEntity<>(updateAnswer, headers, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -45,18 +45,22 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public AnswerDto getAnswer(UUID id) {
-        Answer answer = answerRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException("The answer by id: " + id + ", does not exist.");
+    public AnswerDto getAnswer(UUID answerId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> {
+            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
         });
         return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
 
     @Transactional
     public AnswerDto updateAnswer(UUID answerId, AnswerDto answerRequest) {
-        Answer answer = answerRepository.getReferenceById(answerId);
+
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> {
+            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
+        });
         answer.setContent(answerRequest.content());
         answer.setCorrect(answerRequest.isCorrect());
+
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 

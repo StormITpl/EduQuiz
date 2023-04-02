@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
@@ -21,8 +20,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,12 +95,21 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void updateAnswer() {
+    void shouldReturnStatusOkWhenAnswerUpdatedCorrectly() throws Exception {
         //given
+        AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
+
+        given(answerService.updateAnswer(firstAnswerId, answerDto))
+                .willReturn(new AnswerDto(firstAnswerId, "Spain", false));
 
         //when
+        ResultActions result = mockMvc.perform(put("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
 
         //then
+        result.andExpect(status().isOk());
+        result.andExpect(content().string(containsString("Spain")));
     }
 
     @Test
