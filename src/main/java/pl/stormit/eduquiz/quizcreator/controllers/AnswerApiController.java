@@ -49,9 +49,15 @@ public class AnswerApiController {
     }
 
     @PostMapping
-    ResponseEntity<AnswerDto> createAnswer(@Valid @RequestBody AnswerDto answerRequest) {
-        AnswerDto createdAnswer = answerService.createAnswer(answerRequest);
-        return new ResponseEntity<>(createdAnswer, HttpStatus.CREATED);
+    ResponseEntity<AnswerDto> createAnswer(@Valid
+                                           @PathVariable("question-id") UUID questionId,
+                                           @RequestBody AnswerDto answerRequest) {
+
+        AnswerDto createdAnswer = answerService.createAnswer(questionId, answerRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The answer has been successfully created");
+
+        return new ResponseEntity<>(createdAnswer, headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")

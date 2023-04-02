@@ -1,16 +1,16 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
+import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -24,10 +24,16 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
 
     @Transactional
-    public AnswerDto createAnswer(@NotNull AnswerDto answerRequest) {
+    public AnswerDto createAnswer(@NotNull UUID questionId, @NotNull AnswerDto answerRequest) {
+
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> {
+            throw new EntityNotFoundException("The question by id: " + questionId + ", does not exist.");
+        });
         Answer answer = new Answer();
         answer.setContent(answerRequest.content());
         answer.setCorrect(answerRequest.isCorrect());
+        answer.setQuestion(question);
+
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
@@ -41,7 +47,7 @@ public class AnswerService {
     @Transactional(readOnly = true)
     public AnswerDto getAnswer(UUID id) {
         Answer answer = answerRepository.findById(id).orElseThrow(() -> {
-            throw new ResourceAccessException("The answer by id: " + id + ", does not exist.");
+            throw new EntityNotFoundException("The answer by id: " + id + ", does not exist.");
         });
         return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
