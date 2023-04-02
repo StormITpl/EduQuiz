@@ -66,6 +66,10 @@ public class AnswerService {
 
     @Transactional
     public void deleteAnswer(UUID answerId) {
-        answerRepository.deleteById(answerId);
+        if (answerRepository.existsById(answerId)) {
+            answerRepository.deleteById(answerId);
+        } else {
+            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
+        }
     }
 }

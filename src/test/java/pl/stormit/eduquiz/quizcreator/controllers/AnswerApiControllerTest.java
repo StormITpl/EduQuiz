@@ -98,7 +98,6 @@ class AnswerApiControllerTest {
     void shouldReturnStatusOkWhenAnswerUpdatedCorrectly() throws Exception {
         //given
         AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
-
         given(answerService.updateAnswer(firstAnswerId, answerDto))
                 .willReturn(new AnswerDto(firstAnswerId, "Spain", false));
 
@@ -113,11 +112,16 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void deleteAnswer() {
+    void shouldReturnStatusOkWhenAnswerDeletedCorrectly() throws Exception {
         //given
+        AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
 
         //when
+        ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
 
         //then
+        result.andExpect(status().isOk());
     }
 }
