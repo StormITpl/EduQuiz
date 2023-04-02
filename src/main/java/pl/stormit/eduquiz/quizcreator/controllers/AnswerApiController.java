@@ -74,12 +74,12 @@ public class AnswerApiController {
     }
 
     @DeleteMapping("{answer-id}")
-    public ResponseEntity<AnswerDto> deleteAnswer(@NotNull @PathVariable("question-id") UUID questionId,
+    public ResponseEntity<Void> deleteAnswer(@NotNull @PathVariable("question-id") UUID questionId,
                                              @NotNull @PathVariable("answer-id") UUID answerId) {
         answerService.deleteAnswer(answerId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The answer has been successfully deleted");
 
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 }

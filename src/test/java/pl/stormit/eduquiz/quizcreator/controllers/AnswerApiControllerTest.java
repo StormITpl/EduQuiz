@@ -42,7 +42,7 @@ class AnswerApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnStatusOkWhenFoundListOfAnswersByQuestionIdCorrectly() throws Exception {
+    void shouldReturn200WhenFoundListOfAnswersByQuestionIdCorrectly() throws Exception {
         //given
         AnswerDto firstAnswer = new AnswerDto(firstAnswerId, "Poland", true);
         AnswerDto secondAnswer = new AnswerDto(secondAnswerId, "Spain", false);
@@ -61,7 +61,7 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void shouldReturnStatusOkWhenFoundAnswerByIdCorrectly() throws Exception {
+    void shouldReturn200WhenFoundAnswerByIdCorrectly() throws Exception {
         //given
         AnswerDto firstAnswer = new AnswerDto(firstAnswerId, "Poland", true);
         given(answerService.getAnswer(firstAnswerId)).willReturn(firstAnswer);
@@ -77,7 +77,7 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void shouldReturnStatusCreatedWhenAnswerCreatedCorrectly() throws Exception {
+    void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
         //given
         AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
         Question question = new Question("In which country was Nicolaus Copernicus born");
@@ -95,7 +95,7 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void shouldReturnStatusOkWhenAnswerUpdatedCorrectly() throws Exception {
+    void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
         //given
         AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
         given(answerService.updateAnswer(firstAnswerId, answerDto))
@@ -112,7 +112,7 @@ class AnswerApiControllerTest {
     }
 
     @Test
-    void shouldReturnStatusOkWhenAnswerDeletedCorrectly() throws Exception {
+    void shouldReturn204WhenAnswerDeletedCorrectly() throws Exception {
         //given
         AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
 
@@ -122,6 +122,6 @@ class AnswerApiControllerTest {
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
 
         //then
-        result.andExpect(status().isOk());
+        result.andExpect(status().isNoContent());
     }
 }
