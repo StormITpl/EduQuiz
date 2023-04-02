@@ -1,18 +1,13 @@
 package pl.stormit.eduquiz.quizcreator.domain.quiz;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.Hibernate;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
@@ -25,8 +20,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "quizzes")
-@Getter
-@Setter
+@Data
 public class Quiz {
 
     @Id
@@ -35,23 +29,15 @@ public class Quiz {
 
     private String name;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonBackReference
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questions;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonBackReference
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Game> games;
 
