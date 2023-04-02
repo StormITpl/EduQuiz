@@ -1,11 +1,12 @@
 package pl.stormit.eduquiz.result.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
-import pl.stormit.eduquiz.result.domain.model.Result;
+import pl.stormit.eduquiz.game.dto.GameIdDto;
+import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
 
 import java.util.UUID;
@@ -17,21 +18,26 @@ public class ResultApiController {
 
     private final ResultService resultService;
 
-    @ResponseStatus(HttpStatus.CREATED)
+
     @PostMapping
-    Result createResult(@RequestBody Game game, @RequestBody Quiz quiz) {
-        return resultService.createResult(game, quiz);
+    ResponseEntity<ResultDto> createResult(@RequestBody GameIdDto gameIdDto) {
+        ResultDto resultDto = resultService.createResult(gameIdDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The result has been successfully calculated");
+        return new ResponseEntity<ResultDto>(resultDto, headers, HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
-    Result getResult(@PathVariable UUID id){
-        return resultService.getResult(id);
+    @GetMapping("{resultId}")
+    ResponseEntity<ResultDto> getResult(@PathVariable UUID resultId) {
+        ResultDto resultDto = resultService.getResult(resultId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The result has been found");
+        return new ResponseEntity<ResultDto>(resultDto, headers, HttpStatus.OK);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
-    void deleteResult(@PathVariable UUID id){
+    ResponseEntity<Void> deleteResult(@PathVariable UUID id) {
         resultService.deleteResult(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
