@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameIdDto;
@@ -72,7 +71,12 @@ public class ResultService {
     }
 
     @Transactional
-    public void deleteResult(UUID id) {
-        resultRepository.deleteById(id);
+    public void deleteResult(UUID resultId) {
+        if (resultRepository.existsById(resultId)) {
+            resultRepository.deleteById(resultId);
+        } else {
+            throw new EntityNotFoundException("The result by id: " + resultId + " does not exist.");
+        }
     }
 }
+

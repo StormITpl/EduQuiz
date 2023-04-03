@@ -19,13 +19,18 @@ import pl.stormit.eduquiz.result.dto.ResultDto;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @ActiveProfiles({"test"})
 @Transactional
 @SpringBootTest
 class ResultServiceTest {
 
+    private static final UUID FIRST_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82501");
     @Autowired
     private ResultRepository resultRepository;
     @Autowired
@@ -38,8 +43,10 @@ class ResultServiceTest {
         //given
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
+
         //when
         ResultDto resultDto = resultService.getResult(savedResult.getId());
+
         //then
         assertFalse(resultDto.id().toString().isEmpty());
     }
@@ -50,11 +57,11 @@ class ResultServiceTest {
         Game game = new Game();
         Question exemplaryQuestion = new Question();
         Answer exemplaryAnswer = new Answer();
-        exemplaryAnswer.setId(UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502"));
+        exemplaryAnswer.setId(FIRST_ID);
         exemplaryAnswer.setCorrect(true);
         exemplaryQuestion.setAnswers(List.of(exemplaryAnswer));
-        Quiz exemplaryQuiz = new Quiz("Royal", null, null, List.of(exemplaryQuestion));
-
+        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null,
+                null, List.of(exemplaryQuestion), List.of(game));
         game.setQuiz(exemplaryQuiz);
         game.setUserAnswers(List.of(UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502")));
         Game savedGame = gameRepository.save(game);
@@ -62,6 +69,7 @@ class ResultServiceTest {
 
         //when
         ResultDto resultDto = resultService.createResult(gameIdDto);
+
         //then
         assertFalse(resultDto.id().toString().isEmpty());
         assertEquals(resultDto.game(), savedGame);
@@ -73,9 +81,12 @@ class ResultServiceTest {
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
         UUID id = savedResult.getId();
+
         //when
         resultService.deleteResult(savedResult.getId());
+
         //then
-        assertThrows(EntityNotFoundException.class, ()-> resultService.getResult(id));
+        assertTrue(resultRepository.findById(savedResult.getId()).isEmpty());
+        assertThrows(EntityNotFoundException.class, () -> resultService.getResult(id));
     }
 }
