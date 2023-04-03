@@ -1,7 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,30 +10,36 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import pl.stormit.eduquiz.quizcreator.domain.user.User;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles({"test"})
-@RequiredArgsConstructor
 @WebMvcTest(UserApiController.class)
 class UserApiControllerTest {
 
+    private static final UUID FIRST_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0221");
+    private static final UUID SECOND_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0123");
+    private static final UUID THIRD_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0117");
     @Autowired
     private MockMvc mockMvc;
 
@@ -45,22 +50,20 @@ class UserApiControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void shouldGetUsers() throws Exception {
+    void shouldReturn200WhenFoundAllResults() throws Exception {
         // given
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d3");
-        UserDto firstDtoUser = new UserDto(ID_1, "Ananiasz");
-        final UUID ID_2 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d4");
-        UserDto secondDtoUser = new UserDto(ID_2, "Wojski");
-        final UUID ID_3 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d5");
-        UserDto thirdDtoUser = new UserDto(ID_2, "Dajmiech");
+        UserDto firstDtoUser = new UserDto(FIRST_ID, "Ananiasz", List.of());
+        UserDto secondDtoUser = new UserDto(SECOND_ID, "Wojski", List.of());
+        UserDto thirdDtoUser = new UserDto(THIRD_ID, "Dajmiech", List.of());
+        List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
+        given(userService.getUsers()).willReturn((expectedDtoUsers));
 
         //when
-        List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
-        when(userService.getUsers()).thenReturn((expectedDtoUsers));
+        MockHttpServletRequestBuilder content = get("/api/v1/users");
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        mockMvc.perform(content)
+                .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Ananiasz")))
                 .andExpect(content().string(containsString("Wojski")))
                 .andExpect(content().string(containsString("Dajmiech")))
@@ -68,14 +71,13 @@ class UserApiControllerTest {
     }
 
     @Test
-    void shouldGetUserById() throws Exception {
+    void shouldReturn200IfUserIsFoundByIdCorrectly() throws Exception {
         // given
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d3");
-        UserDto expectedDtoUser = new UserDto(ID_1, "Ananiasz");
+        UserDto expectedDtoUser = new UserDto(FIRST_ID, "Ananiasz", List.of());
         String userUrl = "/api/v1/users/" + expectedDtoUser.id();
 
         //when
-        given(userService.getUser(any())).willReturn(expectedDtoUser);
+        given(userService.getUser(FIRST_ID)).willReturn(expectedDtoUser);
 
         //then
         mockMvc.perform(get(userUrl))
@@ -86,10 +88,9 @@ class UserApiControllerTest {
 
     @Rollback
     @Test
-    void shouldCreateUser() throws Exception {
+    void shouldReturn201WhenUserCreatedCorrectly() throws Exception {
         // given
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d6");
-        UserDto createdUserDto = new UserDto(ID_1, "Hegemon");
+        UserDto createdUserDto = new UserDto(FIRST_ID, "Hegemon", List.of());
 
         // when
         MockHttpServletRequestBuilder content = post("/api/v1/users")
@@ -104,38 +105,36 @@ class UserApiControllerTest {
 
     @Rollback
     @Test
-    void shouldUpdateUser() throws Exception {
+    void shouldReturn200WhenUserUpdatedCorrectly() throws Exception {
         //given
-        User user = new User("Hegemon");
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d6");
-        UserDto updatedUserDto = new UserDto(ID_1, "Hegemon The Great");
+        UserDto userDto = new UserDto(FIRST_ID, "Hegemon", List.of());
+        UserRequestDto requestDto = new UserRequestDto("Imperator", List.of());
 
         //then
         MockHttpServletRequestBuilder content = put(
-                "/api/v1/users/{userId}", user.getId())
+                "/api/v1/users/{userId}", FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedUserDto));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto)));
 
         //when
         mockMvc.perform(content)
-                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+        verify(userService, times(1)).updateUser(eq(FIRST_ID), eq(requestDto));
     }
 
     @Rollback
     @Test
-    void shouldDeleteUser() throws Exception {
-        //given
-        User deletedUser = new User("Hegemon");
-
+    void shouldReturn204WhenUserDeletedCorrectly() throws Exception {
         //then
         MockHttpServletRequestBuilder content = delete(
-                "/api/v1/users/{userId}", deletedUser.getId())
+                "/api/v1/users/{userId}", FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON);
 
         //when
         mockMvc.perform(content)
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
+        verify(userService, times(1)).deleteUser(eq(FIRST_ID));
     }
 }
