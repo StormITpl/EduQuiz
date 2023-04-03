@@ -5,16 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
-import pl.stormit.eduquiz.quizcreator.domain.category.CategoryRepository;
-import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -30,57 +26,64 @@ class CategoryServiceTest {
     @Test
     void shouldReturnTwoCategories() {
         //given
-        Category firstCategory = new Category("Chemistry");
-        Category secondCategory = new Category("Biology");
+        Category firstCategory = new Category();
+        firstCategory.setName("Chemistry");
+        Category secondCategory = new Category();
+        secondCategory.setName("Biology");
         categoryRepository.saveAll(List.of(firstCategory, secondCategory));
         //when
-        List<Category> categories = categoryService.getCategories();
+        List<CategoryDto> categoriesDto = categoryService.getCategories();
         //then
-        assertThat(categories)
+        assertThat(categoriesDto)
                 .hasSize(2)
-                .extracting(Category::getName)
+                .extracting(CategoryDto::name)
                 .containsExactlyInAnyOrder("Chemistry", "Biology");
     }
 
     @Test
     void shouldReturnOneCategoryFoundById() {
         //given
-        Category category = new Category("Math");
+        Category category = new Category();
+        category.setName("Math");
         categoryRepository.save(category);
         //when
-        Category categoryFoundById = categoryService.getCategory(category.getId());
+        CategoryDto categoryDtoFoundById = categoryService.getCategory(category.getId());
         //then
-        assertEquals(categoryFoundById, category);
+        assertEquals(categoryDtoFoundById.name(), category.getName());
     }
 
     @Test
     void shouldCreateCategory() {
         //given
-        CategoryDto  categoryRequestDto = new CategoryDto("Math");
+        Category category = new Category();
+        category.setName("Chemistry");
+        CategoryDto categoryRequestDto = new CategoryDto(
+                category.getId(),category.getName());
         //when
         CategoryDto createdCategory = categoryService.createCategory(categoryRequestDto);
         //then
         assertEquals(createdCategory.name(), categoryRequestDto.name());
+        assertNotNull(createdCategory.id());
     }
 
     @Test
     void shouldUpdateCategory() {
         //given
-        Category category = new Category("Math");
+        Category category = new Category();
+        category.setName("Math");
         categoryRepository.save(category);
-        Category categoryToUpdate = categoryService.getCategory(category.getId());
-        categoryToUpdate.setName("Economy");
-        CategoryDto categoryToUpdateDto = new CategoryDto(categoryToUpdate.getName());
+        CategoryDto categoryToUpdate = new CategoryDto(category.getId(),"Physics");
         //when
-        CategoryDto updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdateDto);
+        CategoryDto updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdate);
         //then
-        assertEquals(updatedCategory.name(), "Economy");
+        assertEquals(updatedCategory.name(), "Physics");
     }
 
     @Test
     void shouldDeleteCategory() {
         //given
-        Category category = new Category("Math");
+        Category category = new Category();
+        category.setName("Physics");
         categoryRepository.save(category);
         //when
         categoryService.deleteCategory(category.getId());

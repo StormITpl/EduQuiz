@@ -1,7 +1,9 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
@@ -29,31 +29,51 @@ public class CategoryApiController {
     private final CategoryService categoryService;
 
     @GetMapping
-    List<Category> getCategories() {
-        return categoryService.getCategories();
+    ResponseEntity<List<CategoryDto>> getCategories() {
+
+        List<CategoryDto> categoryDtoList = categoryService.getCategories();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The list of categories has been successfully found");
+
+        return new ResponseEntity<>(categoryDtoList, headers, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    Category getCategory(@PathVariable UUID id) {
-        return categoryService.getCategory(id);
+    @GetMapping("{category-id}")
+    ResponseEntity<CategoryDto> getCategory(@NotNull @PathVariable("category-id") UUID categoryId) {
+        CategoryDto categoryDto = categoryService.getCategory(categoryId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The category has been successfully found");
+
+        return new ResponseEntity<>(categoryDto, headers, HttpStatus.OK);
     }
 
 
     @PostMapping
     ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
+
         CategoryDto createdCategory = categoryService.createCategory(categoryRequest);
-        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The category has been successfully created");
+
+        return new ResponseEntity<>(createdCategory, headers, HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
-    ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @RequestBody CategoryDto categoryRequest) {
-        CategoryDto createdCategory = categoryService.updateCategory(id, categoryRequest);
-        return new ResponseEntity<>(createdCategory, HttpStatus.ACCEPTED);
-    }
+    @PutMapping("{category-id}")
+    ResponseEntity<CategoryDto> updateCategory(@NotNull @PathVariable("category-id") UUID categoryId,
+                                               @RequestBody CategoryDto categoryRequest) {
+        CategoryDto createdCategory = categoryService.updateCategory(categoryId, categoryRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The category has been successfully updated");
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{id}")
-    void deleteCategory(@PathVariable UUID id) {
-        categoryService.deleteCategory(id);
+        return new ResponseEntity<>(createdCategory,headers, HttpStatus.OK);
+    }
+    
+    @DeleteMapping("{category-id}")
+    ResponseEntity<Void> deleteCategory(@NotNull @PathVariable("category-id") UUID categoryId) {
+        categoryService.deleteCategory(categoryId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The category has been successfully deleted");
+
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 }
