@@ -1,13 +1,11 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
-import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
@@ -24,52 +22,31 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
 
     @Transactional
-    public AnswerDto createAnswer(@NotNull UUID questionId, @NotNull AnswerDto answerRequest) {
-
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> {
-            throw new EntityNotFoundException("The question by id: " + questionId + ", does not exist.");
-        });
-        Answer answer = new Answer();
-        answer.setContent(answerRequest.content());
-        answer.setCorrect(answerRequest.isCorrect());
-        answer.setQuestion(question);
-
+    public AnswerDto createAnswer(@NotNull AnswerDto answerRequest) {
+        Answer answer = new Answer(answerRequest.content(), answerRequest.isCorrect());
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
     @Transactional(readOnly = true)
-    public List<AnswerDto> getAnswers(UUID questionId) {
-        return answerRepository.findByQuestionId(questionId).stream()
-                .map(answerMapper::mapAnswerEntityToAnswerDto)
-                .toList();
+    public List<Answer> getAnswers(UUID questionId) {
+        return answerRepository.findByQuestionId(questionId);
     }
 
     @Transactional(readOnly = true)
-    public AnswerDto getAnswer(UUID answerId) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> {
-            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
-        });
-        return answerMapper.mapAnswerEntityToAnswerDto(answer);
+    public Answer getAnswer(UUID id) {
+        return answerRepository.getReferenceById(id);
     }
 
     @Transactional
     public AnswerDto updateAnswer(UUID answerId, AnswerDto answerRequest) {
-
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> {
-            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
-        });
+        Answer answer = answerRepository.getReferenceById(answerId);
         answer.setContent(answerRequest.content());
         answer.setCorrect(answerRequest.isCorrect());
-
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
     @Transactional
     public void deleteAnswer(UUID answerId) {
-        if (answerRepository.existsById(answerId)) {
-            answerRepository.deleteById(answerId);
-        } else {
-            throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
-        }
+        answerRepository.deleteById(answerId);
     }
 }
