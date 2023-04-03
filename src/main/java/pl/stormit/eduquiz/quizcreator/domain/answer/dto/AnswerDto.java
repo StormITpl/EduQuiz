@@ -1,5 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer.dto;
 
-public record AnswerDto(String content,
+import java.util.UUID;
+
+public record AnswerDto(UUID id, String content,
                         boolean isCorrect) {
 }
