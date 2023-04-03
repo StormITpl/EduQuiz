@@ -6,10 +6,7 @@ import pl.stormit.eduquiz.quizcreator.domain.user.User;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface UserRequestMapper {
 
-
-    UserDto mapUserEntityToUserDto(User user);
-
-    List<UserDto> mapUserListOfEntityToUsersDtoList(List<User> userList);
+    UserRequestDto mapUserEntityToUserRequestDto(User user);
 }

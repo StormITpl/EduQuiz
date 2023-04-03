@@ -1,17 +1,22 @@
 package pl.stormit.eduquiz.quizcreator.domain.quiz;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizCreationDto;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizEditingDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -27,50 +32,68 @@ class QuizServiceTest {
     @Test
     void shouldReturnTwoQuizzes() {
         //given
-        Quiz firstQuiz = new Quiz("Royal");
-        Quiz secondQuiz = new Quiz("Master");
-        quizRepository.saveAll(List.of(firstQuiz, secondQuiz));
+        quizRepository.findAll();
+        Quiz firstQuiz = new Quiz();
+        firstQuiz.setName("Gold");
+        quizRepository.save(firstQuiz);
+        Quiz secondQuiz = new Quiz();
+        secondQuiz.setName("Silver");
+        quizRepository.save(secondQuiz);
+
         //when
-        List<Quiz> quizzes = quizService.getQuizzes();
+        List<QuizDto> quizzesDto = quizService.getQuizzes();
+
         //then
-        assertThat(quizzes)
+        assertThat(quizzesDto)
                 .hasSize(2)
-                .extracting(Quiz::getName)
-                .containsExactlyInAnyOrder("Royal", "Master");
+                .extracting(QuizDto::name)
+                .containsExactlyInAnyOrder("Gold", "Silver");
     }
 
     @Test
     void shouldReturnOneQuizFoundById() {
         //given
-        Quiz quiz = new Quiz("Special");
-        quizRepository.save(quiz);
+        Quiz quiz = new Quiz();
+        quiz.setName("Special");
+        Quiz savedQuiz = quizRepository.save(quiz);
+
         //when
-        Quiz quizFoundById = quizRepository.getReferenceById(quiz.getId());
+        QuizDto quizDtoFoundById = quizService.getQuiz(savedQuiz.getId());
+
         //then
-        assertEquals(quizFoundById.getId(), quiz.getId());
+        assertEquals(quizDtoFoundById.id(), savedQuiz.getId());
+        assertEquals(quizDtoFoundById.name(), savedQuiz.getName());
     }
 
     @Test
     void shouldCreateQuiz() {
         //given
-        Quiz quiz = new Quiz("Special");
-        QuizCreationDto quizCreationDto = new QuizCreationDto(
-                quiz.getName(), quiz.getCategory(), quiz.getUser(), quiz.getQuestions());
+        Quiz quiz = new Quiz();
+        quiz.setName("Special");
+        QuizRequestDto quizRequestDto = new QuizRequestDto(
+                quiz.getName(), quiz.getCategory(), quiz.getUser(), quiz.getQuestions(), quiz.getGames());
+
         //when
-        QuizCreationDto createdQuiz = quizService.createQuiz(quizCreationDto);
+        QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
+
         //then
         assertEquals(createdQuiz.name(), quiz.getName());
+        assertNotNull(createdQuiz.id());
     }
 
     @Test
     void shouldUpdateQuiz() {
         //given
-        Quiz quiz = new Quiz("Special", null, List.of());
+        Quiz quiz = new Quiz();
+        quiz.setName("Special");
+        quiz.setQuestions(List.of());
         quizRepository.save(quiz);
-        QuizEditingDto quizToUpdate = new QuizEditingDto("Pro", quiz.getCategory(), quiz.getQuestions());
+        QuizRequestDto quizToUpdate = new QuizRequestDto("Pro", quiz.getCategory(),
+                quiz.getUser(), quiz.getQuestions(), quiz.getGames());
 
         //when
-        QuizEditingDto updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);
+        QuizDto updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);
+
         //then
         assertEquals(updatedQuiz.name(), "Pro");
         assertNull(updatedQuiz.category());
@@ -80,11 +103,15 @@ class QuizServiceTest {
     @Test
     void shouldDeleteQuiz() {
         //given
-        Quiz quiz = new Quiz("Special");
-        quiz = quizRepository.save(quiz);
+        Quiz quiz = new Quiz();
+        quiz.setName("Special");
+        Quiz savedQuiz = quizRepository.save(quiz);
+
         //when
         quizService.deleteQuiz(quiz.getId());
+
         //then
-        assertTrue(quizRepository.findById(quiz.getId()).isEmpty());
+        assertTrue(quizRepository.findById(savedQuiz.getId()).isEmpty());
+        assertThrows(EntityNotFoundException.class, () -> quizService.getQuiz(savedQuiz.getId()));
     }
 }
