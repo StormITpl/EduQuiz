@@ -1,5 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.domain.category.dto;
 
 
-public record CategoryDto(String name) {
+import java.util.UUID;
+
+public record CategoryDto(UUID id, String name) {
 }
