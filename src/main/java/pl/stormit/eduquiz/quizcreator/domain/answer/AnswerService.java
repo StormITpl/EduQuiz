@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
@@ -24,17 +25,17 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
 
     @Transactional
-    public AnswerDto createAnswer(@NotNull UUID questionId, @NotNull AnswerDto answerRequest) {
+    public AnswerDto createAnswer(UUID questionId, AnswerRequestDto answerRequestDto) {
 
         Question question = questionRepository.findById(questionId).orElseThrow(() -> {
             throw new EntityNotFoundException("The question by id: " + questionId + ", does not exist.");
         });
         Answer answer = new Answer();
-        answer.setContent(answerRequest.content());
-        answer.setCorrect(answerRequest.isCorrect());
+        answer.setContent(answerRequestDto.content());
+        answer.setCorrect(answerRequestDto.isCorrect());
         answer.setQuestion(question);
 
-        return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
+        return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
 
     @Transactional(readOnly = true)
@@ -53,15 +54,15 @@ public class AnswerService {
     }
 
     @Transactional
-    public AnswerDto updateAnswer(UUID answerId, AnswerDto answerRequest) {
+    public AnswerDto updateAnswer(UUID answerId, AnswerRequestDto answerRequestDto) {
 
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> {
             throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
         });
-        answer.setContent(answerRequest.content());
-        answer.setCorrect(answerRequest.isCorrect());
+        answer.setContent(answerRequestDto.content());
+        answer.setCorrect(answerRequestDto.isCorrect());
 
-        return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
+        return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
 
     @Transactional

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,25 +53,25 @@ public class AnswerApiController {
 
     @PostMapping
     ResponseEntity<AnswerDto> createAnswer(@NotNull @PathVariable("question-id") UUID questionId,
-                                           @Valid @RequestBody AnswerDto answerRequest) {
+                                           @Valid @RequestBody AnswerRequestDto answerRequestDto) {
 
-        AnswerDto createdAnswer = answerService.createAnswer(questionId, answerRequest);
+        AnswerDto createdAnswerDto = answerService.createAnswer(questionId, answerRequestDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The answer has been successfully created");
 
-        return new ResponseEntity<>(createdAnswer, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdAnswerDto, headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{answer-id}")
     ResponseEntity<AnswerDto> updateAnswer(@NotNull @PathVariable("question-id") UUID questionId,
                                            @NotNull @PathVariable("answer-id") UUID answerId,
-                                           @Valid @RequestBody AnswerDto answerRequest) {
+                                           @Valid @RequestBody AnswerRequestDto answerRequestDto) {
 
-        AnswerDto updateAnswer = answerService.updateAnswer(answerId, answerRequest);
+        AnswerDto updateAnswerDto = answerService.updateAnswer(answerId, answerRequestDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The answer has been successfully updated");
 
-        return new ResponseEntity<>(updateAnswer, headers, HttpStatus.OK);
+        return new ResponseEntity<>(updateAnswerDto, headers, HttpStatus.OK);
     }
 
     @DeleteMapping("{answer-id}")
