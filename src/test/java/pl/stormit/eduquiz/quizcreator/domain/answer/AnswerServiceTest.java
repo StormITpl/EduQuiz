@@ -10,6 +10,8 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
+import pl.stormit.eduquiz.quizcreator.domain.question.Question;
+import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +33,12 @@ public class AnswerServiceTest {
     @Autowired
     private AnswerMapper answerMapper;
 
+    @Autowired
+    private QuestionRepository questionRepository;
+
     private Answer answer;
+
+    private Question question;
 
     @BeforeEach
     void SetUp(){
@@ -39,15 +46,19 @@ public class AnswerServiceTest {
         answer.setContent("Poland");
         answer.setCorrect(true);
         answer.setQuestion(null);
+        answerRepository.save(answer);
+        question = new Question();
+        question.setContent("In which country was Nicolaus Copernicus born?");
+        questionRepository.save(question);
     }
 
     @Test
     void shouldCreateAnswerCorrectly() {
         //given
-        AnswerRequestDto userRequestDto = new AnswerRequestDto("Poland", true, null);
+        AnswerRequestDto userRequestDto = new AnswerRequestDto("Poland", true, question);
 
         //when
-        AnswerDto createdAnswerDto = answerService.createAnswer(userRequestDto);
+        AnswerDto createdAnswerDto = answerService.createAnswer(question.getId(), userRequestDto);
 
         //then
         assertThat(createdAnswerDto.content()).isEqualTo(userRequestDto.content());
@@ -59,7 +70,7 @@ public class AnswerServiceTest {
     void shouldReturnListOfAnswersCorrectly() {
         //given
         List<Answer> answers = answerRepository.findAll();
-        List<AnswerDto> expectedAnswers = answerMapper.mapAnswerEntityToAnswerDto(answers);
+        List<AnswerDto> expectedAnswers = answerMapper.mapAnswerEntityToAnswerDtoList(answers);
 
         //when
         List<AnswerDto> actualAnswers = answerService.getAnswers(null);
@@ -86,7 +97,7 @@ public class AnswerServiceTest {
     void shouldUpdateAnswerCorrectly() {
         //given
         UUID answerId = answer.getId();
-        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Spain", false, null)
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Spain", false, null);
 
         //when
         AnswerDto updatedAnswerDto = answerService.updateAnswer(answerId, answerRequestDto);
