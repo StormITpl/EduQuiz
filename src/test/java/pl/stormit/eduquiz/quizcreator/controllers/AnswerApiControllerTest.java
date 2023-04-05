@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 
 import java.util.List;
@@ -44,8 +46,8 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenFoundListOfAnswersByQuestionIdCorrectly() throws Exception {
         //given
-        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true);
-        AnswerDto secondAnswer = new AnswerDto(SECOND_ANSWER_ID, "Spain", false);
+        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
+        AnswerDto secondAnswer = new AnswerDto(SECOND_ANSWER_ID, "Spain", false, null);
         given(answerService.getAnswers(any())).willReturn(List.of(firstAnswer, secondAnswer));
 
         //when
@@ -63,7 +65,7 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenFoundAnswerByIdCorrectly() throws Exception {
         //given
-        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true);
+        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
         given(answerService.getAnswer(FIRST_ANSWER_ID)).willReturn(firstAnswer);
 
         //when
@@ -79,15 +81,16 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true);
         Question question = new Question("In which country was Nicolaus Copernicus born");
         UUID questionId = question.getId();
-        given(answerService.createAnswer(questionId, answerDto)).willReturn(answerDto);
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, question);
+        given(answerService.createAnswer(questionId, answerRequestDto))
+                .willReturn(new AnswerDto(FIRST_ANSWER_ID,"Poland", true, question));
 
         //when
         ResultActions result = mockMvc.perform(post("/api/v1/questions/" + questionId + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
         //then
         result.andExpect(status().isCreated());
@@ -97,14 +100,14 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true);
-        given(answerService.updateAnswer(FIRST_ANSWER_ID, answerDto))
-                .willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false));
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto( "Poland", true, null);
+        given(answerService.updateAnswer(FIRST_ANSWER_ID, answerRequestDto))
+                .willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false, null));
 
         //when
         ResultActions result = mockMvc.perform(put("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
         //then
         result.andExpect(status().isOk());
@@ -114,7 +117,7 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn204WhenAnswerDeletedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true);
+        AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
 
         //when
         ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
