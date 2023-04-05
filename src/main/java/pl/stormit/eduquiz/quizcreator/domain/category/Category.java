@@ -1,6 +1,5 @@
 package pl.stormit.eduquiz.quizcreator.domain.category;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

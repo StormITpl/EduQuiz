@@ -15,6 +15,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,9 +48,10 @@ class GameServiceTest {
     void shouldCreateGameCorrectly() {
 
         //given
-        Quiz quiz = new Quiz("Quiz");
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
         quiz.setId(ID_1);
-        QuizDto quizDto = new QuizDto(ID_1, "Quiz");
+        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
@@ -68,9 +70,10 @@ class GameServiceTest {
     void shouldReturnGame() {
 
         //given
-        Quiz quiz = new Quiz("Quiz");
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
         quiz.setId(ID_1);
-        QuizDto quizDto = new QuizDto(ID_1, "Quiz");
+        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
@@ -90,7 +93,8 @@ class GameServiceTest {
     void shouldDeleteGame() {
 
         //given
-        Quiz quiz = new Quiz("Quiz");
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
         quiz.setId(ID_1);
         Game game = new Game(ID_1, null, quiz);
 

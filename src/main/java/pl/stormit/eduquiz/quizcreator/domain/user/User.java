@@ -1,9 +1,14 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.List;
@@ -12,24 +17,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     private String nickname;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonBackReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
-
-    public User() {
-        this.id = UUID.randomUUID();
-    }
-
-    public User(String nickname) {
-        this();
-        this.nickname = nickname;
-    }
 }
