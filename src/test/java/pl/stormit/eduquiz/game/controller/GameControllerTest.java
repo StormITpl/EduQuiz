@@ -3,13 +3,13 @@ package pl.stormit.eduquiz.game.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import pl.stormit.eduquiz.game.contoller.GameController;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
@@ -21,14 +21,14 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@SpringBootTest
-@AutoConfigureMockMvc
+@ActiveProfiles({"test"})
+@WebMvcTest(GameController.class)
 class GameControllerTest {
 
     private static final UUID ID_1 = UUID.fromString("5d1b4c2c-9f1c-11ed-a8fc-0242ac120001");
@@ -45,10 +45,11 @@ class GameControllerTest {
     private ObjectMapper objectMapper;
 
     private GameDto gameDto;
+
     private QuizDto quizDto;
 
     @Test
-    void shouldReturnStatusCreatedWhenCreateGameCorrectly() throws Exception {
+    void shouldReturn201WhenGameCreatedCorrectly() throws Exception {
         //given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
@@ -66,7 +67,7 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldReturnStatusOkWhenReturnGameCorrectly() throws Exception {
+    void shouldReturn200WhenFoundGameByIdCorrectly() throws Exception {
         //given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
@@ -74,13 +75,27 @@ class GameControllerTest {
                 .thenReturn(gameDto);
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/v1/games/"+ID_1)
+        ResultActions result = mockMvc.perform(get("/api/v1/games/" + ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto)))
         );
 
         //then
         result.andExpect(status().isOk());
-        //result.andExpect(header().string("message", "The Game has been successfully found"));
+    }
+
+    @Test
+    void shouldReturn204WhenGameDeletedCorrectly() throws Exception {
+        //given
+        List<UUID> listExample = Collections.emptyList();
+        GameDto gameDto = new GameDto(ID_1, listExample);
+
+        //when
+        ResultActions result = mockMvc.perform(delete("/api/v1/games/" + ID_1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
+
+        //then
+        result.andExpect(status().isNoContent());
     }
 }
