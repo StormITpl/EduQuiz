@@ -1,10 +1,12 @@
 package pl.stormit.eduquiz.game.contoller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
 import java.util.UUID;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/games")
@@ -29,47 +32,54 @@ public class GameController {
 
     private final GameService gameService;
 
-
     @GetMapping("/{gameId}")
-    public ResponseEntity<GameDto> getGame(@PathVariable UUID gameId){
-        GameDto game = gameService.getGame(gameId);
+    public ResponseEntity<GameDto> getGame(@NotNull @PathVariable UUID gameId) {
+
+        GameDto gameDto = gameService.getGame(gameId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The Game has been successfully found");
-        return new ResponseEntity<>(game,headers, HttpStatus.OK);
+
+        return new ResponseEntity<>(gameDto, headers, HttpStatus.OK);
     }
+
     @PostMapping("/singleGame")
     public ResponseEntity<GameDto> createGame(@Valid @RequestBody QuizDto quizRequest) {
 
-        GameDto createGame = gameService.createGame(quizRequest);
+        GameDto createGameDto = gameService.createGame(quizRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The new game has been successfully created");
 
-        return new ResponseEntity<GameDto>(createGame, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(createGameDto, headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<GameDto> playGame(@PathVariable UUID gameId, @RequestBody AnswerDto answerDto) {
+    public ResponseEntity<GameDto> playGame(@NotNull @PathVariable UUID gameId,
+                                            @Valid @RequestBody AnswerDto answerDto) {
 
-        GameDto game = gameService.playGame(gameId, answerDto);
+        GameDto gameDto = gameService.playGame(gameId, answerDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The game has been successfully started");
 
-        return new ResponseEntity<>(game, headers, HttpStatus.OK);
+        return new ResponseEntity<>(gameDto, headers, HttpStatus.OK);
     }
 
     @PutMapping("/complete/{gameId}")
-    public ResponseEntity<GameDto> completeGame(@PathVariable UUID gameId){
+    public ResponseEntity<GameDto> completeGame(@NotNull @PathVariable UUID gameId) {
 
-        GameDto game = gameService.completeGame(gameId);
+        GameDto gameDto = gameService.completeGame(gameId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The game has been successfully completed");
 
-        return new ResponseEntity<>(game, headers, HttpStatus.OK);
+        return new ResponseEntity<>(gameDto, headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{gameId}")
-    public ResponseEntity<Void> deleteGame(@PathVariable UUID gameId) {
+    public ResponseEntity<Void> deleteGame(@NotNull @PathVariable UUID gameId) {
+
         gameService.deleteGame(gameId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", "The game has been successfully deleted");
+
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 }
