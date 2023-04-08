@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 
 import java.util.List;
@@ -28,9 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AnswerApiController.class)
 class AnswerApiControllerTest {
 
-    private static final UUID questionId = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0117");
-    private static final UUID firstAnswerId = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0221");
-    private static final UUID secondAnswerId = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0123");
+    private static final UUID QUESTION_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0117");
+    private static final UUID FIRST_ANSWER_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0221");
+    private static final UUID SECOND_ANSWER_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0123");
 
     @MockBean
     private AnswerService answerService;
@@ -44,12 +46,12 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenFoundListOfAnswersByQuestionIdCorrectly() throws Exception {
         //given
-        AnswerDto firstAnswer = new AnswerDto(firstAnswerId, "Poland", true);
-        AnswerDto secondAnswer = new AnswerDto(secondAnswerId, "Spain", false);
+        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
+        AnswerDto secondAnswer = new AnswerDto(SECOND_ANSWER_ID, "Spain", false, null);
         given(answerService.getAnswers(any())).willReturn(List.of(firstAnswer, secondAnswer));
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + questionId + "/answers")
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstAnswer, secondAnswer)))));
         ;
@@ -63,11 +65,11 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenFoundAnswerByIdCorrectly() throws Exception {
         //given
-        AnswerDto firstAnswer = new AnswerDto(firstAnswerId, "Poland", true);
-        given(answerService.getAnswer(firstAnswerId)).willReturn(firstAnswer);
+        AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
+        given(answerService.getAnswer(FIRST_ANSWER_ID)).willReturn(firstAnswer);
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId)
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(firstAnswer))));
 
@@ -79,15 +81,14 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
-        Question question = new Question("In which country was Nicolaus Copernicus born");
-        UUID questionId = question.getId();
-        given(answerService.createAnswer(questionId, answerDto)).willReturn(answerDto);
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
+        given(answerService.createAnswer(QUESTION_ID, answerRequestDto))
+                .willReturn(new AnswerDto(FIRST_ANSWER_ID,"Poland", true, null));
 
         //when
-        ResultActions result = mockMvc.perform(post("/api/v1/questions/" + questionId + "/answers")
+        ResultActions result = mockMvc.perform(post("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
         //then
         result.andExpect(status().isCreated());
@@ -97,14 +98,14 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
-        given(answerService.updateAnswer(firstAnswerId, answerDto))
-                .willReturn(new AnswerDto(firstAnswerId, "Spain", false));
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto( "Poland", true, null);
+        given(answerService.updateAnswer(FIRST_ANSWER_ID, answerRequestDto))
+                .willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false, null));
 
         //when
-        ResultActions result = mockMvc.perform(put("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId)
+        ResultActions result = mockMvc.perform(put("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
         //then
         result.andExpect(status().isOk());
@@ -114,10 +115,10 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn204WhenAnswerDeletedCorrectly() throws Exception {
         //given
-        AnswerDto answerDto = new AnswerDto(firstAnswerId, "Poland", true);
+        AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
 
         //when
-        ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + questionId + "/answers/" + firstAnswerId)
+        ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
 

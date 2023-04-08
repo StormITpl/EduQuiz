@@ -98,8 +98,8 @@ public class PlayGameIntegrationTest {
         restTemplate.exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
         UUID gameId = gameRepository.findAll().get(0).getId();
 
-        AnswerDto answerDto1 = new AnswerDto(UUID.randomUUID(), "Abc", true);
-        AnswerDto answerDto2 = new AnswerDto(UUID.randomUUID(), "Def", false);
+        AnswerDto answerDto1 = new AnswerDto(UUID.randomUUID(), "Abc", true, null);
+        AnswerDto answerDto2 = new AnswerDto(UUID.randomUUID(), "Def", false, null);
 
         //when
         URI playedGameUri = URI.create("/api/v1/games/" + gameId);
