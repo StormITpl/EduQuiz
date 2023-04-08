@@ -9,9 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.List;
@@ -19,8 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "games")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Game {
