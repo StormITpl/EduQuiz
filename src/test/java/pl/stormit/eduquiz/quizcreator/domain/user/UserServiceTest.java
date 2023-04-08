@@ -1,20 +1,25 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -23,6 +28,8 @@ class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Autowired
     private UserService userService;
@@ -30,128 +37,98 @@ class UserServiceTest {
     @Autowired
     private UserMapper userMapper;
 
+    private User firstUser;
+    private User secondUser;
+    private User thirdUser;
+
     @BeforeEach
     void SetUp() {
-        userMapper.mapUserEntityToUsersDtoList(userRepository.saveAll(List.of(
-                new User("Ananiasz"),
-                new User("Wojski"),
-                new User("Dajmiech")
-        )));
+        firstUser = new User();
+        firstUser.setNickname("Ananiasz");
+        userRepository.save(firstUser);
+        secondUser = new User();
+        secondUser.setNickname("Wojski");
+        userRepository.save(secondUser);
+        thirdUser = new User();
+        thirdUser.setNickname("Dajmiech");
+        userRepository.save(thirdUser);
     }
 
     @Test
-    void shouldGetAllUsers_1() {
+    void shouldReturnAllUsers() {
         //given
         List<User> users = userRepository.findAll();
-        List<UserDto> expectedUsers = userMapper.mapUserEntityToUsersDtoList(users);
+        List<UserDto> expectedUsers = userMapper.mapUserListOfEntityToUsersDtoList(users);
 
         //when
-        List<UserDto> actualUsers = userMapper.mapUserEntityToUsersDtoList(userRepository.findAll());
+        List<UserDto> actualUsers = userService.getUsers();
 
         //then
-        Assertions.assertThat(actualUsers).isNotNull();
-        Assertions.assertThat(actualUsers).hasSize(expectedUsers.size());
-        Assertions.assertThat(actualUsers).extracting(UserDto::nickname);
-        Assertions.assertThat(actualUsers).containsExactlyElementsOf(expectedUsers);
-    }
-
-    @Test
-    void shouldGetAllUsers_2() {
-        //given
-        userRepository.deleteAll();
-        userRepository.saveAll(List.of(
-                new User("Ananiasz"), new User("Wojski"), new User("Dajmiech")));
-
-        //when
-        List<UserDto> userList = userMapper.mapUserEntityToUsersDtoList(userRepository.findAll());
-
-        //then
-        assertThat(userList)
-                .hasSize(3)
-                .extracting(UserDto::nickname)
-                .containsExactlyInAnyOrder("Ananiasz", "Wojski", "Dajmiech");
+        assertThat(actualUsers).isNotNull();
+        assertThat(actualUsers).hasSize(expectedUsers.size());
+        assertThat(actualUsers).containsExactlyElementsOf(expectedUsers);
     }
 
     @Test
     void shouldGetSingleUser() {
         //given
-        User user = new User("Wojski");
-        userRepository.saveAll(List.of(
-                new User("Ananiasz"), user, new User("Dajmiech")));
+        UUID firstId = firstUser.getId();
 
         //when
-        UserDto resultOfSingleUser = userMapper.mapUserEntityToUserDto(userRepository.getReferenceById(user.getId()));
+        UserDto foundUserDto = userService.getUser(firstId);
 
         //then
-        assertThat(resultOfSingleUser.id()).isEqualTo(user.getId());
+        assertThat(foundUserDto.id()).isEqualTo(firstId);
     }
 
     @Test
     @Transactional
     @Rollback
-    void shouldCreateUser_1() {
-        // given
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d3");
-        UserDto userDto = new UserDto(ID_1, "Łamignat");
-
-        // when
-        UserDto createdUserDto = userService.createUser(userDto);
-
-        // then
-        assertThat(createdUserDto).isNotNull();
-        assertThat(createdUserDto.nickname()).isEqualTo(userDto.nickname());
-
-        User createdUser = userRepository.findById(createdUserDto.id()).orElse(null);
-        assertThat(createdUser).isNotNull();
-        assertThat(createdUser.getNickname()).isEqualTo(userDto.nickname());
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    void shouldCreateUser_2() {
+    void shouldCreateUser() {
         //given
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d3");
-        UserDto userDto = new UserDto(ID_1, "Łamignat");
+        UserRequestDto userRequestDto = new UserRequestDto("Łamignat", null);
 
         //when
-        UserDto resultOfCreatingUserDto = userService.createUser(userDto);
+        UserDto createdUserDto = userService.createUser(userRequestDto);
 
         //then
-        assertThat(resultOfCreatingUserDto.nickname()).isEqualTo(userDto.nickname());
-        assertThat(resultOfCreatingUserDto.nickname()).isEqualTo(userRepository.getReferenceById(resultOfCreatingUserDto.id()).getNickname());
+        assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
+        assertThat(createdUserDto.quizzes()).isNull();
     }
 
     @Test
     @Transactional
     void shouldUpdateUser() {
         //given
-        User user = new User();
-        user.setNickname("Andrzej Duda");
-        userRepository.save(user);
-
-        final UUID ID_1 = UUID.fromString("b9d82a81-c317-4eee-9da7-7680785df4d3");
-        UserDto updatedUser = new UserDto(ID_1, "Andrzej Dude");
+        UUID firstId = firstUser.getId();
+        Quiz quiz = new Quiz();
+        quiz.setName("Automotive");
+        quizRepository.save(quiz);
+        List<Quiz> quizzesList = new ArrayList<>();
+        quizzesList.add(quiz);
+        UserRequestDto userRequestDto = new UserRequestDto("Gniewosz", quizzesList);
 
         //when
-        UserDto resultOfUpdateUser = userService.updateUser(user.getId(), updatedUser);
+        UserDto updatedUserDto = userService.updateUser(firstId, userRequestDto);
 
         //then
-        assertThat(resultOfUpdateUser.nickname()).isEqualTo(updatedUser.nickname());
-        User updatedEntity = userRepository.findById(user.getId()).orElseThrow();
-        assertThat(updatedEntity.getNickname()).isEqualTo(updatedUser.nickname());
+        assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
+        assertThat(updatedUserDto.id()).isEqualTo(firstId);
+        assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }
 
     @Test
     void shouldDeleteUser() {
         //given
-        User user = new User("Oferma");
-        user = userRepository.save(user);
+        User user = new User();
+        user.setNickname("Oferma");
+        User savedUser = userRepository.save(user);
 
         //when
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(savedUser.getId());
 
         //then
         assertThat(userRepository.findById(user.getId())).isEmpty();
+        assertThrows(EntityNotFoundException.class, () -> userService.getUser(savedUser.getId()));
     }
 }

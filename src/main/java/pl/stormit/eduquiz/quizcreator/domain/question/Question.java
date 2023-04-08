@@ -30,13 +30,9 @@ public class Question {
 
     private String content;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonBackReference
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<Answer> answers;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
 

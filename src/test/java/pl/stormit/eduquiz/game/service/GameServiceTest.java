@@ -2,6 +2,7 @@ package pl.stormit.eduquiz.game.service;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,10 +15,12 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -45,9 +48,10 @@ class GameServiceTest {
     void shouldCreateGameCorrectly() {
 
         //given
-        Quiz quiz = new Quiz("Quiz");
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
         quiz.setId(ID_1);
-        QuizDto quizDto = new QuizDto(ID_1, "Quiz");
+        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
@@ -60,5 +64,46 @@ class GameServiceTest {
         //then
         assertEquals(game.getId(), returnGame.id());
         assertEquals(game.getUserAnswers(), returnGame.userAnswers());
+    }
+
+    @Test
+    void shouldReturnGame() {
+
+        //given
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
+        quiz.setId(ID_1);
+        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
+        Game game = new Game(ID_2, null, quiz);
+        GameDto gameDto = new GameDto(ID_2, null);
+
+        //when
+        when(gameRepository.save(any(Game.class))).thenReturn(game);
+        when(gameMapper.mapGameEntityToGameDto(game)).thenReturn(gameDto);
+        when(gameRepository.findById(any())).thenReturn(Optional.of(game));
+        GameDto returnedGameDto = gameService.getGame(ID_2);
+
+        //then
+        assertEquals(game.getId(), returnedGameDto.id());
+        //assertEquals(returnedGameDto., "Quiz");
+        assertNull(returnedGameDto.userAnswers());
+    }
+
+    @Test
+    void shouldDeleteGame() {
+
+        //given
+        Quiz quiz = new Quiz();
+        quiz.setName("Quiz");
+        quiz.setId(ID_1);
+        Game game = new Game(ID_1, null, quiz);
+
+        //when
+        Mockito.doNothing().when(gameRepository).deleteById(game.getId());
+
+        //then
+        gameService.deleteGame(game.getId());
+        Mockito.verify(gameRepository, Mockito.times(1)).deleteById(game.getId());
+        Mockito.verifyNoMoreInteractions(gameRepository);
     }
 }

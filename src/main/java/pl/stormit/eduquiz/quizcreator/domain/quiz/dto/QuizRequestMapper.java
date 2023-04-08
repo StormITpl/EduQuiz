@@ -3,9 +3,12 @@ package pl.stormit.eduquiz.quizcreator.domain.quiz.dto;
 import org.mapstruct.Mapper;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
-public interface QuizCreationMapper {
+public interface QuizRequestMapper {
 
-    QuizCreationDto mapQuizEntityToQuizCreationDto(Quiz quiz);
+    QuizRequestDto mapQuizEntityToQuizRequestDto(Quiz quiz);
+
 }

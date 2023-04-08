@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.game.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -37,6 +38,13 @@ public class GameService {
         game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
+    }
+
+    public GameDto getGame(UUID gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> {
+            throw new EntityNotFoundException("The game does not exist");
+        });
+        return gameMapper.mapGameEntityToGameDto(game);
     }
 
     public GameDto playGame(UUID gameId, AnswerDto answer) {

@@ -1,64 +1,82 @@
 package pl.stormit.eduquiz.result.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
+import pl.stormit.eduquiz.game.dto.GameIdDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
+import pl.stormit.eduquiz.result.dto.ResultDto;
+import pl.stormit.eduquiz.result.dto.ResultMapper;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class ResultService {
 
     private final ResultRepository resultRepository;
-
     private final GameRepository gameRepository;
+    private final ResultMapper resultMapper;
+
 
     @Transactional(readOnly = true)
-    public Result getResult(UUID id) {
-        return resultRepository.getById(id);
+    public ResultDto getResult(UUID id) {
+        Result result = resultRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new EntityNotFoundException("Result not found");
+                });
+        return resultMapper.mapResultEntityToResultDto(result);
     }
 
-    private Integer getScore(Game game, Quiz quiz) {
-        List<UUID> userAnswers = game.getUserAnswers();
+    private Integer getScore(Game game) {
+        List<UUID> userAnswersIds = game.getUserAnswers();
+        Quiz quiz = game.getQuiz();
         List<Question> questions = quiz.getQuestions();
-        int goodAnswers = 0;
+        int correctAnswers = 0;
+        correctAnswers = countCorrectAnswers(userAnswersIds, questions, correctAnswers);
+        return correctAnswers;
+    }
 
-        for(Question question : questions) {
-            for(Answer answer : question.getAnswers()) {
-                if(answer.isCorrect() && userAnswers.contains(answer.getId())) {
-                    goodAnswers++;
+    private int countCorrectAnswers(List<UUID> userAnswersIds, List<Question> questions, int correctAnswers) {
+        for (Question question : questions) {
+            for (Answer answer : question.getAnswers()) {
+                if (answer.isCorrect() && userAnswersIds.contains(answer.getId())) {
+                    correctAnswers++;
                 }
             }
         }
-
-        return goodAnswers;
+        return correctAnswers;
     }
 
     @Transactional
-    public Result createResult(@NotNull Game game, Quiz quiz) {
+    public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
+        Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
+            throw new EntityNotFoundException("The game does not exist");
+        });
         Result result = new Result();
-        result.setId(game.getId());
         result.setGame(game);
-        result.setQuiz(quiz);
-        int score = this.getScore(game, quiz);
+        int score = this.getScore(game);
         result.setScore(score);
 
-        return resultRepository.save(result);
+        return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }
 
     @Transactional
-    public void deleteResult(UUID id) {
-        resultRepository.deleteById(id);
+    public void deleteResult(UUID resultId) {
+        if (resultRepository.existsById(resultId)) {
+            resultRepository.deleteById(resultId);
+        } else {
+            throw new EntityNotFoundException("The result by id: " + resultId + " does not exist.");
+        }
     }
 }
+

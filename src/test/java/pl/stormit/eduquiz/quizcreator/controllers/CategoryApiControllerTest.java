@@ -8,20 +8,24 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import pl.stormit.eduquiz.quizcreator.controllers.CategoryApiController;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
+import org.springframework.test.web.servlet.ResultActions;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,78 +40,96 @@ class CategoryApiControllerTest {
     @MockBean
     private CategoryService categoryService;
 
+    private static final UUID FIRST_CATEGORY_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0255");
+    private static final UUID SECOND_CATEGORY_ID = UUID.fromString("b92315cb-5862-4449-9826-ca09c76e0156");
+
+
     @Test
-    void shouldReturnAllCategories() throws Exception {
-
-        Category firstCategory = new Category("Chemistry");
-        Category secondCategory = new Category("Biology");
-
+    void shouldReturn200WhenFoundAllCategoriesCorrectly() throws Exception {
+        //given
+        CategoryDto firstCategory = new CategoryDto(FIRST_CATEGORY_ID,"Chemistry" );
+        CategoryDto secondCategory = new CategoryDto(SECOND_CATEGORY_ID,"Biology");
         given(categoryService.getCategories()).willReturn(List.of(firstCategory, secondCategory));
 
-        mockMvc.perform(get("/api/v1/categories"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Chemistry")))
-                .andExpect(content().string(containsString("Biology")));
-
-    }
-
-
-    @Test
-    void shouldReturnOneCategoryById() throws Exception {
-
-        Category category = new Category("Biology");
-        String url = "/api/v1/categories/" + category.getId();
-
-        given(categoryService.getCategory(any())).willReturn(category);
-
-        mockMvc.perform(get(url))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Biology")));
-    }
-
-    @Test
-    void shouldCreateCategory() throws Exception {
-
-        CategoryDto exemplaryCategoryDto = new CategoryDto("Economy");
-
-        MockHttpServletRequestBuilder content = post("/api/v1/categories")
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(exemplaryCategoryDto));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstCategory, secondCategory)))));
 
-
-        mockMvc.perform(content)
-                .andExpect(status().isCreated());
-
+        //then
+        result.andExpect(status().isOk());
+        result.andExpect(content().string(containsString("Chemistry")));
+        result.andExpect(content().string(containsString("Biology")));
 
     }
 
+
     @Test
-    void shouldUpdateCategory() throws Exception {
+    void shouldReturn200WhenFoundOneCategoryByIdCorrectly() throws Exception {
 
-        Category exemplaryCategory = new Category("Economy");
-        CategoryDto exemplaryCategoryDto = new CategoryDto(exemplaryCategory.getName());
+        //given
+        CategoryDto categoryDto = new CategoryDto(SECOND_CATEGORY_ID,"Biology");
+        given(categoryService.getCategory(any())).willReturn(categoryDto);
 
-        MockHttpServletRequestBuilder content = put(
-                "/api/v1/categories/{categoryId}", exemplaryCategory.getId())
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/categories/" + SECOND_CATEGORY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(exemplaryCategoryDto));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        mockMvc.perform(content)
-                .andExpect(MockMvcResultMatchers.status().isAccepted())
-                .andDo(MockMvcResultHandlers.print());
+        //then
+        result.andExpect(status().isOk());
+        result.andExpect(content().string(containsString("Biology")));
+        verify(categoryService, times(1)).getCategory(eq(SECOND_CATEGORY_ID));
     }
 
     @Test
-    void shouldDeleteCategory() throws Exception {
+    void shouldReturn201WhenCategoryCreatedCorrectly() throws Exception {
+        //given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Economy");
+        given(categoryService.createCategory(categoryDto)).willReturn(categoryDto);
 
-        Category exemplaryCategory = new Category("Biology");
+        //when
+        ResultActions result = mockMvc.perform(post("/api/v1/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        MockHttpServletRequestBuilder content = delete(
-                "/api/v1/categories/{categoryId}", exemplaryCategory.getId())
-                .contentType(MediaType.APPLICATION_JSON);
+        //then
+        result.andExpect(status().isCreated());
+        result.andExpect(content().string(containsString("Economy")));
+        verify(categoryService, times(1)).createCategory(eq(categoryDto));
 
-        mockMvc.perform(content)
-                .andExpect(MockMvcResultMatchers.status().isNoContent())
-                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void shouldReturn200WhenCategoryUpdatedCorrectly() throws Exception {
+        //given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Chemistry");
+        given(categoryService.updateCategory(FIRST_CATEGORY_ID, categoryDto))
+                .willReturn(new CategoryDto(FIRST_CATEGORY_ID, "Office"));
+
+        //when
+        ResultActions result = mockMvc.perform(put(
+                "/api/v1/categories/" + FIRST_CATEGORY_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
+
+        //then
+        result.andExpect(status().isOk());
+        result.andExpect(content().string(containsString("Office")));
+        verify(categoryService, times(1)).updateCategory(FIRST_CATEGORY_ID,categoryDto);
+    }
+
+    @Test
+    void shouldReturn204WhenCategoryDeletedCorrectly() throws Exception {
+        //given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Biology");
+
+        //when
+        ResultActions result = mockMvc.perform(delete("/api/v1/categories/" + FIRST_CATEGORY_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
+
+        //then
+        result.andExpect(status().isNoContent());
     }
 }
