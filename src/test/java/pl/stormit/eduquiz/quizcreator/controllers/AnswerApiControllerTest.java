@@ -81,14 +81,12 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
         //given
-        Question question = new Question("In which country was Nicolaus Copernicus born");
-        UUID questionId = question.getId();
-        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, question);
-        given(answerService.createAnswer(questionId, answerRequestDto))
-                .willReturn(new AnswerDto(FIRST_ANSWER_ID,"Poland", true, question));
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
+        given(answerService.createAnswer(QUESTION_ID, answerRequestDto))
+                .willReturn(new AnswerDto(FIRST_ANSWER_ID,"Poland", true, null));
 
         //when
-        ResultActions result = mockMvc.perform(post("/api/v1/questions/" + questionId + "/answers")
+        ResultActions result = mockMvc.perform(post("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
