@@ -46,7 +46,6 @@ class GameServiceTest {
 
     @Test
     void shouldCreateGameCorrectly() {
-
         //given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
@@ -67,8 +66,7 @@ class GameServiceTest {
     }
 
     @Test
-    void shouldReturnGame() {
-
+    void shouldReturnGameByIdCorrectly() {
         //given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
@@ -90,8 +88,7 @@ class GameServiceTest {
     }
 
     @Test
-    void shouldDeleteGame() {
-
+    void shouldDeleteGameCorrectly() {
         //given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
