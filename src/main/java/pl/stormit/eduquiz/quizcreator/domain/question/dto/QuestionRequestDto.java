@@ -4,10 +4,8 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
 import java.util.List;
-import java.util.UUID;
 
-public record QuestionDto(UUID id,
-                          String content,
-                          Quiz quiz,
-                          List<Answer> answers) {
+public record QuestionRequestDto(String content,
+                                 Quiz quiz,
+                                 List<Answer> answers) {
 }
