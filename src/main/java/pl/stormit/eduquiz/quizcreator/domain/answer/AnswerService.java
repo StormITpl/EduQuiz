@@ -24,7 +24,6 @@ public class AnswerService {
 
     private final AnswerMapper answerMapper;
 
-    @Transactional
     public AnswerDto createAnswer(UUID questionId, AnswerRequestDto answerRequestDto) {
 
         Question question = questionRepository.findById(questionId).orElseThrow(() -> {
@@ -35,7 +34,7 @@ public class AnswerService {
         answer.setCorrect(answerRequestDto.isCorrect());
         answer.setQuestion(question);
 
-        return answerMapper.mapAnswerEntityToAnswerDto(answer);
+        return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
     @Transactional(readOnly = true)

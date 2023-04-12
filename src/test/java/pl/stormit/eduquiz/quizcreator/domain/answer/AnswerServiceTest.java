@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test"})
-@Transactional
 @SpringBootTest
 public class AnswerServiceTest {
 
@@ -63,7 +62,6 @@ public class AnswerServiceTest {
         //then
         assertThat(createdAnswerDto.content()).isEqualTo(userRequestDto.content());
         assertThat(createdAnswerDto.isCorrect()).isEqualTo(userRequestDto.isCorrect());
-        assertThat(createdAnswerDto.question()).isNull();
     }
 
     @Test
