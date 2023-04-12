@@ -39,7 +39,7 @@ public class GameService {
         Game game = new Game(quiz);
         game.setUserAnswers(userAnswers);
 
-        return gameMapper.mapGameEntityToGameDto(game);
+        return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 
     @Transactional(readOnly = true)
