@@ -71,7 +71,6 @@ class GameServiceTest {
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
-        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
@@ -83,7 +82,6 @@ class GameServiceTest {
 
         //then
         assertEquals(game.getId(), returnedGameDto.id());
-        //assertEquals(returnedGameDto., "Quiz");
         assertNull(returnedGameDto.userAnswers());
     }
 
@@ -93,14 +91,13 @@ class GameServiceTest {
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
-        Game game = new Game(ID_1, null, quiz);
+        Game game = new Game(ID_2, null, quiz);
 
         //when
-        Mockito.doNothing().when(gameRepository).deleteById(game.getId());
+        when(gameRepository.existsById(any())).thenReturn(true);
+        gameService.deleteGame(ID_2);
 
         //then
-        gameService.deleteGame(game.getId());
         Mockito.verify(gameRepository, Mockito.times(1)).deleteById(game.getId());
-        Mockito.verifyNoMoreInteractions(gameRepository);
     }
 }
