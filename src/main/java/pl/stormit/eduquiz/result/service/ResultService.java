@@ -9,14 +9,11 @@ import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameIdDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
-import pl.stormit.eduquiz.quizcreator.domain.question.Question;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.dto.ResultMapper;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
