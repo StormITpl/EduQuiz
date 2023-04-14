@@ -34,25 +34,6 @@ public class ResultService {
         return resultMapper.mapResultEntityToResultDto(result);
     }
 
-    private Integer getScore(Game game) {
-        List<UUID> userAnswersIds = game.getUserAnswers();
-        Quiz quiz = game.getQuiz();
-        List<Question> questions = quiz.getQuestions();
-        int correctAnswers = 0;
-        correctAnswers = countCorrectAnswers(userAnswersIds, questions, correctAnswers);
-        return correctAnswers;
-    }
-
-    private int countCorrectAnswers(List<UUID> userAnswersIds, List<Question> questions, int correctAnswers) {
-        for (Question question : questions) {
-            for (Answer answer : question.getAnswers()) {
-                if (answer.isCorrect() && userAnswersIds.contains(answer.getId())) {
-                    correctAnswers++;
-                }
-            }
-        }
-        return correctAnswers;
-    }
 
     @Transactional
     public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
