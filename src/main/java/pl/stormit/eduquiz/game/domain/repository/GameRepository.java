@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.game.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 

@@ -60,12 +60,19 @@ public class ResultService {
     @Transactional
     public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
         Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
-            throw new EntityNotFoundException("The game does not exist");
+            throw new EntityNotFoundException("The game does not exist with ID: " + gameIdDto);
         });
         Result result = new Result();
         result.setGame(game);
-        int score = this.getScore(game);
-        result.setScore(score);
+        Long score = game.getQuiz().getQuestions().stream()
+                .flatMap(question -> question.getAnswers().stream())
+                .filter(Answer::isCorrect)
+                .map(Answer::getId)
+                .filter(correctId -> game.getUserAnswers().contains(correctId))
+                .count();
+
+
+        result.setScore(score.intValue());
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }
