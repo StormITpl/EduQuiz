@@ -1,4 +1,8 @@
+server.port: 8080
+
 spring:
+  application.name: eduquiz
+
   jpa:
     hibernate.ddl-auto: validate
     properties:
@@ -17,5 +21,6 @@ spring:
     change-log: db/changelog-dev.yaml
     contexts: dev
 
-server:
-  port: 8080
+http-client:
+  eduquiz-users:
+    base-url: http://localohost:8080

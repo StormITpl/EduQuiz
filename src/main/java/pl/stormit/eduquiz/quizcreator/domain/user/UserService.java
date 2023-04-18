@@ -5,10 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.http.service.UserHttpService;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,10 +23,11 @@ public class UserService {
 
     private final UserMapper userMapper;
 
+    private final UserHttpService userHttpService;
+
     @Transactional(readOnly = true)
-    public List<UserDto> getUsers() {
-        List<User> foundUsers = userRepository.findAll();
-        return userMapper.mapUserListOfEntityToUsersDtoList(foundUsers);
+    public List<UserDto> getUsers(final UUID id, final String nickname, List<Quiz> quizzes, final String message) {
+        return Collections.singletonList(userHttpService.getUsers(id, nickname, quizzes, message));
     }
 
     @Transactional(readOnly = true)
