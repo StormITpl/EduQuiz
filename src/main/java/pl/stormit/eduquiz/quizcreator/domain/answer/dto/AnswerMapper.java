@@ -2,8 +2,6 @@ package pl.stormit.eduquiz.quizcreator.domain.answer.dto;
 
 import org.mapstruct.Mapper;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
-import pl.stormit.eduquiz.quizcreator.domain.user.User;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 
 import java.util.List;
 
