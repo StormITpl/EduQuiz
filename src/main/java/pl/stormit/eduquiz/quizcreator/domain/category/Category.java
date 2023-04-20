@@ -29,5 +29,4 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
-
 }
