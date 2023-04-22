@@ -32,7 +32,7 @@ public class ResultService {
     public ResultDto getResult(UUID id) {
         Result result = resultRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new EntityNotFoundException("Result not found");
+                    throw new EntityNotFoundException("Result by id: " + id + " not found");
                 });
         return resultMapper.mapResultEntityToResultDto(result);
     }
@@ -60,13 +60,12 @@ public class ResultService {
     @Transactional
     public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
         Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
-            throw new EntityNotFoundException("The game does not exist");
+            throw new EntityNotFoundException("The game by id: " + gameIdDto.id() + " does not exist");
         });
         Result result = new Result();
         result.setGame(game);
         int score = this.getScore(game);
         result.setScore(score);
-
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }
 
@@ -79,4 +78,3 @@ public class ResultService {
         }
     }
 }
-
