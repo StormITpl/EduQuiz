@@ -17,7 +17,6 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
@@ -54,7 +53,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID userId) {
+    public void deleteUser(@NotNull UUID userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         } else {
