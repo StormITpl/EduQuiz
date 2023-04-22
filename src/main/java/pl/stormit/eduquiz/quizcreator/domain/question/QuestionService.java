@@ -14,9 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class QuestionService {
-
     private final QuestionRepository questionRepository;
-
     private final QuestionMapper questionMapper;
 
     @Transactional(readOnly = true)
@@ -36,25 +34,21 @@ public class QuestionService {
 
     @Transactional
     public QuestionDto createQuestion(QuestionRequestDto questionRequestDto) {
-
         Question question = new Question();
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
-
         return questionMapper.mapQuestionEntityToQuestionDto(question);
     }
 
     @Transactional
     public QuestionDto updateQuestion(UUID questionId, QuestionRequestDto questionRequestDto) {
-
         Question question = questionRepository.findById(questionId).orElseThrow(() -> {
             throw new EntityNotFoundException("The question by id: " + questionId + ", does not exist.");
         });
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
-
         return questionMapper.mapQuestionEntityToQuestionDto(question);
     }
 
