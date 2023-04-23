@@ -38,7 +38,7 @@ public class ResultService {
     @Transactional
     public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
         Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
-            throw new EntityNotFoundException("The game does not exist with ID: " + gameIdDto);
+            throw new EntityNotFoundException("The game does not exist with ID: " + gameIdDto.id());
         });
         Result result = new Result();
         result.setGame(game);
