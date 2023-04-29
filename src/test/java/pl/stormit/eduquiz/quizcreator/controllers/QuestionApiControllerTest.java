@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class QuestionApiControllerTest {
 
     private static final UUID FIRST_QUESTION_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0112");
+
     private static final UUID SECOND_QUESTION_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0777");
 
     @MockBean
@@ -53,7 +54,6 @@ class QuestionApiControllerTest {
         ResultActions result = mockMvc.perform(get("/api/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstQuestion, secondQuestion)))));
-        ;
 
         //then
         result.andExpect(status().isOk());
@@ -82,7 +82,7 @@ class QuestionApiControllerTest {
         //given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
         given(questionService.createQuestion(questionRequestDto))
-                .willReturn(new QuestionDto(FIRST_QUESTION_ID,"In what year did World War II begin?", null, null));
+                .willReturn(new QuestionDto(FIRST_QUESTION_ID, "In what year did World War II begin?", null, null));
 
         //when
         ResultActions result = mockMvc.perform(post("/api/v1/questions")

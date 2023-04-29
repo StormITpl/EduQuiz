@@ -38,8 +38,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserApiControllerTest {
 
     private static final UUID FIRST_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0221");
+
     private static final UUID SECOND_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0123");
+
     private static final UUID THIRD_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0117");
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,12 +65,7 @@ class UserApiControllerTest {
         MockHttpServletRequestBuilder content = get("/api/v1/users");
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Ananiasz")))
-                .andExpect(content().string(containsString("Wojski")))
-                .andExpect(content().string(containsString("Dajmiech")))
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(status().isOk()).andExpect(content().string(containsString("Ananiasz"))).andExpect(content().string(containsString("Wojski"))).andExpect(content().string(containsString("Dajmiech"))).andDo(MockMvcResultHandlers.print());
     }
 
     @Test
@@ -80,10 +78,7 @@ class UserApiControllerTest {
         given(userService.getUser(FIRST_ID)).willReturn(expectedDtoUser);
 
         //then
-        mockMvc.perform(get(userUrl))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Ananiasz")))
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(get(userUrl)).andExpect(status().isOk()).andExpect(content().string(containsString("Ananiasz"))).andDo(MockMvcResultHandlers.print());
     }
 
     @Rollback
@@ -93,14 +88,10 @@ class UserApiControllerTest {
         UserDto createdUserDto = new UserDto(FIRST_ID, "Hegemon", List.of());
 
         // when
-        MockHttpServletRequestBuilder content = post("/api/v1/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createdUserDto));
+        MockHttpServletRequestBuilder content = post("/api/v1/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createdUserDto));
 
         // then
-        mockMvc.perform(content)
-                .andExpect(status().isCreated())
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print());
     }
 
     @Rollback
@@ -111,15 +102,10 @@ class UserApiControllerTest {
         UserRequestDto requestDto = new UserRequestDto("Imperator", List.of());
 
         //then
-        MockHttpServletRequestBuilder content = put(
-                "/api/v1/users/{userId}", FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto)));
+        MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON).content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto)));
 
         //when
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
         verify(userService, times(1)).updateUser(eq(FIRST_ID), eq(requestDto));
     }
 
@@ -127,14 +113,10 @@ class UserApiControllerTest {
     @Test
     void shouldReturn204WhenUserDeletedCorrectly() throws Exception {
         //then
-        MockHttpServletRequestBuilder content = delete(
-                "/api/v1/users/{userId}", FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder content = delete("/api/v1/users/{userId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON);
 
         //when
-        mockMvc.perform(content)
-                .andExpect(MockMvcResultMatchers.status().isNoContent())
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(MockMvcResultMatchers.status().isNoContent()).andDo(MockMvcResultHandlers.print());
         verify(userService, times(1)).deleteUser(eq(FIRST_ID));
     }
 }

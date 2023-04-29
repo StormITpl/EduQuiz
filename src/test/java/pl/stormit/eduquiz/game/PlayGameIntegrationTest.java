@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles({"test"})
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PlayGameIntegrationTest {
+class PlayGameIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;
@@ -67,8 +67,7 @@ public class PlayGameIntegrationTest {
         //when
         HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto);
         URI createGameUri = URI.create("/api/v1/games/singleGame");
-        ResponseEntity<GameDto> responseEntity = restTemplate
-                .exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
+        ResponseEntity<GameDto> responseEntity = restTemplate.exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
         UUID gameId = gameRepository.findAll().get(0).getId();
         GameDto body = responseEntity.getBody();
 

@@ -28,6 +28,7 @@ class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private QuizRepository quizRepository;
 
@@ -38,7 +39,9 @@ class UserServiceTest {
     private UserMapper userMapper;
 
     private User firstUser;
+
     private User secondUser;
+
     private User thirdUser;
 
     @BeforeEach
@@ -46,9 +49,11 @@ class UserServiceTest {
         firstUser = new User();
         firstUser.setNickname("Ananiasz");
         userRepository.save(firstUser);
+
         secondUser = new User();
         secondUser.setNickname("Wojski");
         userRepository.save(secondUser);
+
         thirdUser = new User();
         thirdUser.setNickname("Dajmiech");
         userRepository.save(thirdUser);

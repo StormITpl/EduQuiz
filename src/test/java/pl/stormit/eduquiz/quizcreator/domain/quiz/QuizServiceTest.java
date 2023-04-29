@@ -44,10 +44,7 @@ class QuizServiceTest {
         List<QuizDto> quizzesDto = quizService.getQuizzes();
 
         //then
-        assertThat(quizzesDto)
-                .hasSize(2)
-                .extracting(QuizDto::name)
-                .containsExactlyInAnyOrder("Gold", "Silver");
+        assertThat(quizzesDto).hasSize(2).extracting(QuizDto::name).containsExactlyInAnyOrder("Gold", "Silver");
     }
 
     @Test
@@ -70,8 +67,7 @@ class QuizServiceTest {
         //given
         Quiz quiz = new Quiz();
         quiz.setName("Special");
-        QuizRequestDto quizRequestDto = new QuizRequestDto(
-                quiz.getName(), quiz.getCategory(), quiz.getUser(), quiz.getQuestions(), quiz.getGames());
+        QuizRequestDto quizRequestDto = new QuizRequestDto(quiz.getName(), quiz.getCategory(), quiz.getUser(), quiz.getQuestions(), quiz.getGames());
 
         //when
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
@@ -88,8 +84,7 @@ class QuizServiceTest {
         quiz.setName("Special");
         quiz.setQuestions(List.of());
         quizRepository.save(quiz);
-        QuizRequestDto quizToUpdate = new QuizRequestDto("Pro", quiz.getCategory(),
-                quiz.getUser(), quiz.getQuestions(), quiz.getGames());
+        QuizRequestDto quizToUpdate = new QuizRequestDto("Pro", quiz.getCategory(), quiz.getUser(), quiz.getQuestions(), quiz.getGames());
 
         //when
         QuizDto updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);

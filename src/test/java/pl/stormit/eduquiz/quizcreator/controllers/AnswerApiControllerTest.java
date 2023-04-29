@@ -1,7 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,7 +12,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
-import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 
 import java.util.List;
 import java.util.Objects;
@@ -82,8 +80,7 @@ class AnswerApiControllerTest {
     void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
         //given
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
-        given(answerService.createAnswer(QUESTION_ID, answerRequestDto))
-                .willReturn(new AnswerDto(FIRST_ANSWER_ID,"Poland", true, null));
+        given(answerService.createAnswer(QUESTION_ID, answerRequestDto)).willReturn(new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null));
 
         //when
         ResultActions result = mockMvc.perform(post("/api/v1/questions/" + QUESTION_ID + "/answers")
@@ -98,9 +95,8 @@ class AnswerApiControllerTest {
     @Test
     void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
         //given
-        AnswerRequestDto answerRequestDto = new AnswerRequestDto( "Poland", true, null);
-        given(answerService.updateAnswer(FIRST_ANSWER_ID, answerRequestDto))
-                .willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false, null));
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
+        given(answerService.updateAnswer(FIRST_ANSWER_ID, answerRequestDto)).willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false, null));
 
         //when
         ResultActions result = mockMvc.perform(put("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)

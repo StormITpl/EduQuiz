@@ -36,12 +36,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class QuizApiControllerTest {
 
     private static final UUID FIRST_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0101");
+
     private static final UUID SECOND_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0202");
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private QuizService quizService;
 
@@ -56,13 +59,10 @@ class QuizApiControllerTest {
         given(quizService.getQuizzes()).willReturn(quizzesDtos);
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/v1/quizzes")
-                .contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mockMvc.perform(get("/api/v1/quizzes").contentType(MediaType.APPLICATION_JSON));
 
         //then
-        result.andExpect(status().isOk())
-                .andExpect(content().string(containsString("PL")))
-                .andExpect(content().string(containsString("UK")));
+        result.andExpect(status().isOk()).andExpect(content().string(containsString("PL"))).andExpect(content().string(containsString("UK")));
     }
 
     @Test
@@ -72,8 +72,7 @@ class QuizApiControllerTest {
         given(quizService.getQuiz(FIRST_ID)).willReturn(firstQuizDto);
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/v1/quizzes/" + FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mockMvc.perform(get("/api/v1/quizzes/" + FIRST_ID).contentType(MediaType.APPLICATION_JSON));
 
         //then
         result.andExpect(status().isOk());
@@ -83,19 +82,14 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn201WhenQuizCreatedCorrectly() throws Exception {
         //given
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto(
-                "Master", null, null, List.of(), List.of());
-
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, List.of(), List.of());
         String dtoAsString = objectMapper.writeValueAsString(exemplaryQuizRequestDto);
 
         //when
-        MockHttpServletRequestBuilder content = post("/api/v1/quizzes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(dtoAsString);
+        MockHttpServletRequestBuilder content = post("/api/v1/quizzes").contentType(MediaType.APPLICATION_JSON).content(dtoAsString);
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isCreated());
+        mockMvc.perform(content).andExpect(status().isCreated());
         verify(quizService, times(1)).createQuiz(eq(exemplaryQuizRequestDto));
     }
 
@@ -103,33 +97,23 @@ class QuizApiControllerTest {
     void shouldReturn200WhenQuizUpdatedCorrectly() throws Exception {
         //given
         QuizDto quizDto = new QuizDto(FIRST_ID, "Beginner", null, null, null, null);
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto(
-                "Master", null, null, null, null);
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, null, null);
 
         //when
-        MockHttpServletRequestBuilder content = put(
-                "/api/v1/quizzes/{quizId}", FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(exemplaryQuizRequestDto));
+        MockHttpServletRequestBuilder content = put("/api/v1/quizzes/{quizId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(exemplaryQuizRequestDto));
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
         verify(quizService, times(1)).updateQuiz(eq(FIRST_ID), eq(exemplaryQuizRequestDto));
     }
 
     @Test
     void shouldReturn204WhenQuizDeletedCorrectly() throws Exception {
         //when
-        MockHttpServletRequestBuilder content = delete(
-                "/api/v1/quizzes/{quizId}", FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder content = delete("/api/v1/quizzes/{quizId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON);
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isNoContent())
-                .andDo(MockMvcResultHandlers.print());
+        mockMvc.perform(content).andExpect(status().isNoContent()).andDo(MockMvcResultHandlers.print());
         verify(quizService, times(1)).deleteQuiz(eq(FIRST_ID));
     }
 }

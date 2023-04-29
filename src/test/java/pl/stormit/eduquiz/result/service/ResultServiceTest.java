@@ -31,10 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ResultServiceTest {
 
     private static final UUID FIRST_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82501");
+
     @Autowired
     private ResultRepository resultRepository;
+
     @Autowired
     private GameRepository gameRepository;
+
     @Autowired
     private ResultService resultService;
 
@@ -60,8 +63,7 @@ class ResultServiceTest {
         exemplaryAnswer.setId(FIRST_ID);
         exemplaryAnswer.setCorrect(true);
         exemplaryQuestion.setAnswers(List.of(exemplaryAnswer));
-        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null,
-                null, List.of(exemplaryQuestion), List.of(game));
+        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null, null, List.of(exemplaryQuestion), List.of(game));
         game.setQuiz(exemplaryQuiz);
         game.setUserAnswers(List.of(UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502")));
         Game savedGame = gameRepository.save(game);

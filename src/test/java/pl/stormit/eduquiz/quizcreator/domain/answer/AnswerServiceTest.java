@@ -1,7 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.answer;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
-public class AnswerServiceTest {
+class AnswerServiceTest {
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -40,7 +39,7 @@ public class AnswerServiceTest {
     private Question question;
 
     @BeforeEach
-    void SetUp(){
+    void SetUp() {
         answer = new Answer();
         answer.setContent("Poland");
         answer.setCorrect(true);

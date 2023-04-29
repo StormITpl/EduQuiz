@@ -24,16 +24,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @ActiveProfiles({"test"})
 @WebMvcTest(ResultApiController.class)
 class ResultApiControllerTest {
 
     private static final UUID EXEMPLARY_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502");
+
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private ResultService resultService;
 
@@ -53,9 +55,8 @@ class ResultApiControllerTest {
                 .content(objectMapper.writeValueAsString(exemplaryGameIdDto));
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
+        mockMvc.perform(content).andExpect(status().isCreated()).andExpect(jsonPath("$.id")
+                .value(EXEMPLARY_ID.toString()))
                 .andExpect(jsonPath("$.game.quiz.name").value("Minerals"));
     }
 
@@ -69,14 +70,10 @@ class ResultApiControllerTest {
         given(resultService.getResult(EXEMPLARY_ID)).willReturn(exemplaryResultDto);
 
         //when
-        MockHttpServletRequestBuilder content = get("/api/v1/results/" + exemplaryResultDto.id())
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder content = get("/api/v1/results/" + exemplaryResultDto.id()).contentType(MediaType.APPLICATION_JSON);
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
-                .andExpect(jsonPath("$.game.quiz.name").value("History"));
+        mockMvc.perform(content).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString())).andExpect(jsonPath("$.game.quiz.name").value("History"));
     }
 
     @Test
@@ -85,11 +82,9 @@ class ResultApiControllerTest {
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, null);
 
         //when
-        MockHttpServletRequestBuilder content = delete("/api/v1/results/" + exemplaryResultDto.id())
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder content = delete("/api/v1/results/" + exemplaryResultDto.id()).contentType(MediaType.APPLICATION_JSON);
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isNoContent());
+        mockMvc.perform(content).andExpect(status().isNoContent());
     }
 }

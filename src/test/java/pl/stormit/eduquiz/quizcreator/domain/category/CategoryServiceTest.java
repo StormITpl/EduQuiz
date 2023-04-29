@@ -31,13 +31,12 @@ class CategoryServiceTest {
         Category secondCategory = new Category();
         secondCategory.setName("Biology");
         categoryRepository.saveAll(List.of(firstCategory, secondCategory));
+
         //when
         List<CategoryDto> categoriesDto = categoryService.getCategories();
+
         //then
-        assertThat(categoriesDto)
-                .hasSize(2)
-                .extracting(CategoryDto::name)
-                .containsExactlyInAnyOrder("Chemistry", "Biology");
+        assertThat(categoriesDto).hasSize(2).extracting(CategoryDto::name).containsExactlyInAnyOrder("Chemistry", "Biology");
     }
 
     @Test
@@ -46,8 +45,10 @@ class CategoryServiceTest {
         Category category = new Category();
         category.setName("Math");
         categoryRepository.save(category);
+
         //when
         CategoryDto categoryDtoFoundById = categoryService.getCategory(category.getId());
+
         //then
         assertEquals(categoryDtoFoundById.name(), category.getName());
     }
@@ -57,10 +58,11 @@ class CategoryServiceTest {
         //given
         Category category = new Category();
         category.setName("Chemistry");
-        CategoryDto categoryRequestDto = new CategoryDto(
-                category.getId(),category.getName());
+        CategoryDto categoryRequestDto = new CategoryDto(category.getId(), category.getName());
+
         //when
         CategoryDto createdCategory = categoryService.createCategory(categoryRequestDto);
+
         //then
         assertEquals(createdCategory.name(), categoryRequestDto.name());
         assertNotNull(createdCategory.id());
@@ -72,9 +74,11 @@ class CategoryServiceTest {
         Category category = new Category();
         category.setName("Math");
         categoryRepository.save(category);
-        CategoryDto categoryToUpdate = new CategoryDto(category.getId(),"Physics");
+        CategoryDto categoryToUpdate = new CategoryDto(category.getId(), "Physics");
+
         //when
         CategoryDto updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdate);
+
         //then
         assertEquals(updatedCategory.name(), "Physics");
     }
@@ -85,8 +89,10 @@ class CategoryServiceTest {
         Category category = new Category();
         category.setName("Physics");
         categoryRepository.save(category);
+
         //when
         categoryService.deleteCategory(category.getId());
+
         //then
         assertTrue(categoryRepository.findById(category.getId()).isEmpty());
     }
