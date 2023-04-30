@@ -52,7 +52,6 @@ class AnswerApiControllerTest {
         ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstAnswer, secondAnswer)))));
-        ;
 
         //then
         result.andExpect(status().isOk());

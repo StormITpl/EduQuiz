@@ -57,21 +57,21 @@ class PlayGameIntegrationTest {
 
     @Test
     void shouldCreateGameCorrectly() {
-        //given
+        // given
         Quiz quiz = new Quiz();
         quiz.setName("First quiz");
         Quiz quizSaved = quizRepository.save(quiz);
         UUID quizId = quizSaved.getId();
         QuizDto quizDto = new QuizDto(quizId, "First quiz", null, null, List.of(), List.of());
 
-        //when
+        // when
         HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto);
         URI createGameUri = URI.create("/api/v1/games/singleGame");
         ResponseEntity<GameDto> responseEntity = restTemplate.exchange(createGameUri, HttpMethod.POST, entity, GameDto.class);
         UUID gameId = gameRepository.findAll().get(0).getId();
         GameDto body = responseEntity.getBody();
 
-        //then
+        // then
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(1, gameRepository.findAll().size());
         assertEquals(gameId, body.id());
@@ -79,7 +79,7 @@ class PlayGameIntegrationTest {
 
     @Test
     void shouldPlayGameCorrectly() {
-        //given
+        // given
         Quiz quiz = new Quiz();
         quiz.setName("First quiz");
         Quiz quizSaved = quizRepository.save(quiz);
@@ -100,7 +100,7 @@ class PlayGameIntegrationTest {
         AnswerDto answerDto1 = new AnswerDto(UUID.randomUUID(), "Abc", true, null);
         AnswerDto answerDto2 = new AnswerDto(UUID.randomUUID(), "Def", false, null);
 
-        //when
+        // when
         URI playedGameUri = URI.create("/api/v1/games/" + gameId);
 
         HttpEntity<AnswerDto> playedGameEntity1 = new HttpEntity<>(answerDto1, headers);
@@ -116,7 +116,7 @@ class PlayGameIntegrationTest {
         GameDto updatedGameDto = playResponseEntity.getBody();
         Optional<Game> game = gameRepository.findById(gameId);
 
-        //then
+        // then
         assertEquals(HttpStatus.OK, playResponseEntity.getStatusCode());
         assertEquals(gameId, updatedGameDto.id());
         assertEquals(2, updatedGameDto.userAnswers().size());

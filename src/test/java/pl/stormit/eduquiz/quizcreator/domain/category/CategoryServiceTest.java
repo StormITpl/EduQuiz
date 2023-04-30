@@ -25,75 +25,76 @@ class CategoryServiceTest {
 
     @Test
     void shouldReturnTwoCategories() {
-        //given
+        // given
         Category firstCategory = new Category();
         firstCategory.setName("Chemistry");
         Category secondCategory = new Category();
         secondCategory.setName("Biology");
         categoryRepository.saveAll(List.of(firstCategory, secondCategory));
 
-        //when
+        // when
         List<CategoryDto> categoriesDto = categoryService.getCategories();
 
-        //then
-        assertThat(categoriesDto).hasSize(2).extracting(CategoryDto::name).containsExactlyInAnyOrder("Chemistry", "Biology");
+        // then
+        assertThat(categoriesDto).hasSize(2)
+                .extracting(CategoryDto::name).containsExactlyInAnyOrder("Chemistry", "Biology");
     }
 
     @Test
     void shouldReturnOneCategoryFoundById() {
-        //given
+        // given
         Category category = new Category();
         category.setName("Math");
         categoryRepository.save(category);
 
-        //when
+        // when
         CategoryDto categoryDtoFoundById = categoryService.getCategory(category.getId());
 
-        //then
+        // then
         assertEquals(categoryDtoFoundById.name(), category.getName());
     }
 
     @Test
     void shouldCreateCategory() {
-        //given
+        // given
         Category category = new Category();
         category.setName("Chemistry");
         CategoryDto categoryRequestDto = new CategoryDto(category.getId(), category.getName());
 
-        //when
+        // when
         CategoryDto createdCategory = categoryService.createCategory(categoryRequestDto);
 
-        //then
+        // then
         assertEquals(createdCategory.name(), categoryRequestDto.name());
         assertNotNull(createdCategory.id());
     }
 
     @Test
     void shouldUpdateCategory() {
-        //given
+        // given
         Category category = new Category();
         category.setName("Math");
         categoryRepository.save(category);
         CategoryDto categoryToUpdate = new CategoryDto(category.getId(), "Physics");
 
-        //when
+        // when
         CategoryDto updatedCategory = categoryService.updateCategory(category.getId(), categoryToUpdate);
 
-        //then
+        // then
         assertEquals(updatedCategory.name(), "Physics");
     }
 
     @Test
     void shouldDeleteCategory() {
-        //given
+        // given
         Category category = new Category();
         category.setName("Physics");
         categoryRepository.save(category);
 
-        //when
+        // when
         categoryService.deleteCategory(category.getId());
 
-        //then
+        // then
         assertTrue(categoryRepository.findById(category.getId()).isEmpty());
     }
 }

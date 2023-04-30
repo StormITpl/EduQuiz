@@ -52,27 +52,27 @@ class AnswerServiceTest {
 
     @Test
     void shouldCreateAnswerCorrectly() {
-        //given
+        // given
         AnswerRequestDto userRequestDto = new AnswerRequestDto("Poland", true, question);
 
-        //when
+        // when
         AnswerDto createdAnswerDto = answerService.createAnswer(question.getId(), userRequestDto);
 
-        //then
+        // then
         assertThat(createdAnswerDto.content()).isEqualTo(userRequestDto.content());
         assertThat(createdAnswerDto.isCorrect()).isEqualTo(userRequestDto.isCorrect());
     }
 
     @Test
     void shouldReturnListOfAnswersCorrectly() {
-        //given
+        // given
         List<Answer> answers = answerRepository.findAll();
         List<AnswerDto> expectedAnswers = answerMapper.mapAnswerEntityToAnswerDtoList(answers);
 
-        //when
+        // when
         List<AnswerDto> actualAnswers = answerService.getAnswers(null);
 
-        //then
+        // then
         assertThat(actualAnswers).isNotNull();
         assertThat(actualAnswers).hasSize(expectedAnswers.size());
         assertThat(actualAnswers).containsExactlyElementsOf(expectedAnswers);
@@ -80,26 +80,26 @@ class AnswerServiceTest {
 
     @Test
     void shouldReturnAnswerByIdCorrectly() {
-        //given
+        // given
         UUID answerId = answer.getId();
 
-        //when
+        // when
         AnswerDto foundAnswerDto = answerService.getAnswer(answerId);
 
-        //then
+        // then
         assertThat(foundAnswerDto.id()).isEqualTo(answerId);
     }
 
     @Test
     void shouldUpdateAnswerCorrectly() {
-        //given
+        // given
         UUID answerId = answer.getId();
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Spain", false, null);
 
-        //when
+        // when
         AnswerDto updatedAnswerDto = answerService.updateAnswer(answerId, answerRequestDto);
 
-        //then
+        // then
         assertThat(updatedAnswerDto.id()).isEqualTo(answerId);
         assertThat(updatedAnswerDto.content()).isEqualTo("Spain");
         assertThat(updatedAnswerDto.isCorrect()).isEqualTo(false);
@@ -107,13 +107,13 @@ class AnswerServiceTest {
 
     @Test
     void shouldDeleteAnswerCorrectly() {
-        //given
+        // given
         Answer savedAnswer = answerRepository.save(answer);
 
-        //when
+        // when
         answerRepository.deleteById(savedAnswer.getId());
 
-        //then
+        // then
         assertThat(answerRepository.findById(answer.getId())).isEmpty();
         assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(savedAnswer.getId()));
     }

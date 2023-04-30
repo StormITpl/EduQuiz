@@ -41,7 +41,7 @@ class ResultApiControllerTest {
 
     @Test
     void shouldReturn201WhenResultCreatedCorrectly() throws Exception {
-        //given
+        // given
         Quiz exemplaryQuiz = new Quiz();
         exemplaryQuiz.setName("Minerals");
         Game exemplaryGame = new Game(exemplaryQuiz);
@@ -49,42 +49,46 @@ class ResultApiControllerTest {
         GameIdDto exemplaryGameIdDto = new GameIdDto(EXEMPLARY_ID);
         given(resultService.createResult(exemplaryGameIdDto)).willReturn(exemplaryResultDto);
 
-        //when
+        // when
         MockHttpServletRequestBuilder content = post("/api/v1/results")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(exemplaryGameIdDto));
 
-        //then
-        mockMvc.perform(content).andExpect(status().isCreated()).andExpect(jsonPath("$.id")
-                .value(EXEMPLARY_ID.toString()))
+        // then
+        mockMvc.perform(content)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
                 .andExpect(jsonPath("$.game.quiz.name").value("Minerals"));
     }
 
     @Test
     void shouldReturn200WhenFoundResultByIdCorrectly() throws Exception {
-        //given
+        // given
         Quiz exemplaryQuiz = new Quiz();
         exemplaryQuiz.setName("History");
         Game exemplaryGame = new Game(exemplaryQuiz);
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, exemplaryGame);
         given(resultService.getResult(EXEMPLARY_ID)).willReturn(exemplaryResultDto);
 
-        //when
-        MockHttpServletRequestBuilder content = get("/api/v1/results/" + exemplaryResultDto.id()).contentType(MediaType.APPLICATION_JSON);
+        // when
+        MockHttpServletRequestBuilder content = get("/api/v1/results/" + exemplaryResultDto.id())
+                .contentType(MediaType.APPLICATION_JSON);
 
-        //then
-        mockMvc.perform(content).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString())).andExpect(jsonPath("$.game.quiz.name").value("History"));
+        // then
+        mockMvc.perform(content).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
+                .andExpect(jsonPath("$.game.quiz.name").value("History"));
     }
 
     @Test
     void shouldReturn204WhenResultDeletedCorrectly() throws Exception {
-        //given
+        // given
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, null);
 
-        //when
+        // when
         MockHttpServletRequestBuilder content = delete("/api/v1/results/" + exemplaryResultDto.id()).contentType(MediaType.APPLICATION_JSON);
 
-        //then
+        // then
         mockMvc.perform(content).andExpect(status().isNoContent());
     }
 }

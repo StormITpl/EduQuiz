@@ -43,20 +43,20 @@ class ResultServiceTest {
 
     @Test
     void shouldReturnResultById() {
-        //given
+        // given
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
 
-        //when
+        // when
         ResultDto resultDto = resultService.getResult(savedResult.getId());
 
-        //then
+        // then
         assertFalse(resultDto.id().toString().isEmpty());
     }
 
     @Test
     void shouldCreateResultUsingGameId() {
-        //given
+        // given
         Game game = new Game();
         Question exemplaryQuestion = new Question();
         Answer exemplaryAnswer = new Answer();
@@ -69,25 +69,25 @@ class ResultServiceTest {
         Game savedGame = gameRepository.save(game);
         GameIdDto gameIdDto = new GameIdDto(savedGame.getId());
 
-        //when
+        // when
         ResultDto resultDto = resultService.createResult(gameIdDto);
 
-        //then
+        // then
         assertFalse(resultDto.id().toString().isEmpty());
         assertEquals(resultDto.game(), savedGame);
     }
 
     @Test
     void shouldDeleteResult() {
-        //given
+        // given
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
         UUID id = savedResult.getId();
 
-        //when
+        // when
         resultService.deleteResult(savedResult.getId());
 
-        //then
+        // then
         assertTrue(resultRepository.findById(savedResult.getId()).isEmpty());
         assertThrows(EntityNotFoundException.class, () -> resultService.getResult(id));
     }
