@@ -24,22 +24,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @ActiveProfiles({"test"})
 @WebMvcTest(ResultApiController.class)
 class ResultApiControllerTest {
 
     private static final UUID EXEMPLARY_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502");
+
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private ResultService resultService;
 
     @Test
     void shouldReturn201WhenResultCreatedCorrectly() throws Exception {
-        //given
+        // given
         Quiz exemplaryQuiz = new Quiz();
         exemplaryQuiz.setName("Minerals");
         Game exemplaryGame = new Game(exemplaryQuiz);
@@ -47,12 +49,12 @@ class ResultApiControllerTest {
         GameIdDto exemplaryGameIdDto = new GameIdDto(EXEMPLARY_ID);
         given(resultService.createResult(exemplaryGameIdDto)).willReturn(exemplaryResultDto);
 
-        //when
+        // when
         MockHttpServletRequestBuilder content = post("/api/v1/results")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(exemplaryGameIdDto));
 
-        //then
+        // then
         mockMvc.perform(content)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
@@ -61,35 +63,32 @@ class ResultApiControllerTest {
 
     @Test
     void shouldReturn200WhenFoundResultByIdCorrectly() throws Exception {
-        //given
+        // given
         Quiz exemplaryQuiz = new Quiz();
         exemplaryQuiz.setName("History");
         Game exemplaryGame = new Game(exemplaryQuiz);
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, exemplaryGame);
         given(resultService.getResult(EXEMPLARY_ID)).willReturn(exemplaryResultDto);
 
-        //when
+        // when
         MockHttpServletRequestBuilder content = get("/api/v1/results/" + exemplaryResultDto.id())
                 .contentType(MediaType.APPLICATION_JSON);
 
-        //then
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
+        // then
+        mockMvc.perform(content).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EXEMPLARY_ID.toString()))
                 .andExpect(jsonPath("$.game.quiz.name").value("History"));
     }
 
     @Test
     void shouldReturn204WhenResultDeletedCorrectly() throws Exception {
-        //given
+        // given
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, null);
 
-        //when
-        MockHttpServletRequestBuilder content = delete("/api/v1/results/" + exemplaryResultDto.id())
-                .contentType(MediaType.APPLICATION_JSON);
+        // when
+        MockHttpServletRequestBuilder content = delete("/api/v1/results/" + exemplaryResultDto.id()).contentType(MediaType.APPLICATION_JSON);
 
-        //then
-        mockMvc.perform(content)
-                .andExpect(status().isNoContent());
+        // then
+        mockMvc.perform(content).andExpect(status().isNoContent());
     }
 }

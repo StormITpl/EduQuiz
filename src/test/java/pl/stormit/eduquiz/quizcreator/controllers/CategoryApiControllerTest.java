@@ -18,7 +18,6 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,101 +34,97 @@ class CategoryApiControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private CategoryService categoryService;
 
     private static final UUID FIRST_CATEGORY_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0255");
-    private static final UUID SECOND_CATEGORY_ID = UUID.fromString("b92315cb-5862-4449-9826-ca09c76e0156");
 
+    private static final UUID SECOND_CATEGORY_ID = UUID.fromString("b92315cb-5862-4449-9826-ca09c76e0156");
 
     @Test
     void shouldReturn200WhenFoundAllCategoriesCorrectly() throws Exception {
-        //given
-        CategoryDto firstCategory = new CategoryDto(FIRST_CATEGORY_ID,"Chemistry" );
-        CategoryDto secondCategory = new CategoryDto(SECOND_CATEGORY_ID,"Biology");
+        // given
+        CategoryDto firstCategory = new CategoryDto(FIRST_CATEGORY_ID, "Chemistry");
+        CategoryDto secondCategory = new CategoryDto(SECOND_CATEGORY_ID, "Biology");
         given(categoryService.getCategories()).willReturn(List.of(firstCategory, secondCategory));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstCategory, secondCategory)))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Chemistry")));
         result.andExpect(content().string(containsString("Biology")));
-
     }
-
 
     @Test
     void shouldReturn200WhenFoundOneCategoryByIdCorrectly() throws Exception {
-
-        //given
-        CategoryDto categoryDto = new CategoryDto(SECOND_CATEGORY_ID,"Biology");
+        // given
+        CategoryDto categoryDto = new CategoryDto(SECOND_CATEGORY_ID, "Biology");
         given(categoryService.getCategory(any())).willReturn(categoryDto);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/api/v1/categories/" + SECOND_CATEGORY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Biology")));
-        verify(categoryService, times(1)).getCategory(eq(SECOND_CATEGORY_ID));
+        verify(categoryService, times(1)).getCategory((SECOND_CATEGORY_ID));
     }
 
     @Test
     void shouldReturn201WhenCategoryCreatedCorrectly() throws Exception {
-        //given
-        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Economy");
+        // given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID, "Economy");
         given(categoryService.createCategory(categoryDto)).willReturn(categoryDto);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(post("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        //then
+        // then
         result.andExpect(status().isCreated());
         result.andExpect(content().string(containsString("Economy")));
-        verify(categoryService, times(1)).createCategory(eq(categoryDto));
-
+        verify(categoryService, times(1)).createCategory((categoryDto));
     }
 
     @Test
     void shouldReturn200WhenCategoryUpdatedCorrectly() throws Exception {
-        //given
-        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Chemistry");
-        given(categoryService.updateCategory(FIRST_CATEGORY_ID, categoryDto))
-                .willReturn(new CategoryDto(FIRST_CATEGORY_ID, "Office"));
+        // given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID, "Chemistry");
+        given(categoryService.updateCategory(FIRST_CATEGORY_ID, categoryDto)).willReturn(new CategoryDto(FIRST_CATEGORY_ID, "Office"));
 
-        //when
-        ResultActions result = mockMvc.perform(put(
-                "/api/v1/categories/" + FIRST_CATEGORY_ID)
+        // when
+        ResultActions result = mockMvc.perform(put("/api/v1/categories/" + FIRST_CATEGORY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Office")));
-        verify(categoryService, times(1)).updateCategory(FIRST_CATEGORY_ID,categoryDto);
+        verify(categoryService, times(1)).updateCategory(FIRST_CATEGORY_ID, categoryDto);
     }
 
     @Test
     void shouldReturn204WhenCategoryDeletedCorrectly() throws Exception {
-        //given
-        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID,"Biology");
+        // given
+        CategoryDto categoryDto = new CategoryDto(FIRST_CATEGORY_ID, "Biology");
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(delete("/api/v1/categories/" + FIRST_CATEGORY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(categoryDto))));
 
-        //then
+        // then
         result.andExpect(status().isNoContent());
     }
 }

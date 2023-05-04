@@ -33,8 +33,6 @@ class GameControllerTest {
 
     private static final UUID ID_1 = UUID.fromString("5d1b4c2c-9f1c-11ed-a8fc-0242ac120001");
 
-    private static final UUID ID_2 = UUID.fromString("5d1b4c2c-9f1c-11ed-a8fc-0242ac120002");
-
     @MockBean
     private GameService gameService;
 
@@ -53,14 +51,12 @@ class GameControllerTest {
         //given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
-        when(gameService.createGame(quizDto))
-                .thenReturn(new GameDto(ID_1, listExample));
+        when(gameService.createGame(quizDto)).thenReturn(new GameDto(ID_1, listExample));
 
         //when
         ResultActions result = mockMvc.perform(post("/api/v1/games/singleGame")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto)))
-        );
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
         //then
         result.andExpect(status().isCreated());
@@ -71,14 +67,12 @@ class GameControllerTest {
         //given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
-        when(gameService.getGame(any()))
-                .thenReturn(gameDto);
+        when(gameService.getGame(any())).thenReturn(gameDto);
 
         //when
         ResultActions result = mockMvc.perform(get("/api/v1/games/" + ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto)))
-        );
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
         //then
         result.andExpect(status().isOk());

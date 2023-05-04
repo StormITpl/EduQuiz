@@ -28,6 +28,7 @@ class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private QuizRepository quizRepository;
 
@@ -38,7 +39,9 @@ class UserServiceTest {
     private UserMapper userMapper;
 
     private User firstUser;
+
     private User secondUser;
+
     private User thirdUser;
 
     @BeforeEach
@@ -46,9 +49,11 @@ class UserServiceTest {
         firstUser = new User();
         firstUser.setNickname("Ananiasz");
         userRepository.save(firstUser);
+
         secondUser = new User();
         secondUser.setNickname("Wojski");
         userRepository.save(secondUser);
+
         thirdUser = new User();
         thirdUser.setNickname("Dajmiech");
         userRepository.save(thirdUser);
@@ -56,14 +61,14 @@ class UserServiceTest {
 
     @Test
     void shouldReturnAllUsers() {
-        //given
+        // given
         List<User> users = userRepository.findAll();
         List<UserDto> expectedUsers = userMapper.mapUserListOfEntityToUsersDtoList(users);
 
-        //when
+        // when
         List<UserDto> actualUsers = userService.getUsers();
 
-        //then
+        // then
         assertThat(actualUsers).isNotNull();
         assertThat(actualUsers).hasSize(expectedUsers.size());
         assertThat(actualUsers).containsExactlyElementsOf(expectedUsers);
@@ -71,13 +76,13 @@ class UserServiceTest {
 
     @Test
     void shouldGetSingleUser() {
-        //given
+        // given
         UUID firstId = firstUser.getId();
 
-        //when
+        // when
         UserDto foundUserDto = userService.getUser(firstId);
 
-        //then
+        // then
         assertThat(foundUserDto.id()).isEqualTo(firstId);
     }
 
@@ -85,13 +90,13 @@ class UserServiceTest {
     @Transactional
     @Rollback
     void shouldCreateUser() {
-        //given
+        // given
         UserRequestDto userRequestDto = new UserRequestDto("Łamignat", null);
 
-        //when
+        // when
         UserDto createdUserDto = userService.createUser(userRequestDto);
 
-        //then
+        // then
         assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
         assertThat(createdUserDto.quizzes()).isNull();
     }
@@ -99,7 +104,7 @@ class UserServiceTest {
     @Test
     @Transactional
     void shouldUpdateUser() {
-        //given
+        // given
         UUID firstId = firstUser.getId();
         Quiz quiz = new Quiz();
         quiz.setName("Automotive");
@@ -108,10 +113,10 @@ class UserServiceTest {
         quizzesList.add(quiz);
         UserRequestDto userRequestDto = new UserRequestDto("Gniewosz", quizzesList);
 
-        //when
+        // when
         UserDto updatedUserDto = userService.updateUser(firstId, userRequestDto);
 
-        //then
+        // then
         assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
@@ -119,15 +124,15 @@ class UserServiceTest {
 
     @Test
     void shouldDeleteUser() {
-        //given
+        // given
         User user = new User();
         user.setNickname("Oferma");
         User savedUser = userRepository.save(user);
 
-        //when
+        // when
         userRepository.deleteById(savedUser.getId());
 
-        //then
+        // then
         assertThat(userRepository.findById(user.getId())).isEmpty();
         assertThrows(EntityNotFoundException.class, () -> userService.getUser(savedUser.getId()));
     }

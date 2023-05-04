@@ -31,61 +31,63 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ResultServiceTest {
 
     private static final UUID FIRST_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82501");
+
     @Autowired
     private ResultRepository resultRepository;
+
     @Autowired
     private GameRepository gameRepository;
+
     @Autowired
     private ResultService resultService;
 
     @Test
     void shouldReturnResultById() {
-        //given
+        // given
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
 
-        //when
+        // when
         ResultDto resultDto = resultService.getResult(savedResult.getId());
 
-        //then
+        // then
         assertFalse(resultDto.id().toString().isEmpty());
     }
 
     @Test
     void shouldCreateResultUsingGameId() {
-        //given
+        // given
         Game game = new Game();
         Question exemplaryQuestion = new Question();
         Answer exemplaryAnswer = new Answer();
         exemplaryAnswer.setId(FIRST_ID);
         exemplaryAnswer.setCorrect(true);
         exemplaryQuestion.setAnswers(List.of(exemplaryAnswer));
-        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null,
-                null, List.of(exemplaryQuestion), List.of(game));
+        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null, null, List.of(exemplaryQuestion), List.of(game));
         game.setQuiz(exemplaryQuiz);
         game.setUserAnswers(List.of(UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502")));
         Game savedGame = gameRepository.save(game);
         GameIdDto gameIdDto = new GameIdDto(savedGame.getId());
 
-        //when
+        // when
         ResultDto resultDto = resultService.createResult(gameIdDto);
 
-        //then
+        // then
         assertFalse(resultDto.id().toString().isEmpty());
         assertEquals(resultDto.game(), savedGame);
     }
 
     @Test
     void shouldDeleteResult() {
-        //given
+        // given
         Result result = new Result();
         Result savedResult = resultRepository.save(result);
         UUID id = savedResult.getId();
 
-        //when
+        // when
         resultService.deleteResult(savedResult.getId());
 
-        //then
+        // then
         assertTrue(resultRepository.findById(savedResult.getId()).isEmpty());
         assertThrows(EntityNotFoundException.class, () -> resultService.getResult(id));
     }

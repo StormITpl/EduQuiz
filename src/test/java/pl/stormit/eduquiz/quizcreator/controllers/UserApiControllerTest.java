@@ -38,8 +38,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserApiControllerTest {
 
     private static final UUID FIRST_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0221");
+
     private static final UUID SECOND_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0123");
+
     private static final UUID THIRD_ID = UUID.fromString("a92315cb-5862-4449-9826-ca09c76e0117");
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,8 +65,7 @@ class UserApiControllerTest {
         MockHttpServletRequestBuilder content = get("/api/v1/users");
 
         //then
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
+        mockMvc.perform(content).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Ananiasz")))
                 .andExpect(content().string(containsString("Wojski")))
                 .andExpect(content().string(containsString("Dajmiech")))
@@ -80,8 +82,7 @@ class UserApiControllerTest {
         given(userService.getUser(FIRST_ID)).willReturn(expectedDtoUser);
 
         //then
-        mockMvc.perform(get(userUrl))
-                .andExpect(status().isOk())
+        mockMvc.perform(get(userUrl)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Ananiasz")))
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -98,8 +99,7 @@ class UserApiControllerTest {
                 .content(objectMapper.writeValueAsString(createdUserDto));
 
         // then
-        mockMvc.perform(content)
-                .andExpect(status().isCreated())
+        mockMvc.perform(content).andExpect(status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -111,30 +111,27 @@ class UserApiControllerTest {
         UserRequestDto requestDto = new UserRequestDto("Imperator", List.of());
 
         //then
-        MockHttpServletRequestBuilder content = put(
-                "/api/v1/users/{userId}", FIRST_ID)
+        MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto)));
 
         //when
-        mockMvc.perform(content)
-                .andExpect(status().isOk())
+        mockMvc.perform(content).andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-        verify(userService, times(1)).updateUser(eq(FIRST_ID), eq(requestDto));
+        verify(userService, times(1))
+                .updateUser(eq(FIRST_ID), eq(requestDto));
     }
 
     @Rollback
     @Test
     void shouldReturn204WhenUserDeletedCorrectly() throws Exception {
         //then
-        MockHttpServletRequestBuilder content = delete(
-                "/api/v1/users/{userId}", FIRST_ID)
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder content = delete("/api/v1/users/{userId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON);
 
         //when
-        mockMvc.perform(content)
-                .andExpect(MockMvcResultMatchers.status().isNoContent())
+        mockMvc.perform(content).andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
-        verify(userService, times(1)).deleteUser(eq(FIRST_ID));
+        verify(userService, times(1))
+                .deleteUser(eq(FIRST_ID));
     }
 }

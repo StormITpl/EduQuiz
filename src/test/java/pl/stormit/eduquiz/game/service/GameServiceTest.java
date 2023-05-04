@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 class GameServiceTest {
 
     private static final UUID ID_1 = UUID.fromString("5d1b4c2c-9f1c-11ed-a8fc-0242ac120002");
+
     private static final UUID ID_2 = UUID.fromString("5d1b4c2c-9f1c-11ed-a8fc-0242ac120003");
 
     @MockBean

@@ -7,12 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
-import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerRepository;
-import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
-import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
-import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
-import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionMapper;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionRequestDto;
@@ -40,7 +34,7 @@ public class QuestionServiceTest {
     private Question question;
 
     @BeforeEach
-    void SetUp(){
+    void SetUp() {
         question = new Question();
         question.setContent("In which country was Nicolaus Copernicus born?");
         questionRepository.save(question);
@@ -48,13 +42,13 @@ public class QuestionServiceTest {
 
     @Test
     void shouldCreateQuestionCorrectly() {
-        //given
+        // given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In which country was Nicolaus Copernicus born?", null, null);
 
-        //when
+        // when
         QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
 
-        //then
+        // then
         assertThat(createdQuestionDto.content()).isEqualTo(questionRequestDto.content());
         assertThat(createdQuestionDto.answers()).isNull();
         assertThat(createdQuestionDto.quiz()).isNull();
@@ -62,14 +56,14 @@ public class QuestionServiceTest {
 
     @Test
     void shouldReturnListOfQuestionsCorrectly() {
-        //given
+        // given
         List<Question> questions = questionRepository.findAll();
         List<QuestionDto> expectedQuestions = questionMapper.mapQuestionEntityToQuestionDtoList(questions);
 
-        //when
+        // when
         List<QuestionDto> actualQuestions = questionService.getQuestions();
 
-        //then
+        // then
         assertThat(actualQuestions).isNotNull();
         assertThat(actualQuestions).hasSize(expectedQuestions.size());
         assertThat(actualQuestions).containsExactlyElementsOf(expectedQuestions);
@@ -77,26 +71,26 @@ public class QuestionServiceTest {
 
     @Test
     void shouldReturnQuestionByIdCorrectly() {
-        //given
+        // given
         UUID questionId = question.getId();
 
-        //when
+        // when
         QuestionDto foundQuestionDto = questionService.getQuestion(questionId);
 
-        //then
+        // then
         assertThat(foundQuestionDto.id()).isEqualTo(questionId);
     }
 
     @Test
     void shouldUpdateQuestionCorrectly() {
-        //given
+        // given
         UUID questionId = question.getId();
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("What was the name of the First Historical Era?", null, null);
 
-        //when
+        // when
         QuestionDto updatedQuestionDto = questionService.updateQuestion(questionId, questionRequestDto);
 
-        //then
+        // then
         assertThat(updatedQuestionDto.id()).isEqualTo(questionId);
         assertThat(updatedQuestionDto.content()).isEqualTo("What was the name of the First Historical Era?");
         assertThat(updatedQuestionDto.quiz()).isEqualTo(null);
@@ -105,13 +99,13 @@ public class QuestionServiceTest {
 
     @Test
     void shouldDeleteQuestionCorrectly() {
-        //given
+        // given
         Question savedQuestion = questionRepository.save(question);
 
-        //when
+        // when
         questionRepository.deleteById(savedQuestion.getId());
 
-        //then
+        // then
         assertThat(questionRepository.findById(question.getId())).isEmpty();
         assertThrows(EntityNotFoundException.class, () -> questionService.getQuestion(savedQuestion.getId()));
     }
