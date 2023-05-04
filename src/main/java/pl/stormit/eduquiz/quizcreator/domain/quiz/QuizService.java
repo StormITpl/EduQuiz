@@ -57,7 +57,7 @@ public class QuizService {
     }
 
     @Transactional
-    public void deleteQuiz(UUID quizId) {
+    public void deleteQuiz(@NotNull UUID quizId) {
         if (quizRepository.existsById(quizId)) {
             quizRepository.deleteById(quizId);
         } else {
