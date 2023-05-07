@@ -61,10 +61,10 @@ class UserApiControllerTest {
         List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
         given(userService.getUsers()).willReturn((expectedDtoUsers));
 
-        //when
+        // when
         MockHttpServletRequestBuilder content = get("/api/v1/users");
 
-        //then
+        // then
         mockMvc.perform(content).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Ananiasz")))
                 .andExpect(content().string(containsString("Wojski")))
@@ -78,10 +78,10 @@ class UserApiControllerTest {
         UserDto expectedDtoUser = new UserDto(FIRST_ID, "Ananiasz", List.of());
         String userUrl = "/api/v1/users/" + expectedDtoUser.id();
 
-        //when
+        // when
         given(userService.getUser(FIRST_ID)).willReturn(expectedDtoUser);
 
-        //then
+        // then
         mockMvc.perform(get(userUrl)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Ananiasz")))
                 .andDo(MockMvcResultHandlers.print());
@@ -106,16 +106,16 @@ class UserApiControllerTest {
     @Rollback
     @Test
     void shouldReturn200WhenUserUpdatedCorrectly() throws Exception {
-        //given
+        // given
         UserDto userDto = new UserDto(FIRST_ID, "Hegemon", List.of());
         UserRequestDto requestDto = new UserRequestDto("Imperator", List.of());
 
-        //then
+        // then
         MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(requestDto)));
 
-        //when
+        // when
         mockMvc.perform(content).andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
         verify(userService, times(1))
@@ -125,10 +125,10 @@ class UserApiControllerTest {
     @Rollback
     @Test
     void shouldReturn204WhenUserDeletedCorrectly() throws Exception {
-        //then
+        // then
         MockHttpServletRequestBuilder content = delete("/api/v1/users/{userId}", FIRST_ID).contentType(MediaType.APPLICATION_JSON);
 
-        //when
+        // when
         mockMvc.perform(content).andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
         verify(userService, times(1))

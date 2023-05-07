@@ -47,7 +47,7 @@ class GameServiceTest {
 
     @Test
     void shouldCreateGameCorrectly() {
-        //given
+        // given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
@@ -55,50 +55,50 @@ class GameServiceTest {
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
-        //when
+        // when
         when(gameRepository.save(any(Game.class))).thenReturn(game);
         when(gameMapper.mapGameEntityToGameDto(game)).thenReturn(gameDto);
         when(quizRepository.findById(any())).thenReturn(Optional.of(quiz));
         GameDto returnGame = gameService.createGame(quizDto);
 
-        //then
+        // then
         assertEquals(game.getId(), returnGame.id());
         assertEquals(game.getUserAnswers(), returnGame.userAnswers());
     }
 
     @Test
     void shouldReturnGameByIdCorrectly() {
-        //given
+        // given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
         Game game = new Game(ID_2, null, quiz);
         GameDto gameDto = new GameDto(ID_2, null);
 
-        //when
+        // when
         when(gameRepository.save(any(Game.class))).thenReturn(game);
         when(gameMapper.mapGameEntityToGameDto(game)).thenReturn(gameDto);
         when(gameRepository.findById(any())).thenReturn(Optional.of(game));
         GameDto returnedGameDto = gameService.getGame(ID_2);
 
-        //then
+        // then
         assertEquals(game.getId(), returnedGameDto.id());
         assertNull(returnedGameDto.userAnswers());
     }
 
     @Test
     void shouldDeleteGameCorrectly() {
-        //given
+        // given
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
         Game game = new Game(ID_2, null, quiz);
 
-        //when
+        // when
         when(gameRepository.existsById(any())).thenReturn(true);
         gameService.deleteGame(ID_2);
 
-        //then
+        // then
         Mockito.verify(gameRepository, Mockito.times(1)).deleteById(game.getId());
     }
 }

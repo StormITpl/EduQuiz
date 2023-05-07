@@ -79,49 +79,49 @@ class QuestionApiControllerTest {
 
     @Test
     void shouldReturn201WhenQuestionCreatedCorrectly() throws Exception {
-        //given
+        // given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
         given(questionService.createQuestion(questionRequestDto))
                 .willReturn(new QuestionDto(FIRST_QUESTION_ID, "In what year did World War II begin?", null, null));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(post("/api/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(questionRequestDto))));
 
-        //then
+        // then
         result.andExpect(status().isCreated());
         result.andExpect(content().string(containsString("In what year did World War II begin?")));
     }
 
     @Test
     void shouldReturn200WhenQuestionUpdatedCorrectly() throws Exception {
-        //given
+        // given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
         given(questionService.updateQuestion(FIRST_QUESTION_ID, questionRequestDto))
                 .willReturn(new QuestionDto(FIRST_QUESTION_ID, "What was the name of the First Historical Era?", null, null));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(put("/api/v1/questions/" + FIRST_QUESTION_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(questionRequestDto))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("What was the name of the First Historical Era?")));
     }
 
     @Test
     void shouldReturn204WhenQuestionDeletedCorrectly() throws Exception {
-        //given
+        // given
         QuestionDto firstQuestion = new QuestionDto(FIRST_QUESTION_ID, "In what year did World War II begin?", null, null);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + FIRST_QUESTION_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(firstQuestion))));
 
-        //then
+        // then
         result.andExpect(status().isNoContent());
     }
 }

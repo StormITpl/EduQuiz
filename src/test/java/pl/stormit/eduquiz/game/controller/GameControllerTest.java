@@ -48,48 +48,48 @@ class GameControllerTest {
 
     @Test
     void shouldReturn201WhenGameCreatedCorrectly() throws Exception {
-        //given
+        // given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
         when(gameService.createGame(quizDto)).thenReturn(new GameDto(ID_1, listExample));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(post("/api/v1/games/singleGame")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
-        //then
+        // then
         result.andExpect(status().isCreated());
     }
 
     @Test
     void shouldReturn200WhenFoundGameByIdCorrectly() throws Exception {
-        //given
+        // given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
         when(gameService.getGame(any())).thenReturn(gameDto);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/api/v1/games/" + ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
     }
 
     @Test
     void shouldReturn204WhenGameDeletedCorrectly() throws Exception {
-        //given
+        // given
         List<UUID> listExample = Collections.emptyList();
         GameDto gameDto = new GameDto(ID_1, listExample);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(delete("/api/v1/games/" + ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
-        //then
+        // then
         result.andExpect(status().isNoContent());
     }
 }
