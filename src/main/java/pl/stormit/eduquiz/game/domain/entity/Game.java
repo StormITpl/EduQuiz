@@ -1,6 +1,5 @@
 package pl.stormit.eduquiz.game.domain.entity;
 
-
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

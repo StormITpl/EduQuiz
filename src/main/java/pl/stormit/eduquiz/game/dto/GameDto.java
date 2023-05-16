@@ -6,4 +6,4 @@ import java.util.UUID;
 public record GameDto(
         UUID id,
         List<UUID> userAnswers
-) {}
+){}
