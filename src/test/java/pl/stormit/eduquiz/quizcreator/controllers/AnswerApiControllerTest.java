@@ -43,17 +43,17 @@ class AnswerApiControllerTest {
 
     @Test
     void shouldReturn200WhenFoundListOfAnswersByQuestionIdCorrectly() throws Exception {
-        //given
+        // given
         AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
         AnswerDto secondAnswer = new AnswerDto(SECOND_ANSWER_ID, "Spain", false, null);
         given(answerService.getAnswers(any())).willReturn(List.of(firstAnswer, secondAnswer));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(List.of(firstAnswer, secondAnswer)))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Poland")));
         result.andExpect(content().string(containsString("Spain")));
@@ -61,63 +61,63 @@ class AnswerApiControllerTest {
 
     @Test
     void shouldReturn200WhenFoundAnswerByIdCorrectly() throws Exception {
-        //given
+        // given
         AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
         given(answerService.getAnswer(FIRST_ANSWER_ID)).willReturn(firstAnswer);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(firstAnswer))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Poland")));
     }
 
     @Test
     void shouldReturn201WhenAnswerCreatedCorrectly() throws Exception {
-        //given
+        // given
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
         given(answerService.createAnswer(QUESTION_ID, answerRequestDto)).willReturn(new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(post("/api/v1/questions/" + QUESTION_ID + "/answers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
-        //then
+        // then
         result.andExpect(status().isCreated());
         result.andExpect(content().string(containsString("Poland")));
     }
 
     @Test
     void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
-        //given
+        // given
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
         given(answerService.updateAnswer(FIRST_ANSWER_ID, answerRequestDto)).willReturn(new AnswerDto(FIRST_ANSWER_ID, "Spain", false, null));
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(put("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
 
-        //then
+        // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Spain")));
     }
 
     @Test
     void shouldReturn204WhenAnswerDeletedCorrectly() throws Exception {
-        //given
+        // given
         AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
 
-        //when
+        // when
         ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerDto))));
 
-        //then
+        // then
         result.andExpect(status().isNoContent());
     }
 }
