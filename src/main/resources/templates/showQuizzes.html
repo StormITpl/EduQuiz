@@ -163,13 +163,14 @@
     </ul>
 </div>
 
+
 <div class="container">
     <header class="blog-header lh-1 py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
             </div>
             <div class="col-4 text-center">
-                <a class="blog-header-logo text-body-emphasis" href="#">Edu Quiz application</a>
+                <a class="blog-header-logo text-body-emphasis" href="#" th:href="@{'/'}">Edu Quiz application</a>
             </div>
             <div class="col-4 d-flex justify-content-end align-items-center">
                 <a class="link-secondary" href="#" aria-label="Search">
@@ -188,9 +189,25 @@
 
     <div class="nav-scroller py-1 mb-2">
         <nav class="nav d-flex justify-content-center">
-            <a th:each="category : ${categories}" th:text="${category.name}" class="p-2 link-secondary" href="#" th:href="@{'/quizzes'}">Category</a>
+            <a th:each="category : ${categories}" th:text="${category.name}" class="p-2 link-secondary" href="#">Category</a>
         </nav>
     </div>
+
+    <div class="row mb-2">
+        <div class="col" th:each="quiz : ${quizzes}">
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary" th:text="${quiz.category().getName()}">Category</strong>
+                        <h3 class="mb-0" th:text="${quiz.name}">Quiz</h3>
+                        <p class="card-text mb-auto">Default short quiz description.</p>
+                        <a href="#" th:href="@{'/quiz/'+${quiz.id}}" class="stretched-link">Start the quiz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <footer class="blog-footer fixed-bottom">
         <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a
