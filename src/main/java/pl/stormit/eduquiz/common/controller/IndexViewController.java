@@ -57,7 +57,7 @@ public class IndexViewController {
     public String quiz(@PathVariable UUID id, Model model){
 
         model.addAttribute("quiz", quizService.getQuiz(id));
-        model.addAttribute("question", quizService.getQuiz(id).questions());
+        model.addAttribute("questions", quizService.getQuiz(id).questions());
 
         return "quiz";
     }

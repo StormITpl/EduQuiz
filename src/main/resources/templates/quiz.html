@@ -3,149 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-        <style>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
         * {
-        margin: 0px;
-        padding: 0px;
-        box-sizing: border-box;
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
         }
 
         body {
-        background-color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
-        background-color: #555;
-        color: #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        font-family: 'Montserrat', sans-serif;
-        max-width: 700px;
+            background-color: #555;
+            color: #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            max-width: 700px;
         }
 
         .container > p {
-        font-size: 32px;
+            font-size: 32px;
         }
 
         .question {
-        width: 75%;
+            width: 75%;
         }
 
         .options {
-        position: relative;
-        padding-left: 40px;
+            position: relative;
+            padding-left: 40px;
         }
 
         #options label {
-        display: block;
-        margin-bottom: 15px;
-        font-size: 14px;
-        cursor: pointer;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .options input {
-        opacity: 0;
+            opacity: 0;
         }
 
         .checkmark {
-        position: absolute;
-        top: -1px;
-        left: 0;
-        height: 25px;
-        width: 25px;
-        background-color: #555;
-        border: 1px solid #ddd;
-        border-radius: 50%;
+            position: absolute;
+            top: -1px;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #555;
+            border: 1px solid #ddd;
+            border-radius: 50%;
         }
 
         .options input:checked ~ .checkmark:after {
-        display: block;
+            display: block;
         }
 
         .options .checkmark:after {
-        content: "";
-        width: 10px;
-        height: 10px;
-        display: block;
-        background: white;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        border-radius: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        transition: 300ms ease-in-out 0s;
+            content: "";
+            width: 10px;
+            height: 10px;
+            display: block;
+            background: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: 300ms ease-in-out 0s;
         }
 
         .options input[type="radio"]:checked ~ .checkmark {
-        background: #21bf73;
-        transition: 300ms ease-in-out 0s;
+            background: #21bf73;
+            transition: 300ms ease-in-out 0s;
         }
 
         .options input[type="radio"]:checked ~ .checkmark:after {
-        transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .btn-primary {
-        background-color: #555;
-        color: #ddd;
-        border: 1px solid #ddd;
+            background-color: #555;
+            color: #ddd;
+            border: 1px solid #ddd;
         }
 
         .btn-primary:hover {
-        background-color: #21bf73;
-        border: 1px solid #21bf73;
+            background-color: #21bf73;
+            border: 1px solid #21bf73;
         }
 
         .btn-success {
-        padding: 5px 25px;
-        background-color: #21bf73;
+            padding: 5px 25px;
+            background-color: #21bf73;
         }
 
         @media (max-width: 576px) {
-        .question {
-        width: 100%;
-        word-spacing: 2px;
+            .question {
+                width: 100%;
+                word-spacing: 2px;
+            }
         }
-        }
-        </style>
+    </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="question ml-sm-5 pl-sm-5 pt-2">
-        <div class="py-2 h5"><b>Q. which option best describes your job role?</b></div>
-        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-            <label class="options">Small Business Owner or Employee
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Nonprofit Owner or Employee
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Journalist or Activist
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Other
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
+<div class="organizer" th:each="question,iterStat : ${questions}">
+    <div th:if="${iterStat.count <= 3}" class="py-2 h5"><b>Question Content</b></div>
+    <div class="container" th:text="${question.content}">
+        <div class="question ml-sm-5 pl-sm-5 pt-2">
+            <div th:each="answers : ${question.getAnswers()}">
+                <div th:each="answer : ${answers.getContent()}" class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3"
+                     id="options">
+                    <!--                         <div th:if="${iterStat.count <= 3}">-->
+                    <label class="options"><p th:text="${answers.getContent()}">Answer1</p>
+                        <input type="radio" name="radio">
+                        <span class="checkmark"></span>
+                    </label>
+                    <!--                         <label  class="options"> <p th:text="${answers.content}">Answer1</p>-->
+                    <!--                    <input type="radio" name="radio">-->
+                    <!--                    <span class="checkmark"></span>-->
+                    <!--                </label>-->
+                    <!--                         <label  class="options"> <p th:text="${answer}">Answer1</p>-->
+                    <!--                    <input type="radio" name="radio">-->
+                    <!--                    <span class="checkmark"></span>-->
+                    <!--                </label>-->
+                    <!--                <label  class="options"> <p th:text="${answer}">Answer1</p>-->
+                    <!--                    <input type="radio" name="radio">-->
+                    <!--                    <span class="checkmark"></span>-->
+                    <!--                </label>-->
+                </div>
+            </div>
         </div>
     </div>
     <div class="d-flex align-items-center pt-3">
         <div id="prev">
             <button class="btn btn-primary">Previous</button>
         </div>
-        <div class="ml-auto mr-sm-5">
-            <button class="btn btn-success">Next</button>
-        </div>
+        <p th:text="${iterStat.index}"></p>
+        <p th:text="${iterStat.size}"></p>
+        <form method="post">
+            <button th:action="${iterStat.index}" class="ml-auto mr-sm-5" type="submit">Next</button>
+        </form>
+        <!--        <div class="ml-auto mr-sm-5" type="submit">-->
+        <!--            <button class="btn btn-success">Next</button>-->
+        <!--        </div>-->
     </div>
 </div>
 
