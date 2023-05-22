@@ -38,6 +38,7 @@ public class QuestionService {
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
+        questionRepository.save(question);
         return questionMapper.mapQuestionEntityToQuestionDto(question);
     }
 
@@ -49,6 +50,7 @@ public class QuestionService {
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
+        questionRepository.save(question);
         return questionMapper.mapQuestionEntityToQuestionDto(question);
     }
 
