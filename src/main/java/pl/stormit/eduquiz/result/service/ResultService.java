@@ -29,7 +29,7 @@ public class ResultService {
     public ResultDto getResult(UUID id) {
         Result result = resultRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new EntityNotFoundException("Result not found");
+                    throw new EntityNotFoundException("Result by id: " + id + " not found");
                 });
         return resultMapper.mapResultEntityToResultDto(result);
     }
