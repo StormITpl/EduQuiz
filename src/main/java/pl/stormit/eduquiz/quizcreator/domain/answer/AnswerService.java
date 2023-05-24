@@ -23,6 +23,7 @@ public class AnswerService {
 
     private final AnswerMapper answerMapper;
 
+    @Transactional
     public AnswerDto createAnswer(UUID questionId, AnswerRequestDto answerRequestDto) {
 
         Question question = questionRepository.findById(questionId).orElseThrow(() -> {
@@ -32,7 +33,6 @@ public class AnswerService {
         answer.setContent(answerRequestDto.content());
         answer.setCorrect(answerRequestDto.isCorrect());
         answer.setQuestion(question);
-
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
 
@@ -59,7 +59,7 @@ public class AnswerService {
         });
         answer.setContent(answerRequestDto.content());
         answer.setCorrect(answerRequestDto.isCorrect());
-
+        answerRepository.save(answer);
         return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }
 

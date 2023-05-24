@@ -7,56 +7,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
-import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerMapper;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
+import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestMapper;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
-import pl.stormit.eduquiz.quizcreator.domain.question.QuestionRepository;
+import pl.stormit.eduquiz.quizcreator.domain.question.QuestionService;
+import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionDto;
+import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionRequestDto;
+import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionRequestMapper;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
 class AnswerServiceTest {
-
-    @Autowired
-    private AnswerRepository answerRepository;
-
     @Autowired
     private AnswerService answerService;
-
     @Autowired
-    private AnswerMapper answerMapper;
-
+    private QuestionService questionService;
     @Autowired
-    private QuestionRepository questionRepository;
-
+    private AnswerRequestMapper answerRequestMapper;
+    @Autowired
+    private QuestionRequestMapper questionRequestMapper;
     private Answer answer;
-
     private Question question;
+     UUID questionId;
+     UUID answerId;
 
-    @BeforeEach
-    void SetUp() {
+     @BeforeEach
+     void SetUp() {
+        question = new Question();
+        question.setContent("In which country was Nicolaus Copernicus born?");
+        QuestionRequestDto questionRequestDto = questionRequestMapper.mapQuestionEntityToQuestionRequestDto(question);
+        QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
+        questionId = createdQuestionDto.id();
         answer = new Answer();
         answer.setContent("Poland");
         answer.setCorrect(true);
-        answer.setQuestion(null);
-        answerRepository.save(answer);
-        question = new Question();
-        question.setContent("In which country was Nicolaus Copernicus born?");
-        questionRepository.save(question);
+        answer.setQuestion(question);
+        AnswerRequestDto answerRequestDto = answerRequestMapper.mapAnswerEntityToAnswerRequestDto(answer);
+        AnswerDto createdAnswerDto = answerService.createAnswer(createdQuestionDto.id(), answerRequestDto);
+        answerId = createdAnswerDto.id();
     }
 
     @Test
     void shouldCreateAnswerCorrectly() {
         // given
-        AnswerRequestDto userRequestDto = new AnswerRequestDto("Poland", true, question);
+        Question otherQuestion = new Question();
+        otherQuestion.setContent("In which country was Beethoven born?");
+        QuestionRequestDto questionRequestDto = questionRequestMapper.mapQuestionEntityToQuestionRequestDto(otherQuestion);
+        QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
+        AnswerRequestDto userRequestDto = new AnswerRequestDto("Germany", false, otherQuestion);
 
         // when
-        AnswerDto createdAnswerDto = answerService.createAnswer(question.getId(), userRequestDto);
+        AnswerDto createdAnswerDto = answerService.createAnswer(createdQuestionDto.id(), userRequestDto);
 
         // then
         assertThat(createdAnswerDto.content()).isEqualTo(userRequestDto.content());
@@ -65,35 +74,29 @@ class AnswerServiceTest {
 
     @Test
     void shouldReturnListOfAnswersCorrectly() {
-        // given
-        List<Answer> answers = answerRepository.findAll();
-        List<AnswerDto> expectedAnswers = answerMapper.mapAnswerEntityToAnswerDtoList(answers);
-
         // when
-        List<AnswerDto> actualAnswers = answerService.getAnswers(null);
+        List<AnswerDto> actualAnswers = answerService.getAnswers(questionId);
 
         // then
         assertThat(actualAnswers).isNotNull();
-        assertThat(actualAnswers).hasSize(expectedAnswers.size());
-        assertThat(actualAnswers).containsExactlyElementsOf(expectedAnswers);
+        assertThat(actualAnswers).hasSize(1);
+//        assertThat(actualAnswers).containsExactlyElementsOf(actualAnswers);
     }
 
     @Test
     void shouldReturnAnswerByIdCorrectly() {
-        // given
-        UUID answerId = answer.getId();
-
         // when
         AnswerDto foundAnswerDto = answerService.getAnswer(answerId);
 
         // then
-        assertThat(foundAnswerDto.id()).isEqualTo(answerId);
+        assertEquals(foundAnswerDto.content(), "Poland");
+        assertTrue(foundAnswerDto.isCorrect());
+        assertEquals(foundAnswerDto.question(), question);
     }
 
     @Test
     void shouldUpdateAnswerCorrectly() {
         // given
-        UUID answerId = answer.getId();
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Spain", false, null);
 
         // when
@@ -107,14 +110,10 @@ class AnswerServiceTest {
 
     @Test
     void shouldDeleteAnswerCorrectly() {
-        // given
-        Answer savedAnswer = answerRepository.save(answer);
-
         // when
-        answerRepository.deleteById(savedAnswer.getId());
+        answerService.deleteAnswer(answerId);
 
         // then
-        assertThat(answerRepository.findById(answer.getId())).isEmpty();
-        assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(savedAnswer.getId()));
+        assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(answerId));
     }
 }

@@ -8,39 +8,37 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestMapper;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles({"test"})
 @Transactional
 @SpringBootTest
 class QuizServiceTest {
-
-    @Autowired
-    private QuizRepository quizRepository;
-
     @Autowired
     private QuizService quizService;
+    @Autowired
+    private QuizRequestMapper quizRequestMapper;
 
     @Test
     void shouldReturnTwoQuizzes() {
         // given
-        quizRepository.findAll();
-
         Quiz firstQuiz = new Quiz();
         firstQuiz.setName("Gold");
-        quizRepository.save(firstQuiz);
+        QuizRequestDto firstQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(firstQuiz);
+        quizService.createQuiz(firstQuizRequestDto);
 
         Quiz secondQuiz = new Quiz();
         secondQuiz.setName("Silver");
-        quizRepository.save(secondQuiz);
+        QuizRequestDto secondQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(secondQuiz);
+        quizService.createQuiz(secondQuizRequestDto);
 
         // when
         List<QuizDto> quizzesDto = quizService.getQuizzes();
@@ -55,14 +53,16 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Special");
-        Quiz savedQuiz = quizRepository.save(quiz);
+        QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
+        QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
+
 
         // when
-        QuizDto quizDtoFoundById = quizService.getQuiz(savedQuiz.getId());
+        QuizDto quizDtoFoundById = quizService.getQuiz(createdQuiz.id());
 
         // then
-        assertEquals(quizDtoFoundById.id(), savedQuiz.getId());
-        assertEquals(quizDtoFoundById.name(), savedQuiz.getName());
+        assertEquals(quizDtoFoundById.id(), createdQuiz.id());
+        assertEquals(quizDtoFoundById.name(), createdQuiz.name());
     }
 
     @Test
@@ -90,8 +90,8 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Special");
-        quiz.setQuestions(List.of());
-        quizRepository.save(quiz);
+        QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
+        QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
         QuizRequestDto quizToUpdate = new QuizRequestDto("Pro",
                 quiz.getCategory(),
                 quiz.getUser(),
@@ -99,12 +99,12 @@ class QuizServiceTest {
                 quiz.getGames());
 
         // when
-        QuizDto updatedQuiz = quizService.updateQuiz(quiz.getId(), quizToUpdate);
+        QuizDto updatedQuiz = quizService.updateQuiz(createdQuiz.id(), quizToUpdate);
 
         // then
         assertEquals(updatedQuiz.name(), "Pro");
         assertNull(updatedQuiz.category());
-        assertEquals(updatedQuiz.questions(), List.of());
+        assertNull(updatedQuiz.questions());
     }
 
     @Test
@@ -112,13 +112,13 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Special");
-        Quiz savedQuiz = quizRepository.save(quiz);
+        QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
+        QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
 
         // when
-        quizService.deleteQuiz(quiz.getId());
+        quizService.deleteQuiz(createdQuiz.id());
 
         // then
-        assertTrue(quizRepository.findById(savedQuiz.getId()).isEmpty());
-        assertThrows(EntityNotFoundException.class, () -> quizService.getQuiz(savedQuiz.getId()));
+        assertThrows(EntityNotFoundException.class, () -> quizService.getQuiz(createdQuiz.id()));
     }
 }
