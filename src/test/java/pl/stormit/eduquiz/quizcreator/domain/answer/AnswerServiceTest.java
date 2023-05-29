@@ -30,17 +30,18 @@ class AnswerServiceTest {
     private AnswerService answerService;
     @Autowired
     private QuestionService questionService;
+
     @Autowired
     private AnswerRequestMapper answerRequestMapper;
     @Autowired
     private QuestionRequestMapper questionRequestMapper;
     private Answer answer;
     private Question question;
-     UUID questionId;
-     UUID answerId;
+    UUID questionId;
+    UUID answerId;
 
-     @BeforeEach
-     void SetUp() {
+    @BeforeEach
+    void SetUp() {
         question = new Question();
         question.setContent("In which country was Nicolaus Copernicus born?");
         QuestionRequestDto questionRequestDto = questionRequestMapper.mapQuestionEntityToQuestionRequestDto(question);
@@ -78,9 +79,11 @@ class AnswerServiceTest {
         List<AnswerDto> actualAnswers = answerService.getAnswers(questionId);
 
         // then
-        assertThat(actualAnswers).isNotNull();
+        assertNotNull(actualAnswers);
         assertThat(actualAnswers).hasSize(1);
-//        assertThat(actualAnswers).containsExactlyElementsOf(actualAnswers);
+        assertEquals(actualAnswers.get(0).isCorrect(), true);
+        assertEquals(actualAnswers.get(0).content(), "Poland");
+        assertEquals(actualAnswers.get(0).question().getId(), questionId);
     }
 
     @Test
@@ -91,7 +94,7 @@ class AnswerServiceTest {
         // then
         assertEquals(foundAnswerDto.content(), "Poland");
         assertTrue(foundAnswerDto.isCorrect());
-        assertEquals(foundAnswerDto.question(), question);
+        assertEquals(foundAnswerDto.question().getId(), questionId);
     }
 
     @Test
