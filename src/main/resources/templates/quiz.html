@@ -116,48 +116,28 @@
     </style>
 </head>
 <body>
-<div class="organizer" th:each="question,iterStat : ${questions}">
-    <div th:if="${iterStat.count <= 3}" class="py-2 h5"><b>Question Content</b></div>
-    <div class="container" th:text="${question.content}">
-        <div class="question ml-sm-5 pl-sm-5 pt-2">
-            <div th:each="answers : ${question.getAnswers()}">
-                <div th:each="answer : ${answers.getContent()}" class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3"
-                     id="options">
-                    <!--                         <div th:if="${iterStat.count <= 3}">-->
-                    <label class="options"><p th:text="${answers.getContent()}">Answer1</p>
-                        <input type="radio" name="radio">
-                        <span class="checkmark"></span>
-                    </label>
-                    <!--                         <label  class="options"> <p th:text="${answers.content}">Answer1</p>-->
-                    <!--                    <input type="radio" name="radio">-->
-                    <!--                    <span class="checkmark"></span>-->
-                    <!--                </label>-->
-                    <!--                         <label  class="options"> <p th:text="${answer}">Answer1</p>-->
-                    <!--                    <input type="radio" name="radio">-->
-                    <!--                    <span class="checkmark"></span>-->
-                    <!--                </label>-->
-                    <!--                <label  class="options"> <p th:text="${answer}">Answer1</p>-->
-                    <!--                    <input type="radio" name="radio">-->
-                    <!--                    <span class="checkmark"></span>-->
-                    <!--                </label>-->
+<div class="container">
+    <div class="question ml-sm-5 pl-sm-5 pt-2">
+        <div class="py-2 h5" th:text="${question.content}"></div>
+        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+            <form th:action="@{/quiz/{id}/1(id=${quiz.id()})}" method="post">
+                <input type="hidden" name="questionIndex" th:value="${questionIndex}" />
+                <label class="options" th:each="answer : ${answers}">
+                    <span th:text="${answer.content}"></span>
+                    <input type="radio" name="radio">
+                    <span class="checkmark"></span>
+                </label>
+                <div class="d-flex align-items-center pt-3">
+                    <div id="prev">
+                        <button class="btn btn-primary">Previous</button>
+                    </div>
+                    <div class="ml-auto mr-sm-5">
+                        <button class="btn btn-success"  type="submit">Next</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
-    <div class="d-flex align-items-center pt-3">
-        <div id="prev">
-            <button class="btn btn-primary">Previous</button>
-        </div>
-        <p th:text="${iterStat.index}"></p>
-        <p th:text="${iterStat.size}"></p>
-        <form method="post">
-            <button th:action="${iterStat.index}" class="ml-auto mr-sm-5" type="submit">Next</button>
-        </form>
-        <!--        <div class="ml-auto mr-sm-5" type="submit">-->
-        <!--            <button class="btn btn-success">Next</button>-->
-        <!--        </div>-->
     </div>
 </div>
-
 </body>
 </html>
