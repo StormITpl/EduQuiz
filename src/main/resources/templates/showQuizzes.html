@@ -201,7 +201,7 @@
                         <strong class="d-inline-block mb-2 text-primary" th:text="${quiz.category().getName()}">Category</strong>
                         <h3 class="mb-0" th:text="${quiz.name}">Quiz</h3>
                         <p class="card-text mb-auto">Default short quiz description.</p>
-                        <a href="#" th:href="@{'/quiz/'+${quiz.id}}" class="stretched-link">Start the quiz</a>
+                        <a href="#" th:href="@{'/quiz/'+${quiz.id} +'/0'}" class="stretched-link">Start the quiz</a>
                     </div>
                 </div>
             </div>
@@ -217,6 +217,6 @@
         </p>
     </footer>
 
-
+</div>
 </body>
 </html>

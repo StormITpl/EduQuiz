@@ -120,7 +120,8 @@
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5" th:text="${question.content}"></div>
         <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-            <form th:action="@{/quiz/{id}/1(id=${quiz.id()})}" method="post">
+<!--            <form th:action="@{/quiz/{id}/1(id=${quiz.id()})}" method="post">-->
+                <form th:action="@{/quiz/{id}/{questionIndex}(id=${quiz.id}, questionIndex=${questionIndex})}" method="post">
                 <input type="hidden" name="questionIndex" th:value="${questionIndex}" />
                 <label class="options" th:each="answer : ${answers}">
                     <span th:text="${answer.content}"></span>
@@ -128,11 +129,11 @@
                     <span class="checkmark"></span>
                 </label>
                 <div class="d-flex align-items-center pt-3">
-                    <div id="prev">
-                        <button class="btn btn-primary">Previous</button>
-                    </div>
+<!--                    <div id="prev">-->
+<!--                        <button class="btn btn-primary">Previous</button>-->
+<!--                    </div>-->
                     <div class="ml-auto mr-sm-5">
-                        <button class="btn btn-success"  type="submit">Next</button>
+                        <button class="btn btn-success"   type="submit">Next</button>
                     </div>
                 </div>
             </form>

@@ -55,17 +55,17 @@ public class IndexViewController {
         return "index";
     }
 
-    @GetMapping("/quiz/{id}")
-    public String quiz(@PathVariable UUID id, Model model){
+    @GetMapping("/quiz/{id}/{questionIndex}")
+    public String quiz(@PathVariable UUID id, @PathVariable int questionIndex, Model model){
 
         QuizDto quiz = quizService.getQuiz(id);
         List<Question> questions = quiz.questions();
 
-        Integer questionIndex = (Integer) model.getAttribute("questionIndex");
+//        questionIndex = (Integer) model.getAttribute("questionIndex");
 
-        if (questionIndex == null) {
-            questionIndex = 0;
-        }
+//        if (questionIndex == null) {
+//            questionIndex = 0;
+//        }
 
 
         Question currentQuestion = questions.get(questionIndex);
@@ -74,18 +74,17 @@ public class IndexViewController {
         model.addAttribute("quiz", quiz);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers", currentAnswers);
+        model.addAttribute("questionIndex", questionIndex);
 
         return "quiz";
     }
 
     @PostMapping("/quiz/{id}/{questionIndex}")
-    public String nextQuestion(@PathVariable UUID id, @PathVariable Integer questionIndex, Model model) {
+    public String nextQuestion(@PathVariable("id") UUID id, @PathVariable("questionIndex") int questionIndex, Model model) {
         QuizDto quiz = quizService.getQuiz(id);
         List<Question> questions = quiz.questions();
 
-        if (questionIndex + 1 < questions.size()) {
             questionIndex++;
-        }
 
         Question currentQuestion = questions.get(questionIndex);
         List<Answer> currentAnswers = currentQuestion.getAnswers();
@@ -94,28 +93,38 @@ public class IndexViewController {
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers", currentAnswers);
         model.addAttribute("questionIndex", questionIndex);
+
+//        questionIndex++;
+//        String newUrl = "quiz/{id}/questionIndex?questionIndex=" + questionIndex;
 
 //        return "quiz";
-        return "redirect:/quiz/{id}/{questionIndex}";
-    }
-    @GetMapping("/quiz/{id}/{questionIndex}")
-    public String nextQuestionGet(@PathVariable UUID id, @PathVariable Integer questionIndex, Model model) {
-        QuizDto quiz = quizService.getQuiz(id);
-        List<Question> questions = quiz.questions();
-
-        if (questionIndex + 1 < questions.size()) {
-            questionIndex++;
-        }
-
-        Question currentQuestion = questions.get(questionIndex);
-        List<Answer> currentAnswers = currentQuestion.getAnswers();
-
-        model.addAttribute("quiz", quiz);
-        model.addAttribute("question", currentQuestion);
-        model.addAttribute("answers", currentAnswers);
-        model.addAttribute("questionIndex", questionIndex);
-
-        return "quiz";
+//        return "redirect:" +newUrl;
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println(questionIndex);
 //        return "redirect:/quiz/{id}/{questionIndex}";
+        return "quiz";
     }
+//    @GetMapping("/quiz/{id}/{questionIndex}")
+//    public String nextQuestionGet(@PathVariable UUID id, @PathVariable Integer questionIndex, Model model) {
+//        QuizDto quiz = quizService.getQuiz(id);
+//        List<Question> questions = quiz.questions();
+//
+//        if (questionIndex + 1 < questions.size()) {
+//            questionIndex++;
+//        }
+//
+//        Question currentQuestion = questions.get(questionIndex);
+//        List<Answer> currentAnswers = currentQuestion.getAnswers();
+//
+//        model.addAttribute("quiz", quiz);
+//        model.addAttribute("question", currentQuestion);
+//        model.addAttribute("answers", currentAnswers);
+//        model.addAttribute("questionIndex", questionIndex);
+//
+//        return "quiz";
+////        questionIndex++;
+////        String newUrl = "quiz/{id}/questionIndex?questionIndex=" + questionIndex;
+////        return "redirect:" +newUrl;
+////        return "redirect:/quiz/{id}/{questionIndex}";
+//    }
 }
