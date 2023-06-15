@@ -123,9 +123,10 @@
 <!--            <form th:action="@{/quiz/{id}/1(id=${quiz.id()})}" method="post">-->
                 <form th:action="@{/quiz/{id}/{questionIndex}(id=${quiz.id}, questionIndex=${questionIndex})}" method="post">
                 <input type="hidden" name="questionIndex" th:value="${questionIndex}" />
+                    <input type="hidden" name="gameDtoId" th:value="${gameDtoId}" />
                 <label class="options" th:each="answer : ${answers}">
                     <span th:text="${answer.content}"></span>
-                    <input type="radio" name="radio">
+                    <input type="radio" name="radio" th:value="${answer.getId()}">
                     <span class="checkmark"></span>
                 </label>
                 <div class="d-flex align-items-center pt-3">

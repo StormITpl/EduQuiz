@@ -58,6 +58,7 @@ public class GameService {
                 });
         userAnswers.add(answer.id());
         playGame.setUserAnswers(userAnswers);
+        System.out.println("USER ANSWERS: " + userAnswers); //Test
 
         return gameMapper.mapGameEntityToGameDto(playGame);
     }
