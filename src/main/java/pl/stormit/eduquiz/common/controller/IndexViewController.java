@@ -105,3 +105,4 @@ public class IndexViewController {
         return "quiz";
     }
 }
+
