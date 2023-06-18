@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "test" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -23,5 +23,3 @@ jobs:
         run: mvn -B package --file pom.xml
       - name: Run Tests
         run: mvn -B test
-
-        ####Edit by k4t
