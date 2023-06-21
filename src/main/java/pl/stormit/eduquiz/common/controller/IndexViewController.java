@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.stormit.eduquiz.game.dto.GameDto;
+import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.game.domain.repository.GameRepository;
+import pl.stormit.eduquiz.game.dto.*;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
@@ -16,8 +18,14 @@ import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.result.domain.model.Result;
+import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
+import pl.stormit.eduquiz.result.dto.ResultDto;
+import pl.stormit.eduquiz.result.service.ResultService;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -30,8 +38,13 @@ public class IndexViewController {
     private final QuizService quizService;
 
     private final GameService gameService;
+    private final GameRepository gameRepository;
+    private final GameIdMapper gameIdMapper;
 
     private final AnswerService answerService;
+
+    private final ResultService resultService;
+    private final ResultRepository resultRepository;
 
     @GetMapping
     public String indexView(Model model) {
@@ -93,6 +106,14 @@ public class IndexViewController {
 
         questionIndex++;
 
+        model.addAttribute("quiz", quiz);
+        model.addAttribute("gameDtoId", gameDtoId);
+
+        if(questions.size() == questionIndex){
+            gameService.completeGame(gameDtoUUID);
+            return "confirmAnswers";
+        }
+
         Question currentQuestion = questions.get(questionIndex);
         List<Answer> currentAnswers = currentQuestion.getAnswers();
 
@@ -102,6 +123,29 @@ public class IndexViewController {
         model.addAttribute("questionIndex", questionIndex);
         model.addAttribute("gameDtoId", gameDtoId);
 
+
+
         return "quiz";
+    }
+
+    @GetMapping("/quiz/{gameDtoId}/completeResults")
+    public String completeResults(@PathVariable("gameDtoId") String id, Model model) {
+
+        UUID gameId = UUID.fromString(id);
+
+        Optional<Game> game = gameRepository.findById(gameId);
+        Game gameTest = game.get();
+        GameIdDto gameIdDto = gameIdMapper.mapGameEntityToGameIdDto(gameTest);
+
+        ResultDto resultDto = resultService.createResult(gameIdDto);
+        Optional<Result> resultById = resultRepository.findById(resultDto.id());
+        System.out.println(resultById.get().getScore());
+        List<Question> questionList = gameTest.getQuiz().getQuestions();
+
+
+        model.addAttribute("results", resultById.get());
+        model.addAttribute("questionList", questionList);
+
+        return "results";
     }
 }

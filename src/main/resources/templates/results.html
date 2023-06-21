@@ -127,6 +127,7 @@
 <!--    <div class="question ml-sm-5 pl-sm-5 pt-2">-->
 <!--        <div class="py-2 h5"></div>-->
                 <div class="resultsText"> You obtained following results:</div>
+                <div class="results" th:text="(${results.getScore()}/${questionList.size()})*100 + '%'"></div>
 <!--    </div>-->
 </div>
 </body>
