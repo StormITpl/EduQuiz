@@ -122,8 +122,13 @@
 <div class="container">
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5"></div>
-        <div class="resultsText"> You obtained following results:</div>
-        <div class="results" th:text="(${results.getScore()}/${questionList.size()})*100 + '%'"></div>
+        <form th:action="@{/}" method="get">
+            <div class="resultsText"> You obtained following results:</div>
+            <div class="results" th:text="(${results.getScore()}/${questionList.size()})*100 + '%'"></div>
+            <div class="ml-auto mr-sm-5">
+                <button class="btn btn-success" type="submit">Back to main</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
