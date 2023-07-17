@@ -122,11 +122,11 @@
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5"></div>
         <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                <form method="post">
-                <div class="confirmText"> Please confirm your answers, to proceed:</div>
+                <form th:action="@{/quiz/{gameDtoId}/completeResults(gameDtoId=${gameDtoId})}"  method="get">
+                <div class="confirmText"> Please confirm to obtain results:</div>
                 <div class="d-flex align-items-center pt-3">
                     <div class="ml-auto mr-sm-5">
-                        <button class="btn btn-success"   type="submit">Confirm</button>
+                        <button  class="btn btn-success" type="submit">Confirm</button>
                     </div>
                 </div>
             </form>
