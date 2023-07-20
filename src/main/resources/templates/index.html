@@ -188,7 +188,7 @@
 
     <div class="nav-scroller py-1 mb-2">
         <nav class="nav d-flex justify-content-center">
-            <a th:each="category : ${categories}" th:text="${category.name}" class="p-2 link-secondary" href="#" th:href="@{'/quizzes'}">Category</a>
+            <a th:each="category : ${categories}" th:text="${category.name}" class="p-2 link-secondary" th:href="@{'/category/'+${category.id()}}" >Category</a>
         </nav>
     </div>
 

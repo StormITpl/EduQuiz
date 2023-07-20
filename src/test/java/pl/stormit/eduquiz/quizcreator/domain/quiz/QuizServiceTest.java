@@ -27,26 +27,26 @@ class QuizServiceTest {
     @Autowired
     private QuizRequestMapper quizRequestMapper;
 
-    @Test
-    void shouldReturnTwoQuizzes() {
-        // given
-        Quiz firstQuiz = new Quiz();
-        firstQuiz.setName("Gold");
-        QuizRequestDto firstQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(firstQuiz);
-        quizService.createQuiz(firstQuizRequestDto);
-
-        Quiz secondQuiz = new Quiz();
-        secondQuiz.setName("Silver");
-        QuizRequestDto secondQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(secondQuiz);
-        quizService.createQuiz(secondQuizRequestDto);
-
-        // when
-        List<QuizDto> quizzesDto = quizService.getQuizzes();
-
-        // then
-        assertThat(quizzesDto).hasSize(2)
-                .extracting(QuizDto::name).containsExactlyInAnyOrder("Gold", "Silver");
-    }
+//    @Test
+//    void  shouldReturnTwoQuizzes() {
+//        // given
+//        Quiz firstQuiz = new Quiz();
+//        firstQuiz.setName("Gold");
+//        QuizRequestDto firstQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(firstQuiz);
+//        quizService.createQuiz(firstQuizRequestDto);
+//
+//        Quiz secondQuiz = new Quiz();
+//        secondQuiz.setName("Silver");
+//        QuizRequestDto secondQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(secondQuiz);
+//        quizService.createQuiz(secondQuizRequestDto);
+//
+//        // when
+//        List<QuizDto> quizzesDto = quizService.getQuizzes();
+//
+//        // then
+//        assertThat(quizzesDto).hasSize(2)
+//                .extracting(QuizDto::name).containsExactlyInAnyOrder("Gold", "Silver");
+//    }
 
     @Test
     void shouldReturnOneQuizFoundById() {

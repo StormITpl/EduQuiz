@@ -26,6 +26,12 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
+    public List<QuizDto> getQuizzesByCategoryId(UUID categoryId) {
+        List<Quiz> foundQuizzes = quizRepository.getAllByCategoryId(categoryId);
+        return quizMapper.mapQuizListOfEntityToQuizDtoList(foundQuizzes);
+    }
+
+    @Transactional(readOnly = true)
     public QuizDto getQuiz(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");

@@ -34,6 +34,4 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
-
-    private String text;
 }

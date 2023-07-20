@@ -14,6 +14,7 @@ import pl.stormit.eduquiz.game.dto.*;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
+import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
@@ -68,9 +69,11 @@ public class IndexViewController {
     @GetMapping("/category/{id}")
     public String viewQuiz(@PathVariable UUID id, Model model) {
 
-        model.addAttribute("quizzes", quizService.getQuizzes());
+        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("quizzes", quizService.getQuizzesByCategoryId(id));
+//        model.addAttribute("quizzes", quizService.getQuizzes());
 
-        return "index";
+        return "showQuizzesByCategory";
     }
 
     @GetMapping("/quiz/{id}/{questionIndex}")
