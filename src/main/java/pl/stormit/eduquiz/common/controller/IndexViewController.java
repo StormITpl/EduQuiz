@@ -151,11 +151,5 @@ public class IndexViewController {
 
         return "results";
     }
-
-    @GetMapping("/quizManagement")
-    public String quizManagement (){
-
-        return "quizManagement";
-    }
 }
 
