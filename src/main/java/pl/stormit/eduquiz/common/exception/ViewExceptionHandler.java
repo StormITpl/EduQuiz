@@ -15,7 +15,7 @@ import pl.stormit.eduquiz.common.controller.QuizManagementViewController;
         QuizManagementViewController.class})
 public class ViewExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(value = { Exception.class })
     protected ModelAndView handleViewException(Exception ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", "Oops! Something went wrong. Please contact your administrator");
         return new ModelAndView("redirect:/");

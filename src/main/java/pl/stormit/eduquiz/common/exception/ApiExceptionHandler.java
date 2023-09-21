@@ -10,12 +10,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import pl.stormit.eduquiz.game.contoller.GameController;
 import pl.stormit.eduquiz.quizcreator.controllers.*;
 
-@ControllerAdvice(basePackageClasses= {GameController.class, AnswerApiController.class, CategoryApiController.class,
-                                        QuestionApiController.class, QuizApiController.class, UserApiController.class})
+@ControllerAdvice(basePackageClasses= { GameController.class, AnswerApiController.class, CategoryApiController.class,
+                                        QuestionApiController.class, QuizApiController.class, UserApiController.class })
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    protected ResponseEntity<ErrorMessage> handleApiException(EntityNotFoundException ex) {
+    protected ResponseEntity<ErrorMessage> handleNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>(new ErrorMessage("FAIL", ex), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = { Exception.class })
+    protected ResponseEntity<ErrorMessage> handleAllOtherException(Exception ex) {
+        return new ResponseEntity<>(new ErrorMessage("FAIL", ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
