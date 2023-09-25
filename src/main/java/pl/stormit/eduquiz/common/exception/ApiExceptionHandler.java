@@ -1,7 +1,6 @@
 package pl.stormit.eduquiz.common.exception;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,13 +13,13 @@ import pl.stormit.eduquiz.quizcreator.controllers.*;
                                         QuestionApiController.class, QuizApiController.class, UserApiController.class })
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(value = { EntityNotFoundException.class })
     protected ResponseEntity<ErrorMessage> handleNotFoundException(EntityNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorMessage("FAIL", ex), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorMessage("FAIL", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseEntity<ErrorMessage> handleAllOtherException(Exception ex) {
-        return new ResponseEntity<>(new ErrorMessage("FAIL", ex), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ErrorMessage("FAIL", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
