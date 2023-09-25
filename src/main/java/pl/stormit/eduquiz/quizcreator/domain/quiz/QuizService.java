@@ -50,7 +50,7 @@ public class QuizService {
     }
 
     @Transactional
-    public QuizDto updateQuiz(@NotNull UUID quizId,  @NotNull QuizRequestDto quizRequest) {
+    public QuizDto updateQuiz(@NotNull UUID quizId, @NotNull QuizRequestDto quizRequest) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");
         });

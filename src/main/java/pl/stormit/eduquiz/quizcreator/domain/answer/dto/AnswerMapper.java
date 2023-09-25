@@ -7,7 +7,7 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 public interface AnswerMapper {
 //    AnswerDto mapAnswerEntityToAnswerDto(Answer answer);
 
-    default AnswerDto mapAnswerEntityToAnswerDto(Answer answer){
+    default AnswerDto mapAnswerEntityToAnswerDto(Answer answer) {
         return AnswerDto
                 .builder()
                 .id(answer.getId())

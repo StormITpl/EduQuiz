@@ -3,18 +3,15 @@ package pl.stormit.eduquiz.common.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
-import pl.stormit.eduquiz.game.dto.*;
+import pl.stormit.eduquiz.game.dto.GameDto;
+import pl.stormit.eduquiz.game.dto.GameIdDto;
+import pl.stormit.eduquiz.game.dto.GameIdMapper;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
@@ -24,7 +21,6 @@ import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -112,7 +108,7 @@ public class IndexViewController {
         model.addAttribute("quiz", quiz);
         model.addAttribute("gameDtoId", gameDtoId);
 
-        if(questions.size() == questionIndex){
+        if (questions.size() == questionIndex) {
             gameService.completeGame(gameDtoUUID);
             return "confirmAnswers";
         }
@@ -125,7 +121,6 @@ public class IndexViewController {
         model.addAttribute("answers", currentAnswers);
         model.addAttribute("questionIndex", questionIndex);
         model.addAttribute("gameDtoId", gameDtoId);
-
 
 
         return "quiz";

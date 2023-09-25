@@ -1,10 +1,6 @@
 package pl.stormit.eduquiz.result.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 

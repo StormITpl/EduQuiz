@@ -74,11 +74,12 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(UUID gameId) {
+    public boolean deleteGame(UUID gameId) {
         if (gameRepository.existsById(gameId)) {
             gameRepository.deleteById(gameId);
         } else {
             throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
         }
+        return false;
     }
 }

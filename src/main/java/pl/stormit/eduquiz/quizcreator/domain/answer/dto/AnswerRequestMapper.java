@@ -7,12 +7,12 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 public interface AnswerRequestMapper {
 //    AnswerRequestDto mapAnswerEntityToAnswerRequestDto(Answer answer);
 
-default AnswerRequestDto mapAnswerEntityToAnswerRequestDto(Answer answer){
-    return AnswerRequestDto
-            .builder()
-            .content(answer.getContent())
-            .isCorrect(answer.isCorrect())
-            .question(answer.getQuestion())
-            .build();
-}
+    default AnswerRequestDto mapAnswerEntityToAnswerRequestDto(Answer answer) {
+        return AnswerRequestDto
+                .builder()
+                .content(answer.getContent())
+                .isCorrect(answer.isCorrect())
+                .question(answer.getQuestion())
+                .build();
+    }
 }

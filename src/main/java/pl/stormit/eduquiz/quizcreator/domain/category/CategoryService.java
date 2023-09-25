@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper  categoryMapper;
+    private final CategoryMapper categoryMapper;
 
     @Transactional(readOnly = true)
     public List<CategoryDto> getCategories() {

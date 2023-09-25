@@ -42,7 +42,6 @@ The following tools are required to start the application:
 - [PostgreSQL](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
 
-
 ## Setup
 
 Before run application you should configurate your database and db server in few step:

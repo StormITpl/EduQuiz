@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto updateUser(@NotNull UUID userId,  @NotNull UserRequestDto userRequest) {
+    public UserDto updateUser(@NotNull UUID userId, @NotNull UserRequestDto userRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         });
