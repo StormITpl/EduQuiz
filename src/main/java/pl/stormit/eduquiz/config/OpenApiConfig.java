@@ -13,7 +13,7 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                         .info(new Info().title("REST API for 'EduQuiz application'")
-                        .description("EduQuiz is a platform for creating and conducting interactive quizzes. It is an/n" +
+                        .description("EduQuiz is a platform for creating and conducting interactive quizzes. It is an " +
                                 "excellent tool for consolidating knowledge individually or in a group."));
     }
 }
