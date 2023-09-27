@@ -1,34 +1,39 @@
 package pl.stormit.eduquiz.authenticator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String[] AUTHENTICATED_LIST = {
+            "/category/**",
+            "/quizzes/**",
+            "/quiz/**",
+            "/quizManagement/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors().disable();
-        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
+                        .requestMatchers(AUTHENTICATED_LIST)
+                        .hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/resource/**").permitAll()
                         .requestMatchers("/categoryManagement").hasRole("ADMIN")
-                        .anyRequest().permitAll())
-                .formLogin()
-                .and()
-                .logout();
+                        .anyRequest().permitAll()
+                )
+                .formLogin(Customizer.withDefaults())
+                .logout(Customizer.withDefaults());
 
 
         return http.build();
@@ -37,23 +42,6 @@ public class SecurityConfig {
     // Przed następnym spotkaniem:
     // Config - zostawić na ten moment tak jak jest
     // Jak zrobić Controller (rejestracja i logowanie)?
-    // Czy potrzeba więcej repozytoriów ? (Czy wystarczy tylko obecne UserRepository)
-    // AuthenticationManager - jak zrobić i co potrzeba?
-    // PasswordEncoder - to co wyżej
+    // Zmiany w CustomUserDetailService - obsługa password i roles
 
-    @Autowired
-    CustomUserDetailService customUserDetailService;
-
-    @Bean
-    DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(customUserDetailService);
-        return provider;
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
 }
