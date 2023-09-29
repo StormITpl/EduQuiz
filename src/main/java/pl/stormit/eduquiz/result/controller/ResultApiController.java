@@ -1,9 +1,12 @@
 package pl.stormit.eduquiz.result.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.stormit.eduquiz.game.dto.GameIdDto;
 import pl.stormit.eduquiz.result.dto.ResultDto;
@@ -11,6 +14,7 @@ import pl.stormit.eduquiz.result.service.ResultService;
 
 import java.util.UUID;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/results")
@@ -18,9 +22,8 @@ public class ResultApiController {
 
     private final ResultService resultService;
 
-
     @PostMapping
-    ResponseEntity<ResultDto> createResult(@RequestBody GameIdDto gameIdDto) {
+    ResponseEntity<ResultDto> createResult(@Valid @RequestBody GameIdDto gameIdDto) {
         ResultDto resultDto = resultService.createResult(gameIdDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The result has been successfully calculated");
@@ -28,7 +31,7 @@ public class ResultApiController {
     }
 
     @GetMapping("{resultId}")
-    ResponseEntity<ResultDto> getResult(@PathVariable UUID resultId) {
+    ResponseEntity<ResultDto> getResult(@NotNull @PathVariable UUID resultId) {
         ResultDto resultDto = resultService.getResult(resultId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The result has been found");
@@ -36,7 +39,7 @@ public class ResultApiController {
     }
 
     @DeleteMapping("{id}")
-    ResponseEntity<Void> deleteResult(@PathVariable UUID id) {
+    ResponseEntity<Void> deleteResult(@NotNull @PathVariable UUID id) {
         resultService.deleteResult(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

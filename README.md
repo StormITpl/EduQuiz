@@ -8,6 +8,7 @@ EduQuiz - an application for creating and solving educational quizzes individual
 * [Technologies Used](#technologies-used)
 * [Prerequisites](#prerequisites)
 * [Setup](#setup)
+* [API Documentation](#api-documentation)
 * [Authors](#authors)
 
 ## General Information
@@ -57,7 +58,7 @@ Login: postgres
 
 Password: password
 
-## API documentation
+## API Documentation
 
 The API documentation can be accessed after starting the project at http://localhost:8080/swagger-ui/index.html
 

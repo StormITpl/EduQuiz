@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +32,8 @@ public class Quiz {
     @GeneratedValue
     private UUID id;
 
+    @NotBlank(message = "Quiz Name must not be blank")
+    @Size(min = 2, max = 20)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,8 +43,10 @@ public class Quiz {
     private User user;
 
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
+    @NotEmpty
     private List<Question> questions;
 
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
+    @NotEmpty
     private List<Game> games;
 }
