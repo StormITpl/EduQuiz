@@ -25,12 +25,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers(AUTHENTICATED_LIST)
-                        .hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/resource/**").permitAll()
+                        .requestMatchers(AUTHENTICATED_LIST).hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/categoryManagement").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(Customizer.withDefaults());
@@ -39,7 +37,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Przed następnym spotkaniem:
+// Przed następnym spotkaniem:
     // Config - zostawić na ten moment tak jak jest
     // Jak zrobić Controller (rejestracja i logowanie)?
     // Zmiany w CustomUserDetailService - obsługa password i roles
