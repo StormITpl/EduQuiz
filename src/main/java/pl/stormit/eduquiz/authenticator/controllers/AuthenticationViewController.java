@@ -44,10 +44,11 @@ public class AuthenticationViewController {
             return "register";
         }
 
-        UserDto registeredUser = userService.createUser(userRequestDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", "User was successfully registered");
-        System.out.println(registeredUser);
-        return "redirect:/register";
+        userService.createUser(userRequestDto);
+
+        model.addAttribute("userRequestDto", new UserRequestDto(null, null));
+        model.addAttribute("message", "User was successfully registered");
+
+        return "register";
     }
 }

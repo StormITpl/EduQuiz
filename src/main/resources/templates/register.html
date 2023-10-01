@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         .alert-danger {
         color: red;
@@ -38,9 +40,12 @@
         }
     </style>
     <link href="css/categoryManagement.css" rel="stylesheet">
+    <title>Register</title>
 </head>
 <div class="container">
     <h1>Register a new account</h1>
+
+    <h1 th:if="${message != null}" th:text="${message}"></h1>
 
     <form action="#" th:action="@{/register}" th:object="${userRequestDto}" method="post">
         <div class="alert-danger" th:if="${#fields.hasErrors('*')}">
