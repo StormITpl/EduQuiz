@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+    <style>
+        .alert-danger {
+        color: red;
+        }
+        .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bd3;
+        border: 1px solid #007bd3;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        }
 
+        .-btn:hover {
+            background-color: #007bff;
+            transform: translateY(-2px);
+        }
+        footer {
+        padding: 2.5rem 0;
+        color: #727272;
+        text-align: center;
+        background-color: #f9f9f9;
+        border-top: .05rem solid #e5e5e5;
+        }
+
+        footer p:last-child {
+        margin-bottom: 0;
+        }
+    </style>
+    <link href="css/categoryManagement.css" rel="stylesheet">
+</head>
+<div class="container">
+    <h1>Register a new account</h1>
+
+    <form action="#" th:action="@{/register}" th:object="${userRequestDto}" method="post">
+        <div class="alert-danger" th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+        </div>
+        <input type="hidden" name="quizzes" th:value="${quizzes}"/>
+        <label for="nickName">Nick Name</label>
+        <input type="text" id="nickName" th:field="*{nickname}"><br>
+        <button class="btn" type="submit">Register</button>
+    </form>
+</div>
+<div>
+    <footer>
+        <p>
+            <a class="btn" href="#" th:href="@{'/'}">Back to Home</a>
+        </p>
+    </footer>
+</div>
 </body>
 </html>
