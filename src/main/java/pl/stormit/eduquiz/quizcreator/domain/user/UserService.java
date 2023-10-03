@@ -38,6 +38,10 @@ public class UserService {
     public UserDto createUser(@NotNull UserRequestDto userRequest) {
         User user = new User();
         user.setNickname(userRequest.nickname());
+        user.setEmail(userRequest.email());
+        user.setPassword(userRequest.password());
+        user.setStatus(userRequest.status());
+        user.setRole(userRequest.role());
         user.setQuizzes(userRequest.quizzes());
         return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
@@ -48,6 +52,10 @@ public class UserService {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         });
         user.setNickname(userRequest.nickname());
+        user.setEmail(userRequest.email());
+        user.setPassword(userRequest.password());
+        user.setStatus(userRequest.status());
+        user.setRole(userRequest.role());
         user.setQuizzes(userRequest.quizzes());
         User savedUser = userRepository.save(user);
         return userMapper.mapUserEntityToUserDto(savedUser);
