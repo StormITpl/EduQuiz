@@ -57,6 +57,10 @@ Login: postgres
 
 Password: password
 
+## API documentation
+
+The API documentation can be accessed after starting the project at http://localhost:8080/swagger-ui/index.html
+
 ## Authors
 
 Created by StormIT community:
