@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static pl.stormit.eduquiz.quizcreator.domain.user.Status.VERIFIED;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -48,14 +49,26 @@ class UserServiceTest {
     void SetUp() {
         firstUser = new User();
         firstUser.setNickname("Ananiasz");
+        firstUser.setEmail("ananiasz@gmail.com");
+        firstUser.setPassword("password");
+        firstUser.setStatus(VERIFIED);
+        firstUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(firstUser);
 
         secondUser = new User();
         secondUser.setNickname("Wojski");
+        secondUser.setEmail("wojski@gmail.com");
+        secondUser.setPassword("password");
+        secondUser.setStatus(VERIFIED);
+        secondUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(secondUser);
 
         thirdUser = new User();
         thirdUser.setNickname("Dajmiech");
+        thirdUser.setEmail("dajmiech@gmail.com");
+        thirdUser.setPassword("password");
+        thirdUser.setStatus(VERIFIED);
+        thirdUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(thirdUser);
     }
 
@@ -91,13 +104,22 @@ class UserServiceTest {
     @Rollback
     void shouldCreateUser() {
         // given
-        UserRequestDto userRequestDto = new UserRequestDto("Łamignat", null);
+        UserRequestDto userRequestDto = new UserRequestDto(
+                "Łamignat",
+                "lamignar@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                null);
 
         // when
         UserDto createdUserDto = userService.createUser(userRequestDto);
 
         // then
         assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
+        assertThat(createdUserDto.email()).isEqualTo(userRequestDto.email());
+        assertThat(createdUserDto.password()).isEqualTo(userRequestDto.password());
         assertThat(createdUserDto.quizzes()).isNull();
     }
 
@@ -111,13 +133,22 @@ class UserServiceTest {
         quizRepository.save(quiz);
         List<Quiz> quizzesList = new ArrayList<>();
         quizzesList.add(quiz);
-        UserRequestDto userRequestDto = new UserRequestDto("Gniewosz", quizzesList);
+        UserRequestDto userRequestDto = new UserRequestDto(
+                "Gniewosz",
+                "gniewoszr@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                quizzesList);
 
         // when
         UserDto updatedUserDto = userService.updateUser(firstId, userRequestDto);
 
         // then
         assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
+        assertThat(updatedUserDto.email()).isEqualTo("gniewoszr@gmail.com");
+        assertThat(updatedUserDto.password()).isEqualTo("password");
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }
