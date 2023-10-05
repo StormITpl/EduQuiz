@@ -207,4 +207,19 @@ insert into answers (id, content, is_correct,  question_id)
 values (gen_random_uuid(), 'Mielno', false, (select id from questions where content = 'What was the name of the 1st capital of Poland?')),
        (gen_random_uuid(), 'Zakopane', true, (select id from questions where content = 'What was the name of the 1st capital of Poland?')),
        (gen_random_uuid(), 'Rzeszów', false, (select id from questions where content = 'What was the name of the 1st capital of Poland?')),
-       (gen_random_uuid(), 'Gniezno', false, (select id from questions where content = 'What was the name of the 1st capital of Poland?'));
+       (gen_random_uuid(), 'Gniezno', false, (select id from questions where content = 'What was the name 1of the 1st capital of Poland?'));
+
+--changeset Slawek_:001_36
+alter table users add column created_at timestamp;
+
+--changeset Slawek_:001_37
+alter table users add column email varchar(50);
+
+--changeset Slawek_:001_38
+alter table users add column  password varchar(100);
+
+--changeset Slawek_:001_39
+alter table users add column role varchar(20);
+
+--changeset Slawek_:001_40
+alter table users add column status varchar(20)
