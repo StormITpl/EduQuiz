@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +50,7 @@ public class User {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt = Instant.now();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;

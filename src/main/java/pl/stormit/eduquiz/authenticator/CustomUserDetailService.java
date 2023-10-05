@@ -15,12 +15,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
 
     private final UserRepository userRepository;
-    private final CustomPasswordEncoder customPasswordEncoder;
 
-    public CustomUserDetailService(UserRepository userRepository,
-                                   CustomPasswordEncoder customPasswordEncoder) {
+    public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.customPasswordEncoder = customPasswordEncoder;
     }
 
     @Override
@@ -29,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("There is no such user"));
         return new org.springframework.security.core.userdetails.User(
                 user.getNickname(),
-                customPasswordEncoder.encode("pass"),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")));
+                user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().toString())));
     }
 }

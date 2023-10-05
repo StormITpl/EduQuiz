@@ -1,8 +1,6 @@
 package pl.stormit.eduquiz.authenticator.controllers;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
 @Controller
@@ -25,7 +22,8 @@ public class AuthenticationViewController {
 
     @GetMapping()
     public String registerUser(final Model model, Error error) {
-        model.addAttribute("userRequestDto", new UserRequestDto(null, null));
+        model.addAttribute("userRequestDto", new UserRequestDto(null,
+                null, null, null, null, null, null));
         model.addAttribute("error", error);
         return "register";
     }
