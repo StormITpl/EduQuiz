@@ -106,7 +106,7 @@ class UserServiceTest {
         // given
         UserRequestDto userRequestDto = new UserRequestDto(
                 "Łamignat",
-                "lamignar@gmail.com",
+                "lamignat@gmail.com",
                 "password",
                 null,
                 null,
@@ -135,7 +135,7 @@ class UserServiceTest {
         quizzesList.add(quiz);
         UserRequestDto userRequestDto = new UserRequestDto(
                 "Gniewosz",
-                "gniewoszr@gmail.com",
+                "gniewosz@gmail.com",
                 "password",
                 null,
                 null,
@@ -147,7 +147,7 @@ class UserServiceTest {
 
         // then
         assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
-        assertThat(updatedUserDto.email()).isEqualTo("gniewoszr@gmail.com");
+        assertThat(updatedUserDto.email()).isEqualTo("gniewosz@gmail.com");
         assertThat(updatedUserDto.password()).isEqualTo("password");
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
