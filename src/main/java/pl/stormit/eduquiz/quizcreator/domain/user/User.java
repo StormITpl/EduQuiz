@@ -11,7 +11,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -66,6 +69,5 @@ public class User {
     private Date createdAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @NotEmpty
     private List<Quiz> quizzes;
 }
