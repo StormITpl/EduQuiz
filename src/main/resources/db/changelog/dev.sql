@@ -208,3 +208,19 @@ values (gen_random_uuid(), 'Mielno', false, (select id from questions where cont
        (gen_random_uuid(), 'Zakopane', true, (select id from questions where content = 'What was the name of the 1st capital of Poland?')),
        (gen_random_uuid(), 'Rzeszów', false, (select id from questions where content = 'What was the name of the 1st capital of Poland?')),
        (gen_random_uuid(), 'Gniezno', false, (select id from questions where content = 'What was the name of the 1st capital of Poland?'));
+
+--changeset RobertoJavaDev:001_36
+alter table users
+    add column created_at timestamp;
+
+alter table users
+    add column email varchar(120);
+
+alter table users
+    add column password varchar(20);
+
+alter table users
+    add column role varchar(255);
+
+alter table users
+    add column status varchar(255);
