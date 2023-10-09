@@ -33,6 +33,5 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    @NotEmpty
     private List<Quiz> quizzes;
 }

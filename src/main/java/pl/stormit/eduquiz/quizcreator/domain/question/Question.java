@@ -31,7 +31,7 @@ public class Question {
     private UUID id;
 
     @NotBlank(message = "Content can't be empty")
-    @Size(min = 5, max = 25, message = "Content must be between 5 and 25 characters")
+    @Size(min = 5, max = 255, message = "Content must be between 5 and 255 characters")
     private String content;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
