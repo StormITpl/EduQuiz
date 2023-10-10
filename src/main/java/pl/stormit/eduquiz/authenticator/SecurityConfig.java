@@ -32,14 +32,7 @@ public class SecurityConfig {
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(Customizer.withDefaults());
-
-
         return http.build();
     }
-
-// Przed następnym spotkaniem:
-    // Config - zostawić na ten moment tak jak jest
-    // Jak zrobić Controller (rejestracja i logowanie)?
-    // Zmiany w CustomUserDetailService - obsługa password i roles
 
 }
