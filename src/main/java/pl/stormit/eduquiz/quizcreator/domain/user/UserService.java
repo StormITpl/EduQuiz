@@ -1,11 +1,15 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
@@ -13,6 +17,7 @@ import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 import java.util.List;
 import java.util.UUID;
 
+@Validated
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -30,7 +35,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDto getUser(UUID userId) {
+    public UserDto getUser(@NotNull @PathVariable("user-id") UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         });
@@ -38,7 +43,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto createUser(@NotNull UserRequestDto userRequest) {
+    public UserDto createUser(@Valid @RequestBody UserRequestDto userRequest) {
         User user = new User();
         user.setNickname(userRequest.nickname());
         user.setEmail(userRequest.email());
@@ -50,7 +55,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto updateUser(@NotNull UUID userId,  @NotNull UserRequestDto userRequest) {
+    public UserDto updateUser(@NotNull @PathVariable("user-id") UUID userId,
+                              @Valid @RequestBody UserRequestDto userRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         });
@@ -65,7 +71,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID userId) {
+    public void deleteUser(@NotNull @PathVariable("user-id") UUID userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         } else {

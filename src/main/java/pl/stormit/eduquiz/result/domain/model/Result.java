@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 
@@ -19,6 +20,7 @@ public class Result {
     @GeneratedValue
     private UUID id;
 
+    @NotNull
     private Integer score;
 
     @OneToOne

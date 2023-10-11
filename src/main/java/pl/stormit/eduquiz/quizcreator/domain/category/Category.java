@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +28,8 @@ public class Category {
     @GeneratedValue
     private UUID id;
 
+    @NotBlank(message = "Category name can't be empty")
+    @Size(min =  2, max = 20)
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)

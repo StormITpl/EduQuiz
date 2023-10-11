@@ -1,9 +1,14 @@
 package pl.stormit.eduquiz.game.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameDto;
@@ -17,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Validated
 @Service
 @RequiredArgsConstructor
 public class GameService {
@@ -32,7 +38,7 @@ public class GameService {
     List<UUID> userAnswers = new ArrayList<>();
 
     @Transactional
-    public GameDto createGame(QuizDto quizRequestDto) {
+    public GameDto createGame(@Valid @RequestBody QuizDto quizRequestDto) {
         Quiz quiz = quizRepository.findById(quizRequestDto.id()).orElseThrow(() -> {
             throw new EntityNotFoundException("The quiz by id: " + quizRequestDto.id() + ", does not exist.");
         });
@@ -43,7 +49,7 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public GameDto getGame(UUID gameId) {
+    public GameDto getGame(@NotNull @PathVariable UUID gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow(() -> {
             throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
         });
@@ -51,7 +57,8 @@ public class GameService {
         return gameMapper.mapGameEntityToGameDto(game);
     }
 
-    public GameDto playGame(UUID gameId, AnswerDto answer) {
+    public GameDto playGame(@NotNull @PathVariable UUID gameId,
+                            @Valid @RequestBody AnswerDto answer) {
         playGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
@@ -63,7 +70,7 @@ public class GameService {
     }
 
     @Transactional
-    public GameDto completeGame(UUID gameId) {
+    public GameDto completeGame(@NotNull @PathVariable UUID gameId) {
         Game updateGame = gameRepository.findById(gameId)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
@@ -74,7 +81,7 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(UUID gameId) {
+    public void deleteGame(@NotNull @PathVariable UUID gameId) {
         if (gameRepository.existsById(gameId)) {
             gameRepository.deleteById(gameId);
         } else {

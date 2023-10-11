@@ -1,4 +1,4 @@
-package pl.stormit.eduquiz.game.contoller;
+package pl.stormit.eduquiz.game.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

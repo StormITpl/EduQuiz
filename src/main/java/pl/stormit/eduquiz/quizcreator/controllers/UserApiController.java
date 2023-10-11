@@ -26,7 +26,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/users")
-
 public class UserApiController {
 
     private final UserService userService;
@@ -65,7 +64,7 @@ public class UserApiController {
     }
 
     @DeleteMapping("{userId}")
-    ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
+    ResponseEntity<Void> deleteUser(@NotNull @PathVariable UUID userId) {
         userService.deleteUser(userId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "User has been successfully deleted");

@@ -1,16 +1,21 @@
 package pl.stormit.eduquiz.quizcreator.domain.category;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryMapper;
 
 import java.util.List;
 import java.util.UUID;
 
+@Validated
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
@@ -25,7 +30,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryDto getCategory(UUID categoryId) {
+    public CategoryDto getCategory(@NotNull @PathVariable("category-id") UUID categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> {
             throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
         });
@@ -33,7 +38,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto createCategory(@NotNull CategoryDto categoryRequest) {
+    public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
         Category category = new Category();
         category.setName(categoryRequest.name());
         category.setId(categoryRequest.id());
@@ -41,7 +46,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto updateCategory(UUID categoryId, @NotNull CategoryDto categoryRequest) {
+    public CategoryDto updateCategory(@NotNull @PathVariable("category-id") UUID categoryId,
+                                      @Valid @RequestBody CategoryDto categoryRequest) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
@@ -51,7 +57,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategory(UUID categoryId) {
+    public void deleteCategory(@NotNull @PathVariable("category-id") UUID categoryId) {
         if (categoryRepository.existsById(categoryId)) {
             categoryRepository.deleteById(categoryId);
         } else {
