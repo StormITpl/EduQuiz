@@ -124,7 +124,7 @@ class UserServiceTest {
         // then
         assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
         assertThat(createdUserDto.email()).isEqualTo(userRequestDto.email());
-        assertTrue(encoder.matches("password", createdUserDto.password()));
+        assertTrue(encoder.matches(userRequestDto.password(), createdUserDto.password()));
         assertThat(createdUserDto.quizzes()).isNull();
     }
 
@@ -153,7 +153,7 @@ class UserServiceTest {
         // then
         assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
         assertThat(updatedUserDto.email()).isEqualTo("gniewosz@gmail.com");
-        assertTrue(encoder.matches("password", updatedUserDto.password()));
+        assertTrue(encoder.matches(userRequestDto.password(), updatedUserDto.password()));
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }
