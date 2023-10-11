@@ -72,4 +72,12 @@ public class UserService {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         }
     }
+
+    public boolean comparePasswords(String password, String confirmPassword) {
+        return !password.equals(confirmPassword);
+    }
+
+    public boolean checkIfNicknameAvailable(UserRequestDto userRequestDto) {
+        return userRepository.findByNickname(userRequestDto.nickname()).isPresent();
+    }
 }

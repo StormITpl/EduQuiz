@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
@@ -16,7 +15,6 @@ public class AuthenticationViewController {
 
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping()
     public String registerUser(final Model model, Error error) {
@@ -32,7 +30,7 @@ public class AuthenticationViewController {
                                @ModelAttribute UserRequestDto userRequestDto,
                                BindingResult bindingResult,
                                Model model) {
-        if (!password.equals(confirmPassword)) {
+        if (userService.comparePasswords(password, confirmPassword)) {
             model.addAttribute("confirmPassword", "Passwords are not the same");
         }
 
@@ -40,7 +38,7 @@ public class AuthenticationViewController {
             model.addAttribute("registrationForm", userRequestDto);
         }
 
-        if (userRepository.findByNickname(userRequestDto.nickname()).isPresent()) {
+        if (userService.checkIfNicknameAvailable(userRequestDto)) {
             bindingResult.rejectValue("nickname",
                     "userRequestDto.nickname",
                     "An account already exists for this nickname.");
