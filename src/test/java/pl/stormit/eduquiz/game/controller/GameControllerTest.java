@@ -16,7 +16,6 @@ import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +32,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 @ActiveProfiles({"test"})
 @WebMvcTest(GameController.class)
@@ -52,8 +50,6 @@ class GameControllerTest {
 
     private GameDto gameDto;
 
-    private QuizDto quizDto;
-
     @Test
     void shouldReturn201WhenGameCreatedCorrectly() throws Exception {
         // given
@@ -71,7 +67,7 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldReturn404WhenGameIsNotFound() throws Exception {
+    void shouldReturn404WhenQuizIsNotFound() throws Exception {
         // given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
@@ -83,8 +79,8 @@ class GameControllerTest {
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
         // then
-        result.andExpect(status().isNotFound())
-                .andExpect(resultIn -> {
+        result.andExpect(status().isNotFound());
+        result.andExpect(resultIn -> {
                     String response = resultIn.getResponse().getContentAsString();
                     ErrorMessage errorMessage = objectMapper.readValue(response, ErrorMessage.class);
                     assertEquals("FAIL", errorMessage.getStatus());
@@ -108,7 +104,7 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldReturn404WhenFoundGameByIdInCorrectly() throws Exception {
+    void shouldReturn404WhenGameIsNotFound() throws Exception {
         // given
         List<UUID> listExample = Collections.emptyList();
         gameDto = new GameDto(ID_1, listExample);
@@ -121,8 +117,8 @@ class GameControllerTest {
                 .content(Objects.requireNonNull(objectMapper.writeValueAsString(gameDto))));
 
         // then
-        result.andExpect(status().isNotFound())
-                .andExpect(resultIn -> {
+        result.andExpect(status().isNotFound());
+        result.andExpect(resultIn -> {
                     String response = resultIn.getResponse().getContentAsString();
                     ErrorMessage errorMessage = objectMapper.readValue(response, ErrorMessage.class);
                     assertEquals("FAIL", errorMessage.getStatus());
@@ -144,7 +140,7 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldReturn404WhenGameDeletedInCorrectly() throws Exception {
+    void shouldReturn404WhenGameIsNotFoundWhileDeleting() throws Exception {
         // given
         doThrow(EntityNotFoundException.class).when(gameService).deleteGame(isA(UUID.class));
 
@@ -153,11 +149,40 @@ class GameControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then
-        result.andExpect(status().isNotFound())
-                .andExpect(resultIn -> {
+        result.andExpect(status().isNotFound());
+        result.andExpect(resultIn -> {
                     String response = resultIn.getResponse().getContentAsString();
                     ErrorMessage errorMessage = objectMapper.readValue(response, ErrorMessage.class);
                     assertEquals("FAIL", errorMessage.getStatus());
                 });
+    }
+
+    @Test
+    void shouldReturn400WhenPassWrongVariableInGetMethod() throws Exception {
+        // when
+        ResultActions result = mockMvc.perform(get("/api/v1/games/" + null)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isBadRequest());
+        result.andExpect(resultIn -> {
+            String response = resultIn.getResponse().getContentAsString();
+            ErrorMessage errorMessage = objectMapper.readValue(response, ErrorMessage.class);
+            assertEquals("FAIL", errorMessage.getStatus());
+        });
+    }
+
+    @Test
+    void shouldReturn400WhenGameDTOisNotValid() throws Exception {
+        // given
+        List<UUID> listExample = Collections.emptyList();
+        GameDto gameDto = new GameDto(ID_1, listExample);
+
+        // when
+        ResultActions result = mockMvc.perform(delete("/api/v1/games/" + ID_1)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNoContent());
     }
 }
