@@ -21,7 +21,4 @@ public class ErrorMessage {
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.message = message;
     }
-
-
-
 }
