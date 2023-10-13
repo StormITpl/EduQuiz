@@ -25,20 +25,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles({"test"})
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnswerServiceTest {
+
     @Autowired
     private AnswerService answerService;
+
     @Autowired
     private QuestionService questionService;
 
     @Autowired
     private AnswerRequestMapper answerRequestMapper;
+
     @Autowired
     private QuestionRequestMapper questionRequestMapper;
+
     private Answer answer;
+
     private Question question;
+
     UUID questionId;
+
     UUID answerId;
 
     @BeforeEach
@@ -120,4 +127,5 @@ class AnswerServiceTest {
         // then
         assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(answerId));
     }
+
 }

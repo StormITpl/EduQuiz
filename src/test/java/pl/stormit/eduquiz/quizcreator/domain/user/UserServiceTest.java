@@ -38,7 +38,7 @@ class UserServiceTest {
     private User firstUser;
 
     private User secondUser;
-    
+
     private User thirdUser;
 
     @BeforeEach
