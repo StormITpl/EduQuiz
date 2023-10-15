@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pl.stormit.eduquiz.game.contoller.GameController;
-import pl.stormit.eduquiz.quizcreator.controllers.*;
+import pl.stormit.eduquiz.quizcreator.controllers.AnswerApiController;
+import pl.stormit.eduquiz.quizcreator.controllers.CategoryApiController;
+import pl.stormit.eduquiz.quizcreator.controllers.QuestionApiController;
+import pl.stormit.eduquiz.quizcreator.controllers.QuizApiController;
+import pl.stormit.eduquiz.quizcreator.controllers.UserApiController;
 
 
 import java.util.HashMap;
