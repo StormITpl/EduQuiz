@@ -8,6 +8,7 @@ EduQuiz - an application for creating and solving educational quizzes individual
 * [Technologies Used](#technologies-used)
 * [Prerequisites](#prerequisites)
 * [Setup](#setup)
+* [API Documentation](#api-documentation)
 * [Authors](#authors)
 
 ## General Information
@@ -56,6 +57,10 @@ docker run --name eduquizdev -e POSTGRES_PASSWORD=password -d -p 5432:5432 eduqu
 Login: postgres
 
 Password: password
+
+## API Documentation
+
+The API documentation can be accessed after starting the project at http://localhost:8080/swagger-ui/index.html
 
 ## Authors
 

@@ -1,10 +1,14 @@
 package pl.stormit.eduquiz.result.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.game.dto.GameIdDto;
@@ -16,6 +20,7 @@ import pl.stormit.eduquiz.result.dto.ResultMapper;
 
 import java.util.UUID;
 
+@Validated
 @Service
 @RequiredArgsConstructor
 public class ResultService {
@@ -26,7 +31,7 @@ public class ResultService {
 
 
     @Transactional(readOnly = true)
-    public ResultDto getResult(UUID id) {
+    public ResultDto getResult(@NotNull @PathVariable UUID id) {
         Result result = resultRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("Result by id: " + id + " not found");
@@ -36,7 +41,7 @@ public class ResultService {
 
 
     @Transactional
-    public ResultDto createResult(@NotNull GameIdDto gameIdDto) {
+    public ResultDto createResult(@Valid @RequestBody GameIdDto gameIdDto) {
         Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
             throw new EntityNotFoundException("The game does not exist with ID: " + gameIdDto.id());
         });
@@ -56,7 +61,7 @@ public class ResultService {
     }
 
     @Transactional
-    public void deleteResult(UUID resultId) {
+    public void deleteResult(@NotNull @PathVariable("result-id") UUID resultId) {
         if (resultRepository.existsById(resultId)) {
             resultRepository.deleteById(resultId);
         } else {

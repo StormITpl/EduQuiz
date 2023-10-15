@@ -55,9 +55,34 @@ class UserApiControllerTest {
     @Test
     void shouldReturn200WhenFoundAllResults() throws Exception {
         // given
-        UserDto firstDtoUser = new UserDto(FIRST_ID, "Ananiasz", List.of());
-        UserDto secondDtoUser = new UserDto(SECOND_ID, "Wojski", List.of());
-        UserDto thirdDtoUser = new UserDto(THIRD_ID, "Dajmiech", List.of());
+        UserDto firstDtoUser = new UserDto(
+                FIRST_ID,
+                "Ananiasz",
+                "ananiasz@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
+
+        UserDto secondDtoUser = new UserDto(
+                SECOND_ID,
+                "Wojski",
+                "wojski@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
+        UserDto thirdDtoUser = new UserDto(
+                THIRD_ID,
+                "Dajmiech",
+                "dajmiech@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
         List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
         given(userService.getUsers()).willReturn((expectedDtoUsers));
 
@@ -75,7 +100,14 @@ class UserApiControllerTest {
     @Test
     void shouldReturn200IfUserIsFoundByIdCorrectly() throws Exception {
         // given
-        UserDto expectedDtoUser = new UserDto(FIRST_ID, "Ananiasz", List.of());
+        UserDto expectedDtoUser = new UserDto(FIRST_ID,
+                "Ananiasz",
+                "ananiasz@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
         String userUrl = "/api/v1/users/" + expectedDtoUser.id();
 
         // when
@@ -91,7 +123,14 @@ class UserApiControllerTest {
     @Test
     void shouldReturn201WhenUserCreatedCorrectly() throws Exception {
         // given
-        UserDto createdUserDto = new UserDto(FIRST_ID, "Hegemon", List.of());
+        UserDto createdUserDto = new UserDto(FIRST_ID,
+                "Ananiasz",
+                "ananiasz@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
 
         // when
         MockHttpServletRequestBuilder content = post("/api/v1/users")
@@ -107,8 +146,23 @@ class UserApiControllerTest {
     @Test
     void shouldReturn200WhenUserUpdatedCorrectly() throws Exception {
         // given
-        UserDto userDto = new UserDto(FIRST_ID, "Hegemon", List.of());
-        UserRequestDto requestDto = new UserRequestDto("Imperator", List.of());
+        UserDto userDto = new UserDto(
+                FIRST_ID,
+                "Ananiasz",
+                "ananiasz@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
+        UserRequestDto requestDto = new UserRequestDto(
+                "Dajmiech",
+                "dajmiech@gmail.com",
+                "password",
+                null,
+                null,
+                null,
+                List.of());
 
         // then
         MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID)

@@ -26,7 +26,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/quizzes")
-
 public class QuizApiController {
 
     private final QuizService quizService;
@@ -65,7 +64,7 @@ public class QuizApiController {
     }
 
     @DeleteMapping("{quizId}")
-    ResponseEntity<Void> deleteQuiz(@PathVariable UUID quizId) {
+    ResponseEntity<Void> deleteQuiz(@NotNull @PathVariable UUID quizId) {
         quizService.deleteQuiz(quizId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "Quiz has been successfully deleted");
