@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerRequestMapper;
@@ -27,18 +28,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles({"test"})
 @SpringBootTest
 class AnswerServiceTest {
+
     @Autowired
     private AnswerService answerService;
+
     @Autowired
     private QuestionService questionService;
 
     @Autowired
     private AnswerRequestMapper answerRequestMapper;
+
     @Autowired
     private QuestionRequestMapper questionRequestMapper;
+
     private Answer answer;
+
     private Question question;
+
     UUID questionId;
+
     UUID answerId;
 
     @BeforeEach
@@ -58,20 +66,30 @@ class AnswerServiceTest {
     }
 
     @Test
+    @Transactional
     void shouldCreateAnswerCorrectly() {
         // given
-        Question otherQuestion = new Question();
-        otherQuestion.setContent("In which country was Beethoven born?");
-        QuestionRequestDto questionRequestDto = questionRequestMapper.mapQuestionEntityToQuestionRequestDto(otherQuestion);
+        QuestionRequestDto questionRequestDto = new QuestionRequestDto("In which country was Beethoven born?", null, null);
         QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
-        AnswerRequestDto userRequestDto = new AnswerRequestDto("Germany", false, otherQuestion);
+
+        Question question = new Question();
+        question.setId(createdQuestionDto.id());
+        question.setContent("In which country was Beethoven born?");
+
+        AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
+                .content("Germany")
+                .isCorrect(true)
+                .question(question)
+                .build();
 
         // when
-        AnswerDto createdAnswerDto = answerService.createAnswer(createdQuestionDto.id(), userRequestDto);
+        AnswerDto createdAnswerDto = answerService.createAnswer(createdQuestionDto.id(), answerRequestDto);
 
         // then
-        assertThat(createdAnswerDto.content()).isEqualTo(userRequestDto.content());
-        assertThat(createdAnswerDto.isCorrect()).isEqualTo(userRequestDto.isCorrect());
+        assertNotNull(createdAnswerDto);
+        assertNotNull(createdAnswerDto.id());
+        assertEquals("Germany", createdAnswerDto.content());
+        assertTrue(createdAnswerDto.isCorrect());
     }
 
     @Test
@@ -82,7 +100,7 @@ class AnswerServiceTest {
         // then
         assertNotNull(actualAnswers);
         assertThat(actualAnswers).hasSize(1);
-        assertEquals(actualAnswers.get(0).isCorrect(), true);
+        assertTrue(actualAnswers.get(0).isCorrect());
         assertEquals(actualAnswers.get(0).content(), "Poland");
         assertEquals(actualAnswers.get(0).question().getId(), questionId);
     }
@@ -120,4 +138,5 @@ class AnswerServiceTest {
         // then
         assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(answerId));
     }
+
 }

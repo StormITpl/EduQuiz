@@ -81,6 +81,7 @@ class ResultServiceTest {
     void shouldDeleteResult() {
         // given
         Result result = new Result();
+        result.setScore(666);
         Result savedResult = resultRepository.save(result);
         UUID id = savedResult.getId();
 
