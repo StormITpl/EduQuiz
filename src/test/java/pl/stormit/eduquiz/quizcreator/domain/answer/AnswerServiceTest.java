@@ -67,7 +67,8 @@ class AnswerServiceTest {
 
     @Test
     @Transactional
-    void shouldCreateAnswer() {
+    void shouldCreateAnswerCorrectly() {
+        // given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In which country was Beethoven born?", null, null);
         QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
 
@@ -81,8 +82,10 @@ class AnswerServiceTest {
                 .question(question)
                 .build();
 
+        // when
         AnswerDto createdAnswerDto = answerService.createAnswer(createdQuestionDto.id(), answerRequestDto);
 
+        // then
         assertNotNull(createdAnswerDto);
         assertNotNull(createdAnswerDto.id());
         assertEquals("Germany", createdAnswerDto.content());
