@@ -57,9 +57,9 @@ public class QuestionApiController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The question has been successfully created");
 
-        return new ResponseEntity<>(createdQuestionDto, headers, HttpStatus.CREATED);
-    }
 
+        return new ResponseEntity<>(createdQuestionDto, headers, HttpStatus.CREATED);
+}
     @PutMapping("{questionId}")
     ResponseEntity<QuestionDto> updateQuestion(@NotNull @PathVariable UUID questionId,
                                                @Valid @RequestBody QuestionRequestDto questionRequestDto) {
