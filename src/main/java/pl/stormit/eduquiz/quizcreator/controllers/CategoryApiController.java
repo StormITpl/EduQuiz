@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,10 @@ import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 import java.util.List;
 import java.util.UUID;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/categories")
-
 public class CategoryApiController {
 
     private final CategoryService categoryService;
@@ -47,7 +48,6 @@ public class CategoryApiController {
         return new ResponseEntity<>(categoryDto, headers, HttpStatus.OK);
     }
 
-
     @PostMapping
     ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
 
@@ -60,7 +60,7 @@ public class CategoryApiController {
 
     @PutMapping("{category-id}")
     ResponseEntity<CategoryDto> updateCategory(@NotNull @PathVariable("category-id") UUID categoryId,
-                                               @RequestBody CategoryDto categoryRequest) {
+                                               @Valid @RequestBody CategoryDto categoryRequest) {
         CategoryDto createdCategory = categoryService.updateCategory(categoryId, categoryRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The category has been successfully updated");

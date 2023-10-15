@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,9 +30,12 @@ public class Question {
     @GeneratedValue
     private UUID id;
 
+    @NotBlank(message = "Content can't be empty")
+    @Size(min = 5, max = 255, message = "Content must be between 5 and 255 characters")
     private String content;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    @NotEmpty
     private List<Answer> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)
