@@ -10,9 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
 import pl.stormit.eduquiz.common.exception.ErrorMessage;
-import pl.stormit.eduquiz.game.contoller.GameController;
 import pl.stormit.eduquiz.game.dto.GameDto;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
