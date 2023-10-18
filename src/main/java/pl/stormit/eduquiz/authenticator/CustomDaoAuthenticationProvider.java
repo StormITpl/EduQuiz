@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
-
-
     public CustomDaoAuthenticationProvider(CustomPasswordEncoder customPasswordEncoder,
                                            CustomUserDetailService customUserDetailService) {
         super.setPasswordEncoder(customPasswordEncoder);

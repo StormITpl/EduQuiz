@@ -34,5 +34,4 @@ public class SecurityConfig {
                 .logout(Customizer.withDefaults());
         return http.build();
     }
-
 }

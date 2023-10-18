@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
@@ -13,24 +17,23 @@ import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 @AllArgsConstructor
 public class AuthenticationViewController {
 
-
     private final UserService userService;
 
-    @GetMapping()
-    public String registerUser(final Model model, Error error) {
-        model.addAttribute("userRequestDto", new UserRequestDto(null,
-                null, null, null, null, null, null));
-        model.addAttribute("error", error);
+    @GetMapping
+    public String registerUser(final Model model) {
+        UserRequestDto userRequestDto = new UserRequestDto(null, null, null, null, null, null, null);
+
+        model.addAttribute("userRequestDto", userRequestDto);
+
         return "register";
     }
 
     @PostMapping()
-    public String registerUser(@RequestParam(value = "password") String password,
-                               @RequestParam(value = "confirmPassword") String confirmPassword,
+    public String registerUser(@RequestParam(value = "confirmPassword") String confirmPassword,
                                @ModelAttribute UserRequestDto userRequestDto,
                                BindingResult bindingResult,
                                Model model) {
-        if (userService.comparePasswords(password, confirmPassword)) {
+        if (userService.comparePasswords(userRequestDto.password(), confirmPassword)) {
             model.addAttribute("confirmPassword", "Passwords are not the same");
         }
 

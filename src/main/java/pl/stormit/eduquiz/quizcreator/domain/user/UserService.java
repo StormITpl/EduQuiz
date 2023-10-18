@@ -84,6 +84,6 @@ public class UserService {
     }
 
     public boolean checkIfNicknameAvailable(UserRequestDto userRequestDto) {
-        return userRepository.findByNickname(userRequestDto.nickname()).isPresent();
+        return userRepository.findUserByNickname(userRequestDto.nickname()).isPresent();
     }
 }

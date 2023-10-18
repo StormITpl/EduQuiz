@@ -12,8 +12,6 @@ import java.util.Collections;
 
 @Component
 public class CustomUserDetailService implements UserDetailsService {
-
-
     private final UserRepository userRepository;
 
     public CustomUserDetailService(UserRepository userRepository) {
@@ -22,8 +20,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
-        User user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new UsernameNotFoundException("There is no such user"));
+        User user = userRepository.findUserByNickname(nickname)
+                .orElseThrow(() -> new UsernameNotFoundException
+                        ("The user with following nickname: " + nickname + " does not exist"));
         return new org.springframework.security.core.userdetails.User(
                 user.getNickname(),
                 user.getPassword(),
