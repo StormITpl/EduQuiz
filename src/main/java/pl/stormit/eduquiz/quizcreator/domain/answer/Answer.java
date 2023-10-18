@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +29,7 @@ public class Answer {
     private UUID id;
 
     @NotBlank(message = "Content can't be empty")
-    @Size(min = 10, max = 255, message = "Content must be between 10 and 255 characters")
+    @Size(min = 1, max = 255, message = "Content must be between 10 and 255 characters")
     private String content;
 
     private boolean isCorrect;

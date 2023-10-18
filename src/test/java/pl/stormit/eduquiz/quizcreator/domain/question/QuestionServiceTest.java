@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionDto;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionMapper;
 import pl.stormit.eduquiz.quizcreator.domain.question.dto.QuestionRequestDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +39,25 @@ public class QuestionServiceTest {
     void SetUp() {
         question = new Question();
         question.setContent("In which country was Nicolaus Copernicus born?");
+
+        List<Answer> answers = new ArrayList<>();
+
+        Answer firstAnswer = Answer.builder()
+                .content("in Torun")
+                .isCorrect(true)
+                .question(question)
+                .build();
+
+        Answer secondAnswer = Answer.builder()
+                .content("in Cracow")
+                .isCorrect(false)
+                .question(question)
+                .build();
+
+        answers.add(firstAnswer);
+        answers.add(secondAnswer);
+
+        question.setAnswers(answers);
         questionRepository.save(question);
     }
 

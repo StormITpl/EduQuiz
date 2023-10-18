@@ -53,6 +53,7 @@ public class CategoryService {
                     throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
                 });
         category.setName(categoryRequest.name());
+
         return categoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
     }
 

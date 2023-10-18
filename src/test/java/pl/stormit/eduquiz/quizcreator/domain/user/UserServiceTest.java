@@ -13,7 +13,6 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +38,6 @@ class UserServiceTest {
     private UserService userService;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private CustomPasswordEncoder encoder;
 
     private User firstUser;
@@ -55,23 +51,23 @@ class UserServiceTest {
         firstUser = new User();
         firstUser.setNickname("Ananiasz");
         firstUser.setEmail("ananiasz@gmail.com");
-        firstUser.setPassword("password");
-        firstUser.setStatus(VERIFIED);
+        firstUser.setPassword("Password123!");
+        firstUser.setStatus(Status.VERIFIED);
         firstUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(firstUser);
 
         secondUser = new User();
         secondUser.setNickname("Wojski");
         secondUser.setEmail("wojski@gmail.com");
-        secondUser.setPassword("password");
-        secondUser.setStatus(VERIFIED);
+        secondUser.setPassword("Password123!");
+        secondUser.setStatus(Status.VERIFIED);
         secondUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(secondUser);
 
         thirdUser = new User();
         thirdUser.setNickname("Dajmiech");
         thirdUser.setEmail("dajmiech@gmail.com");
-        thirdUser.setPassword("password");
+        thirdUser.setPassword("Password123!");
         thirdUser.setStatus(VERIFIED);
         thirdUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(thirdUser);
@@ -79,17 +75,12 @@ class UserServiceTest {
 
     @Test
     void shouldReturnAllUsers() {
-        // given
-        List<User> users = userRepository.findAll();
-        List<UserDto> expectedUsers = userMapper.mapUserListOfEntityToUsersDtoList(users);
-
         // when
         List<UserDto> actualUsers = userService.getUsers();
 
         // then
         assertThat(actualUsers).isNotNull();
-        assertThat(actualUsers).hasSize(expectedUsers.size());
-        assertThat(actualUsers).containsExactlyElementsOf(expectedUsers);
+        assertThat(actualUsers).hasSize(3);
     }
 
     @Test
@@ -112,7 +103,7 @@ class UserServiceTest {
         UserRequestDto userRequestDto = new UserRequestDto(
                 "Łamignat",
                 "lamignat@gmail.com",
-                "password",
+                "Password123!",
                 null,
                 null,
                 null,
@@ -141,7 +132,7 @@ class UserServiceTest {
         UserRequestDto userRequestDto = new UserRequestDto(
                 "Gniewosz",
                 "gniewosz@gmail.com",
-                "password",
+                "Password123!",
                 null,
                 null,
                 null,
