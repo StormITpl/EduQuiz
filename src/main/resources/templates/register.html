@@ -1,11 +1,11 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
     <script src="../assets/js/color-modes.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edu quiz application</title>
+    <title>Register</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -86,13 +86,18 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
-    </style>
 
+        .button-separator {
+            display: inline-block;
+            width: 10px;
+        }
+    </style>
 
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/css/blog.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -163,34 +168,43 @@
     </ul>
 </div>
 
-
 <div class="container">
     <header th:insert="~{fragments/fragments :: header}" class="blog-header lh-1 py-3"></header>
+    <h1>Register a new account</h1>
 
-    <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-center">
-            <a th:each="category : ${categories}" th:text="${category.name}" class="p-2 link-secondary" th:href="@{'/category/'+${category.id()}}" >Category</a>
-        </nav>
-    </div>
+    <h1 th:if="${message != null}" th:text="${message}"></h1>
 
-    <div class="row mb-2">
-        <div class="col" th:each="quiz : ${quizzes}">
-            <div class="col-md-6">
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <strong class="d-inline-block mb-2 text-primary" th:text="${quiz.category().getName()}">Category</strong>
-                        <h3 class="mb-0" th:text="${quiz.name}">Quiz</h3>
-                        <p class="card-text mb-auto">Default short quiz description.</p>
-                        <a href="#" th:href="@{'/quiz/'+${quiz.id} +'/0'}" class="stretched-link">Start the quiz</a>
-                    </div>
-                </div>
-            </div>
+    <form action="#" th:action="@{/register}" th:object="${userRequestDto}" method="post">
+
+        <div class="alert-danger" th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
         </div>
-    </div>
 
+        <input type="hidden" name="quizzes" th:value="${quizzes}"/>
+
+        <i class='fas fa-id-badge'></i>
+        <label for="nickName">Nick Name</label>
+        <input type="text" id="nickName" th:field="*{nickname}"><br>
+
+        <i class="fas fa-envelope"></i>
+        <label for="email">email</label>
+        <input type="email" id="email" th:field="*{email}"><br>
+
+        <i class='fas fa-key'></i>
+        <label for="password">Password</label>
+        <input type="password" id="password" th:name="password"><br>
+
+        <p class="alert-danger" th:if="${confirmPassword != null}" th:text="${confirmPassword}"></p>
+        <i class='fas fa-key'></i>
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" th:name="confirmPassword"><br>
+
+        <button class="btn btn-sm btn-outline-primary" type="submit">Register</button>
+        <button class="btn btn-sm btn-outline-primary" type="reset">Reset</button>
+    </form>
 
     <footer th:insert="~{fragments/fragments :: footer}"></footer>
-
 </div>
+
 </body>
 </html>

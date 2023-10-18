@@ -3,7 +3,8 @@ package pl.stormit.eduquiz.result.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles({"test"})
-@WebMvcTest(ResultApiController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class ResultApiControllerTest {
 
     private static final UUID EXEMPLARY_ID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502");

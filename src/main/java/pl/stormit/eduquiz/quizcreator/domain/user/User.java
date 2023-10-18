@@ -53,7 +53,7 @@ public class User {
                         "It must have at least one lower case alphabet\n" +
                         "It must have at least one special character like !@#$%*&()-+=^\n" +
                         "It doesn`t contain any white space")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%*&()-+=^])(?=\\S+$).{8,20}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%*&()-+=^])(?=\\S+$).{8,500}$")
     private String password;
 
     @Enumerated(EnumType.STRING)

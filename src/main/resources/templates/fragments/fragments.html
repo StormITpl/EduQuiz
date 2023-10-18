@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<body>
+
+<header th:fragment="header" class="blog-header lh-1 py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-4 d-flex justify-content-start align-items-center">
+            <a type="button" class="btn btn-sm btn-outline-primary" th:href="@{/categoryManagement}">Category Management</a>
+            <span class="button-separator"></span>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" type="button" class="btn btn-sm btn-outline-primary" th:href="@{/quizManagement}">Quiz Management</a>
+            <span class="button-separator"></span>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" type="button" class="btn btn-sm btn-outline-primary" th:href="@{'/admin'}">Admin panel</a>
+        </div>
+        <div class="col-4 text-center">
+            <a class="blog-header-logo text-body-emphasis" href="/">Edu Quiz application</a>
+        </div>
+        <div class="col-4 d-flex justify-content-end align-items-center" th:insert="~{fragments/fragments :: log}">
+        </div>
+    </div>
+</header>
+
+<div th:fragment="log">
+    <div sec:authorize="isAuthenticated()">
+        <div th:insert="~{fragments/fragments :: logout}"></div>
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <div th:insert="~{fragments/fragments :: login}"></div>
+    </div>
+</div>
+
+<div th:fragment="logout">
+    <div>
+        <p>User: <span sec:authentication="name">Bob</span></p>
+        <a class="btn btn-sm btn-outline-secondary" href="/logout">Logout</a>
+    </div>
+</div>
+
+<div th:fragment="login">
+    <a class="btn btn-sm btn-outline-secondary" href="/register">Sign up</a>
+    <span class="button-separator"></span>
+    <a class="btn btn-sm btn-outline-secondary" href="/login">Log in</a>
+</div>
+
+<footer th:fragment="footer" class="blog-footer fixed-bottom">
+    <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a
+            href="https://twitter.com/mdo">@mdo</a>.</p>
+    <p>
+        <a href="#" th:href="@{'/'}">Back to top</a>
+    </p>
+</footer>
+
+</body>
+</html>

@@ -217,7 +217,7 @@ alter table users
     add column email varchar(120);
 
 alter table users
-    add column password varchar(20);
+    add column password varchar;
 
 alter table users
     add column role varchar(255);

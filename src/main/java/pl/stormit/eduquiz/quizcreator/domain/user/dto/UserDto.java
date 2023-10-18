@@ -5,7 +5,6 @@ import pl.stormit.eduquiz.quizcreator.domain.user.Role;
 import pl.stormit.eduquiz.quizcreator.domain.user.Status;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

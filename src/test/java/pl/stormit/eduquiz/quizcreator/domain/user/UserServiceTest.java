@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.stormit.eduquiz.quizcreator.domain.user.Status.VERIFIED;
 
 @ActiveProfiles({"test"})
@@ -34,6 +36,9 @@ class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomPasswordEncoder encoder;
 
     private User firstUser;
 
@@ -110,7 +115,7 @@ class UserServiceTest {
         // then
         assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
         assertThat(createdUserDto.email()).isEqualTo(userRequestDto.email());
-        assertThat(createdUserDto.password()).isEqualTo(userRequestDto.password());
+        assertTrue(encoder.matches(userRequestDto.password(), createdUserDto.password()));
         assertThat(createdUserDto.quizzes()).isNull();
     }
 
@@ -139,7 +144,7 @@ class UserServiceTest {
         // then
         assertThat(updatedUserDto.nickname()).isEqualTo("Gniewosz");
         assertThat(updatedUserDto.email()).isEqualTo("gniewosz@gmail.com");
-        assertThat(updatedUserDto.password()).isEqualTo("Password123!");
+        assertTrue(encoder.matches(userRequestDto.password(), updatedUserDto.password()));
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }

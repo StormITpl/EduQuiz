@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;
+
+    private final CustomPasswordEncoder customPasswordEncoder;
 
     @Transactional(readOnly = true)
     public List<UserDto> getUsers() {
@@ -44,9 +47,9 @@ public class UserService {
         User user = new User();
         user.setNickname(userRequest.nickname());
         user.setEmail(userRequest.email());
-        user.setPassword(userRequest.password());
-        user.setStatus(userRequest.status());
-        user.setRole(userRequest.role());
+        user.setPassword(customPasswordEncoder.encode(userRequest.password()));
+        user.setStatus(Status.UNVERIFIED);
+        user.setRole(Role.ROLE_USER);
         user.setQuizzes(userRequest.quizzes());
         return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
@@ -59,7 +62,7 @@ public class UserService {
         });
         user.setNickname(userRequest.nickname());
         user.setEmail(userRequest.email());
-        user.setPassword(userRequest.password());
+        user.setPassword(customPasswordEncoder.encode(userRequest.password()));
         user.setStatus(userRequest.status());
         user.setRole(userRequest.role());
         user.setQuizzes(userRequest.quizzes());
@@ -74,5 +77,13 @@ public class UserService {
         } else {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         }
+    }
+
+    public boolean comparePasswords(String password, String confirmPassword) {
+        return !password.equals(confirmPassword);
+    }
+
+    public boolean checkIfNicknameAvailable(UserRequestDto userRequestDto) {
+        return userRepository.findUserByNickname(userRequestDto.nickname()).isPresent();
     }
 }
