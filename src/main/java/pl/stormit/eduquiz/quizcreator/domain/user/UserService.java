@@ -6,14 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ public class UserService {
 
     private final CustomPasswordEncoder customPasswordEncoder;
 
+    private static final String MSGUSERID = "User by id: ";
+    private static final String MSGNOTEXIST = " does not exist.";
+
     @Transactional(readOnly = true)
     public List<UserDto> getUsers() {
         List<User> foundUsers = userRepository.findAll();
@@ -35,9 +39,19 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public long getTotalNumberOfUsers() {
+        return userRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public long getNumberOfUsersCreatedBetween(Instant startDate, Instant endDate) {
+        return userRepository.countByCreatedAtBetween(startDate, endDate);
+    }
+
+    @Transactional(readOnly = true)
     public UserDto getUser(@NotNull @PathVariable("user-id") UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
+            throw new EntityNotFoundException(MSGUSERID + userId + MSGNOTEXIST);
         });
         return userMapper.mapUserEntityToUserDto(user);
     }
@@ -58,7 +72,7 @@ public class UserService {
     public UserDto updateUser(@NotNull @PathVariable("user-id") UUID userId,
                               @Valid @RequestBody UserRequestDto userRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
+            throw new EntityNotFoundException(MSGUSERID + userId + MSGNOTEXIST);
         });
         user.setNickname(userRequest.nickname());
         user.setEmail(userRequest.email());
@@ -75,7 +89,7 @@ public class UserService {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         } else {
-            throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
+            throw new EntityNotFoundException(MSGUSERID + userId + MSGNOTEXIST);
         }
     }
 
