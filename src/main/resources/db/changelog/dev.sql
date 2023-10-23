@@ -217,10 +217,14 @@ alter table users
     add column email varchar(120);
 
 alter table users
-    add column password varchar;
+    add column password varchar(20);
 
 alter table users
     add column role varchar(255);
 
 alter table users
     add column status varchar(255);
+
+--changeset RobertoJavaDev:001_37
+alter table users
+alter column password type varchar;
