@@ -58,6 +58,13 @@ Login: postgres
 
 Password: password
 
+## Predefined application users
+
+| Role  | Login  | Password  |
+|-------|--------|-----------|
+| ADMIN | admin  | admin     |
+| USER  | user   | user      |
+
 ## API Documentation
 
 The API documentation can be accessed after starting the project at http://localhost:8080/swagger-ui/index.html
