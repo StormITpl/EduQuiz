@@ -49,9 +49,9 @@ The following tools are required to start the application:
 Before run application you should configurate your database and db server in few step:
 
 - Create database connection with Docker pasting in command line:
-
+```
 docker run --name eduquizdev -e POSTGRES_PASSWORD=password -d -p 5432:5432 eduquizdev
-
+```
 - Connect with server:
 
 Login: postgres
