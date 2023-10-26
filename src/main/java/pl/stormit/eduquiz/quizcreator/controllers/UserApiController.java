@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
+import pl.stormit.eduquiz.stats.UserStatisticsService;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +30,8 @@ import java.util.UUID;
 public class UserApiController {
 
     private final UserService userService;
+
+    private final UserStatisticsService statsService;
 
     private static final String MSG = "message";
 
@@ -77,11 +77,8 @@ public class UserApiController {
     }
 
     @GetMapping("/statistics")
-    ResponseEntity<Map<String, Long>> getUserStatistics() {
-        Map<String, Long> statistics = new HashMap<>();
-        statistics.put("totalUsers", userService.getTotalNumberOfUsers());
-        Instant weekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
-        statistics.put("usersRegisteredLastWeek", userService.getNumberOfUsersCreatedBetween(weekAgo, Instant.now()));
+    public ResponseEntity<Map<String, Long>> getUserStatistics() {
+        Map<String, Long> statistics = statsService.getUserStatistics();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(MSG, "User statistics have been successfully retrieved");

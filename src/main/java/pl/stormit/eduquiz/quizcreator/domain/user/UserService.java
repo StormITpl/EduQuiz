@@ -14,7 +14,6 @@ import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,16 +35,6 @@ public class UserService {
     public List<UserDto> getUsers() {
         List<User> foundUsers = userRepository.findAll();
         return userMapper.mapUserListOfEntityToUsersDtoList(foundUsers);
-    }
-
-    @Transactional(readOnly = true)
-    public long getTotalNumberOfUsers() {
-        return userRepository.count();
-    }
-
-    @Transactional(readOnly = true)
-    public long getNumberOfUsersCreatedBetween(Instant startDate, Instant endDate) {
-        return userRepository.countByCreatedAtBetween(startDate, endDate);
     }
 
     @Transactional(readOnly = true)
