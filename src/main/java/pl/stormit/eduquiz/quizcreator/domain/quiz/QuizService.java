@@ -20,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class QuizService {
+
     private final QuizRepository quizRepository;
 
     private final QuizDtoMapper quizMapper;
