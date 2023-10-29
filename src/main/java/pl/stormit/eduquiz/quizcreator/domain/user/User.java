@@ -13,7 +13,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,9 +35,13 @@ public class User {
     private UUID id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Nickname must not be blank")
+    @Size(min = 3, max = 13)
     private String nickname;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Invalid email address")
     private String email;
 
     @Column(nullable = false)
