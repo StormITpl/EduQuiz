@@ -16,7 +16,8 @@ public class SecurityConfig {
             "/category/**",
             "/quizzes/**",
             "/quiz/**",
-            "/quizManagement/**"
+            "/quizManagement/**",
+            "/categoryManagement"
     };
 
     @Bean
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(AUTHENTICATED_LIST).hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/categoryManagement").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
