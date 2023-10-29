@@ -225,6 +225,19 @@ alter table users
 alter table users
     add column status varchar(255);
 
+<<<<<<< Updated upstream
 --changeset RobertoJavaDev:001_37
 alter table users
 alter column password type varchar;
+
+--changeset Magdalenacze:001_38
+insert into categories (id, name) values
+                                      (gen_random_uuid(), 'Music'),
+                                      (gen_random_uuid(), 'Animals'),
+                                      (gen_random_uuid(), 'Travels'),
+                                      (gen_random_uuid(), 'Sport'),
+                                      (gen_random_uuid(), 'Culinary'),
+                                      (gen_random_uuid(), 'Movie'),
+                                      (gen_random_uuid(), 'Computer games'),
+                                      (gen_random_uuid(), 'Mathematics');
+
