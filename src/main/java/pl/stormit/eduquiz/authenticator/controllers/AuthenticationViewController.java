@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.authenticator.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,7 @@ public class AuthenticationViewController {
 
     @PostMapping()
     public String registerUser(@RequestParam(value = "confirmPassword") String confirmPassword,
-                               @ModelAttribute UserRequestDto userRequestDto,
+                               @Valid @ModelAttribute UserRequestDto userRequestDto,
                                BindingResult bindingResult,
                                Model model) {
         if (userService.comparePasswords(userRequestDto.password(), confirmPassword)) {
