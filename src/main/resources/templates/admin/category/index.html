@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/template :: head(title = 'EduQuiz - Admin')"></head>
+<head th:replace="~{admin/template :: head(title = 'EduQuiz - Admin')}"></head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-  <th:block th:replace="admin/template :: navbar" />
+  <th:block th:replace="~{admin/template :: navbar}" />
 
-  <th:block th:replace="admin/template :: sidebar(active='categories')" />
+  <th:block th:replace="~{admin/template :: sidebar(active='categories')}" />
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -105,9 +105,9 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <th:block th:replace="admin/template :: rightbar" />
+  <th:block th:replace="~{admin/template :: rightbar}" />
 
-  <th:block th:replace="admin/template :: footer" />
+  <th:block th:replace="~{admin/template :: footer}" />
 </div>
 <!-- ./wrapper -->
 </body>
