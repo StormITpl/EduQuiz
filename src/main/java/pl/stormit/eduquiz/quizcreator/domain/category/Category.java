@@ -28,8 +28,8 @@ public class Category {
     @GeneratedValue
     private UUID id;
 
-    @NotBlank(message = "Category name can't be empty")
-    @Size(min =  2, max = 20)
+    @NotBlank(message = "Category name must not be blank")
+    @Size(min =  3, max = 20, message = "Category name must be 3 to 20 characters")
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
