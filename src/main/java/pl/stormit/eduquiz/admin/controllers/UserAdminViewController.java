@@ -19,6 +19,6 @@ public class UserAdminViewController {
 
         model.addAttribute("users", userService.getUsers());
 
-        return "viewUsers";
+        return "admin/user/index";
     }
 }
