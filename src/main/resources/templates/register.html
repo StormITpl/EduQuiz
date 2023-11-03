@@ -176,25 +176,26 @@
 
     <form action="#" th:action="@{/register}" th:object="${userRequestDto}" method="post">
 
-        <div class="alert-danger" th:if="${#fields.hasErrors('*')}">
-            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-        </div>
-
         <input type="hidden" name="quizzes" th:value="${quizzes}"/>
 
+        <div class="alert-danger" th:if="${#fields.hasErrors('nickname')}" th:text="${#fields.errors('nickname')}"></div>
         <i class='fas fa-id-badge'></i>
         <label for="nickName">Nick Name</label>
         <input type="text" id="nickName" th:field="*{nickname}"><br>
 
+        <div class="alert-danger" th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email')}"></div>
         <i class="fas fa-envelope"></i>
         <label for="email">email</label>
-        <input type="email" id="email" th:field="*{email}"><br>
+        <input type="text" id="email" th:field="*{email}"><br>
 
+        <div class="alert-danger" th:if="${#fields.hasErrors('password')}">
+            <div th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
+        </div>
         <i class='fas fa-key'></i>
         <label for="password">Password</label>
         <input type="password" id="password" th:name="password"><br>
 
-        <p class="alert-danger" th:if="${confirmPassword != null}" th:text="${confirmPassword}"></p>
+        <div class="alert-danger" th:if="${confirmPassword != null}" th:text="${confirmPassword}"></div>
         <i class='fas fa-key'></i>
         <label for="confirmPassword">Confirm password</label>
         <input type="password" id="confirmPassword" th:name="confirmPassword"><br>

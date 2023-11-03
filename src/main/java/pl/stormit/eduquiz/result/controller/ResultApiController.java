@@ -24,18 +24,31 @@ public class ResultApiController {
 
     @PostMapping
     ResponseEntity<ResultDto> createResult(@Valid @RequestBody GameIdDto gameIdDto) {
+        if (gameIdDto.id() == null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("message", "Invalid input data");
+            return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
+        }
+
         ResultDto resultDto = resultService.createResult(gameIdDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The result has been successfully calculated");
-        return new ResponseEntity<ResultDto>(resultDto, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(resultDto, headers, HttpStatus.CREATED);
     }
 
     @GetMapping("{resultId}")
     ResponseEntity<ResultDto> getResult(@NotNull @PathVariable UUID resultId) {
         ResultDto resultDto = resultService.getResult(resultId);
+
+        if (resultDto == null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("message", "Result not found");
+            return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", "The result has been found");
-        return new ResponseEntity<ResultDto>(resultDto, headers, HttpStatus.OK);
+        return new ResponseEntity<>(resultDto, headers, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
