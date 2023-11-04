@@ -20,10 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
@@ -93,6 +90,22 @@ class AnswerServiceTest {
     }
 
     @Test
+    @Transactional
+    void shouldReturn404WhenCreatingAnswerForNonExistentQuestion() {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
+                .content("Germany")
+                .isCorrect(true)
+                .build();
+
+        // when
+        assertThrows(EntityNotFoundException.class, () -> {
+            answerService.createAnswer(nonExistentQuestionId, answerRequestDto);
+        });
+    }
+
+    @Test
     void shouldReturnListOfAnswersCorrectly() {
         // when
         List<AnswerDto> actualAnswers = answerService.getAnswers(questionId);
@@ -106,6 +119,19 @@ class AnswerServiceTest {
     }
 
     @Test
+    void shouldReturnEmptyListWhenQuestionNotFound() {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+
+        // when
+        List<AnswerDto> answers = answerService.getAnswers(nonExistentQuestionId);
+
+        // then
+        assertNotNull(answers);
+        assertTrue(answers.isEmpty());
+    }
+
+    @Test
     void shouldReturnAnswerByIdCorrectly() {
         // when
         AnswerDto foundAnswerDto = answerService.getAnswer(answerId);
@@ -114,6 +140,17 @@ class AnswerServiceTest {
         assertEquals(foundAnswerDto.content(), "Poland");
         assertTrue(foundAnswerDto.isCorrect());
         assertEquals(foundAnswerDto.question().getId(), questionId);
+    }
+
+    @Test
+    void shouldReturnEntityNotFoundExceptionWhenAnswerNotFound() {
+        // given
+        UUID nonExistentAnswerId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            answerService.getAnswer(nonExistentAnswerId);
+        });
     }
 
     @Test
@@ -131,6 +168,18 @@ class AnswerServiceTest {
     }
 
     @Test
+    void shouldThrowEntityNotFoundExceptionWhenAnswerNotFound() {
+        // given
+        UUID nonExistentAnswerId = UUID.randomUUID();
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Spain", false, null);
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            answerService.updateAnswer(nonExistentAnswerId, answerRequestDto);
+        });
+    }
+
+    @Test
     void shouldDeleteAnswerCorrectly() {
         // when
         answerService.deleteAnswer(answerId);
@@ -139,4 +188,12 @@ class AnswerServiceTest {
         assertThrows(EntityNotFoundException.class, () -> answerService.getAnswer(answerId));
     }
 
+    @Test
+    void shouldThrowExceptionWhenAnswerNotFoundOnDeletion() {
+        // given
+        UUID nonExistentAnswerId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> answerService.deleteAnswer(nonExistentAnswerId));
+    }
 }

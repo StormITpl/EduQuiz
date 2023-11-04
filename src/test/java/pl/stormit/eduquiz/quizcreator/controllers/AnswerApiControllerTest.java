@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,6 +64,21 @@ class AnswerApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenQuestionIdNotFound() throws Exception {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        given(answerService.getAnswers(nonExistentQuestionId)).willThrow(new EntityNotFoundException("Question not found"));
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + nonExistentQuestionId + "/answers")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Question not found")));
+    }
+
+    @Test
     void shouldReturn200WhenFoundAnswerByIdCorrectly() throws Exception {
         // given
         AnswerDto firstAnswer = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
@@ -75,6 +92,21 @@ class AnswerApiControllerTest {
         // then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("Poland")));
+    }
+
+    @Test
+    void shouldReturn404WhenAnswerNotFound() throws Exception {
+        // given
+        UUID nonExistentAnswerId = UUID.randomUUID();
+        given(answerService.getAnswer(nonExistentAnswerId)).willThrow(new EntityNotFoundException("Answer not found"));
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + QUESTION_ID + "/answers/" + nonExistentAnswerId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Answer not found")));
     }
 
     @Test
@@ -94,6 +126,25 @@ class AnswerApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenCreatingAnswerForNonExistentQuestion() throws Exception {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
+
+        given(answerService.createAnswer(nonExistentQuestionId, answerRequestDto))
+                .willThrow(new EntityNotFoundException("The question by id: " + nonExistentQuestionId + ", does not exist."));
+
+        // when
+        ResultActions result = mockMvc.perform(post("/api/v1/questions/" + nonExistentQuestionId + "/answers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(answerRequestDto))));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("The question by id: " + nonExistentQuestionId + ", does not exist.")));
+    }
+
+    @Test
     void shouldReturn200WhenAnswerUpdatedCorrectly() throws Exception {
         // given
         AnswerRequestDto answerRequestDto = new AnswerRequestDto("Poland", true, null);
@@ -110,6 +161,23 @@ class AnswerApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenInvalidAnswerDataCausesEntityNotFound() throws Exception {
+        // given
+        AnswerRequestDto invalidAnswerRequestDto = new AnswerRequestDto(null, true, null);
+        given(answerService.updateAnswer(FIRST_ANSWER_ID, invalidAnswerRequestDto))
+                .willThrow(new EntityNotFoundException("Invalid answer data"));
+
+        // when
+        ResultActions result = mockMvc.perform(put("/api/v1/questions/" + QUESTION_ID + "/answers/" + FIRST_ANSWER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(invalidAnswerRequestDto))));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Invalid answer data")));
+    }
+
+    @Test
     void shouldReturn204WhenAnswerDeletedCorrectly() throws Exception {
         // given
         AnswerDto answerDto = new AnswerDto(FIRST_ANSWER_ID, "Poland", true, null);
@@ -121,5 +189,20 @@ class AnswerApiControllerTest {
 
         // then
         result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturn404WhenAnswerDeletionFails() throws Exception {
+        // given
+        UUID nonExistentAnswerId = UUID.randomUUID();
+        doThrow(new EntityNotFoundException("Answer not found")).when(answerService).deleteAnswer(nonExistentAnswerId);
+
+        // when
+        ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + QUESTION_ID + "/answers/" + nonExistentAnswerId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Answer not found")));
     }
 }
