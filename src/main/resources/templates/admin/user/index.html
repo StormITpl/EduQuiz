@@ -157,9 +157,6 @@
 <!--                                    </li>-->
 
                                 </ul>
-                                <style>
-                                </style>
-
                                 <div id="list">
                                     <form th:action="@{/admin/users}" accept-charset="UTF-8" method="get">
                                         <div class="card mb-3 p-3 bg-light">
@@ -193,7 +190,7 @@
                                                                                       value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"
                                                                                       autocomplete="off">
                                         <input type="hidden" name="bulk_action" id="bulk_action" autocomplete="off">
-                                        <div id="sidescroll">
+                                        <div style="width: 1350px; overflow-x: auto;">
                                             <table class="table table-condensed table-striped table-hover">
                                                 <thead>
                                                 <tr>
@@ -276,7 +273,7 @@
                                                     <td class="last_sign_in_at_field datetime_type" title="LastSign">
                                                         -
                                                     </td>
-                                                    <td class="created_at_field datetime_type" title="CreatedAt" th:text="${user.createdAt()}">
+                                                    <td class="created_at_field datetime_type" title="CreatedAt" th:text="${#dates.format(user.createdAt(), 'yyyy-MM-dd HH:mm:ss')}"    >
 
                                                     </td>
                                                     <td class="updated_at_field datetime_type" title="UpdatedAt" >
@@ -288,30 +285,30 @@
                                                     <td class="role_field string_type" title="Role" th:text="${user.role()}">
 
                                                     </td>
-<!--                                                    <td class="last links ra-sidescroll-frozen">-->
-<!--                                                        <ul class="nav d-inline list-inline">-->
-<!--                                                            <li class="nav-item icon show_member_link" title="Show"-->
-<!--                                                                rel="tooltip"><a href="https://rails-admin.fly.dev/admin/user/1"-->
-<!--                                                                                 class="nav-link"><i-->
-<!--                                                                    class="fas fa-info-circle"></i> <span style="display:none">Show</span></a>-->
+                                                    <td class="last links ra-sidescroll-frozen">
+                                                        <ul class="nav d-inline list-inline" style="display: inline-flex; flex-direction: row;">
+                                                            <li class="nav-item icon show_member_link" title="Show" rel="tooltip">
+                                                                <a href="https://rails-admin.fly.dev/admin/user/1" class="nav-link">
+                                                                    <i class="fas fa-info-circle"></i> <span style="display:none">Show</span>
+                                                                </a>
+                                                            </li>
+<!--                                                            <li class="nav-item icon edit_member_link" title="Edit" rel="tooltip">-->
+<!--                                                                <a href="https://rails-admin.fly.dev/admin/user/1/edit" class="nav-link">-->
+<!--                                                                    <i class="fas fa-pencil-alt"></i> <span style="display:none">Edit</span>-->
+<!--                                                                </a>-->
 <!--                                                            </li>-->
-<!--                                                            <li class="nav-item icon edit_member_link" title="Edit"-->
-<!--                                                                rel="tooltip"><a-->
-<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/edit"-->
-<!--                                                                    class="nav-link"><i class="fas fa-pencil-alt"></i> <span-->
-<!--                                                                    style="display:none">Edit</span></a></li>-->
-<!--                                                            <li class="nav-item icon delete_member_link" title="Delete"-->
-<!--                                                                rel="tooltip"><a-->
-<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/delete"-->
-<!--                                                                    class="nav-link"><i class="fas fa-times"></i> <span-->
-<!--                                                                    style="display:none">Delete</span></a></li>-->
-<!--                                                            <li class="nav-item icon history_show_member_link" title="History"-->
-<!--                                                                rel="tooltip"><a-->
-<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/history"-->
-<!--                                                                    class="nav-link"><i class="fas fa-book"></i> <span-->
-<!--                                                                    style="display:none">History</span></a></li>-->
-<!--                                                        </ul>-->
-<!--                                                    </td>-->
+<!--                                                            <li class="nav-item icon delete_member_link" title="Delete" rel="tooltip">-->
+<!--                                                                <a href="https://rails-admin.fly.dev/admin/user/1/delete" class="nav-link">-->
+<!--                                                                    <i class="fas fa-times"></i> <span style="display:none">Delete</span>-->
+<!--                                                                </a>-->
+<!--                                                            </li>-->
+<!--                                                            <li class="nav-item icon history_show_member_link" title="History" rel="tooltip">-->
+<!--                                                            <a href="https://rails-admin.fly.dev/admin/user/1/history" class="nav-link">-->
+<!--                                                                <i class="fas fa-book"></i> <span style="display:none">History</span>-->
+<!--                                                            </a>-->
+<!--                                                            </li>-->
+                                                        </ul>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
