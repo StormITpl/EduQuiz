@@ -15,9 +15,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
+                        <h1 class="m-0">List of Users</h1>
+                    </div>
+                    <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a>Home</a></li>
-                            <li class="breadcrumb-item active">List of Users</li>
+                            <li class="breadcrumb-item active">Users</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -32,18 +35,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <header class="py-2 m-2 border-bottom" data-model="user">
-                                    <h1>
-                                        List of Users
-                                    </h1>
-                                </header>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="https://rails-admin.fly.dev/admin/">Dashboard</a>
-                                        </li>
-                                        <li class="breadcrumb-item active">Users</li>
-                                    </ol>
-                                </nav>
+<!--                                <header class="py-2 m-2 border-bottom" data-model="user">-->
+<!--                                    <h1>-->
+<!--                                        List of Users-->
+<!--                                    </h1>-->
+<!--                                </header>-->
                                 <ul class="nav nav-tabs mb-3">
                                     <li class="nav-item icon index_collection_link"><a
                                             href="https://rails-admin.fly.dev/admin/user" class="nav-link active"><i
@@ -62,110 +58,110 @@
                                             Add filter
                                             <b class="caret"></b>
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-end" id="filters">
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Id&quot;,&quot;name&quot;:&quot;id&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">
-                                                    Id
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">
-                                                    Login
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">
-                                                    Email
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Password&quot;,&quot;name&quot;:&quot;password&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">
-                                                    Password
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Password confirmation&quot;,&quot;name&quot;:&quot;password_confirmation&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">
-                                                    Password confirmation
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Password salt&quot;,&quot;name&quot;:&quot;password_salt&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">
-                                                    Password salt
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Reset password token&quot;,&quot;name&quot;:&quot;reset_password_token&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">
-                                                    Reset password token
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Reset password sent at&quot;,&quot;name&quot;:&quot;reset_password_sent_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">
-                                                    Reset password sent at
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Remember created at&quot;,&quot;name&quot;:&quot;remember_created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">
-                                                    Remember created at
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Sign in count&quot;,&quot;name&quot;:&quot;sign_in_count&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">
-                                                    Sign in count
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Last sign in at&quot;,&quot;name&quot;:&quot;last_sign_in_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">
-                                                    Last sign in at
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Created at&quot;,&quot;name&quot;:&quot;created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">
-                                                    Created at
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">
-                                                    Status
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item"
-                                                   data-options="{&quot;label&quot;:&quot;Roles&quot;,&quot;name&quot;:&quot;roles&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,{&quot;label&quot;:&quot;admin&quot;,&quot;value&quot;:&quot;admin&quot;},{&quot;label&quot;:&quot;user&quot;,&quot;value&quot;:&quot;user&quot;},&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;enum&quot;}">
-                                                    Roles
-                                                </a>
-                                            </li>
-                                        </ul>
+<!--                                        <ul class="dropdown-menu dropdown-menu-end" id="filters">-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Id&quot;,&quot;name&quot;:&quot;id&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">-->
+<!--                                                    Id-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
+<!--                                                    Login-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
+<!--                                                    Email-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Password&quot;,&quot;name&quot;:&quot;password&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">-->
+<!--                                                    Password-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Password confirmation&quot;,&quot;name&quot;:&quot;password_confirmation&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">-->
+<!--                                                    Password confirmation-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Password salt&quot;,&quot;name&quot;:&quot;password_salt&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
+<!--                                                    Password salt-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Reset password token&quot;,&quot;name&quot;:&quot;reset_password_token&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
+<!--                                                    Reset password token-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Reset password sent at&quot;,&quot;name&quot;:&quot;reset_password_sent_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
+<!--                                                    Reset password sent at-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Remember created at&quot;,&quot;name&quot;:&quot;remember_created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
+<!--                                                    Remember created at-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Sign in count&quot;,&quot;name&quot;:&quot;sign_in_count&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">-->
+<!--                                                    Sign in count-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Last sign in at&quot;,&quot;name&quot;:&quot;last_sign_in_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
+<!--                                                    Last sign in at-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Created at&quot;,&quot;name&quot;:&quot;created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
+<!--                                                    Created at-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
+<!--                                                    Status-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <a href="#" class="dropdown-item"-->
+<!--                                                   data-options="{&quot;label&quot;:&quot;Roles&quot;,&quot;name&quot;:&quot;roles&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,{&quot;label&quot;:&quot;admin&quot;,&quot;value&quot;:&quot;admin&quot;},{&quot;label&quot;:&quot;user&quot;,&quot;value&quot;:&quot;user&quot;},&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;enum&quot;}">-->
+<!--                                                    Roles-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
                                     </li>
-                                    <li class="nav-item dropdown dropdown-menu-end"><a class="nav-link dropdown-toggle"
-                                                                                       data-bs-toggle="dropdown" href="#">Selected
-                                        items <b class="caret"></b></a>
-                                        <ul class="dropdown-menu" style="left:auto; right:0;">
-                                            <li><a class="dropdown-item bulk-link" data-action="export" href="#">Export selected
-                                                Users</a></li>
-                                            <li><a class="dropdown-item bulk-link" data-action="bulk_delete" href="#">Delete
-                                                selected Users</a></li>
-                                        </ul>
-                                    </li>
+<!--                                    <li class="nav-item dropdown dropdown-menu-end"><a class="nav-link dropdown-toggle"-->
+<!--                                                                                       data-bs-toggle="dropdown" href="#">Selected-->
+<!--                                        items <b class="caret"></b></a>-->
+<!--                                        <ul class="dropdown-menu" style="left:auto; right:0;">-->
+<!--                                            <li><a class="dropdown-item bulk-link" data-action="export" href="#">Export selected-->
+<!--                                                Users</a></li>-->
+<!--                                            <li><a class="dropdown-item bulk-link" data-action="bulk_delete" href="#">Delete-->
+<!--                                                selected Users</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
 
                                 </ul>
                                 <style>
                                 </style>
 
                                 <div id="list">
-                                    <form action="/admin/user?model_name=user" accept-charset="UTF-8" method="get">
+                                    <form th:action="@{/admin/users}" accept-charset="UTF-8" method="get">
                                         <div class="card mb-3 p-3 bg-light">
                                             <div class="row" data-options="[]" id="filters_box"></div>
                                             <hr class="filters_box" style="display:none">
@@ -192,8 +188,8 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <form id="bulk_form" class="form mb-3" action="/admin/user/bulk_action"
-                                          accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token"
+                                    <form id="bulk_form" class="form mb-3" th:action="@{/admin/users}" method="get">
+                                    <input type="hidden" name="authenticity_token"
                                                                                       value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"
                                                                                       autocomplete="off">
                                         <input type="hidden" name="bulk_action" id="bulk_action" autocomplete="off">
@@ -258,73 +254,64 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody class="table-group-divider">
-                                                <tr class="user_row ">
+                                                <tr class="user_row " th:each="user : ${users}">
                                                     <td class="sticky" style="left: 0px;">
                                                         <input type="checkbox" name="bulk_ids[]" id="bulk_ids_" value="1">
                                                     </td>
-                                                    <td class="id_field integer_type" title="1">
-                                                        1
-                                                    </td>
-                                                    <td class="email_field string_type" title="username@example.com">
-                                                        username@example.com
-                                                    </td>
-                                                    <td class="reset_password_sent_at_field datetime_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="remember_created_at_field datetime_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="sign_in_count_field integer_type" title="0">
-                                                        0
-                                                    </td>
-                                                    <td class="current_sign_in_at_field datetime_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="last_sign_in_at_field datetime_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="current_sign_in_ip_field string_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="last_sign_in_ip_field string_type" title=" - ">
-                                                        -
-                                                    </td>
-                                                    <td class="created_at_field datetime_type" title="November 03, 2023 20:11">
-                                                        November 03, 2023 20:11
-                                                    </td>
-                                                    <td class="updated_at_field datetime_type" title="November 03, 2023 20:11">
-                                                        November 03, 2023 20:11
-                                                    </td>
-                                                    <td class="avatar_field paperclip_type" title="">
+                                                    <td class="id_field integer_type" title="Id" th:text="${user.id()}">
 
                                                     </td>
-                                                    <td class="roles_field enum_type" title=" - ">
+                                                    <td class="login_field string_type" title="Login" th:text="${user.nickname()}">
+
+                                                    </td>
+                                                    <td class="email_field string_type" title="Email" th:text="${user.email()}">
                                                         -
                                                     </td>
-                                                    <td class="last links ra-sidescroll-frozen">
-                                                        <ul class="nav d-inline list-inline">
-                                                            <li class="nav-item icon show_member_link" title="Show"
-                                                                rel="tooltip"><a href="https://rails-admin.fly.dev/admin/user/1"
-                                                                                 class="nav-link"><i
-                                                                    class="fas fa-info-circle"></i> <span style="display:none">Show</span></a>
-                                                            </li>
-                                                            <li class="nav-item icon edit_member_link" title="Edit"
-                                                                rel="tooltip"><a
-                                                                    href="https://rails-admin.fly.dev/admin/user/1/edit"
-                                                                    class="nav-link"><i class="fas fa-pencil-alt"></i> <span
-                                                                    style="display:none">Edit</span></a></li>
-                                                            <li class="nav-item icon delete_member_link" title="Delete"
-                                                                rel="tooltip"><a
-                                                                    href="https://rails-admin.fly.dev/admin/user/1/delete"
-                                                                    class="nav-link"><i class="fas fa-times"></i> <span
-                                                                    style="display:none">Delete</span></a></li>
-                                                            <li class="nav-item icon history_show_member_link" title="History"
-                                                                rel="tooltip"><a
-                                                                    href="https://rails-admin.fly.dev/admin/user/1/history"
-                                                                    class="nav-link"><i class="fas fa-book"></i> <span
-                                                                    style="display:none">History</span></a></li>
-                                                        </ul>
+                                                    <td class="reset_password_at_field datetime_type" title=" - ">
+                                                        -
                                                     </td>
+                                                    <td class="sign_in_count_field integer_type" title="Count">
+                                                        0
+                                                    </td>
+                                                    <td class="last_sign_in_at_field datetime_type" title="LastSign">
+                                                        -
+                                                    </td>
+                                                    <td class="created_at_field datetime_type" title="CreatedAt" th:text="${user.createdAt()}">
+
+                                                    </td>
+                                                    <td class="updated_at_field datetime_type" title="UpdatedAt" >
+
+                                                    </td>
+                                                    <td class="status_field string_type" title="Status" th:text="${user.status()}">
+                                                        -
+                                                    </td>
+                                                    <td class="role_field string_type" title="Role" th:text="${user.role()}">
+
+                                                    </td>
+<!--                                                    <td class="last links ra-sidescroll-frozen">-->
+<!--                                                        <ul class="nav d-inline list-inline">-->
+<!--                                                            <li class="nav-item icon show_member_link" title="Show"-->
+<!--                                                                rel="tooltip"><a href="https://rails-admin.fly.dev/admin/user/1"-->
+<!--                                                                                 class="nav-link"><i-->
+<!--                                                                    class="fas fa-info-circle"></i> <span style="display:none">Show</span></a>-->
+<!--                                                            </li>-->
+<!--                                                            <li class="nav-item icon edit_member_link" title="Edit"-->
+<!--                                                                rel="tooltip"><a-->
+<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/edit"-->
+<!--                                                                    class="nav-link"><i class="fas fa-pencil-alt"></i> <span-->
+<!--                                                                    style="display:none">Edit</span></a></li>-->
+<!--                                                            <li class="nav-item icon delete_member_link" title="Delete"-->
+<!--                                                                rel="tooltip"><a-->
+<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/delete"-->
+<!--                                                                    class="nav-link"><i class="fas fa-times"></i> <span-->
+<!--                                                                    style="display:none">Delete</span></a></li>-->
+<!--                                                            <li class="nav-item icon history_show_member_link" title="History"-->
+<!--                                                                rel="tooltip"><a-->
+<!--                                                                    href="https://rails-admin.fly.dev/admin/user/1/history"-->
+<!--                                                                    class="nav-link"><i class="fas fa-book"></i> <span-->
+<!--                                                                    style="display:none">History</span></a></li>-->
+<!--                                                        </ul>-->
+<!--                                                    </td>-->
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -339,8 +326,8 @@
 
                                             </div>
                                         </div>
-                                        <div class="clearfix total-count">
-                                            1 user
+                                        <div class="clearfix total-count" th:text="${users.size()} + ' users'">
+
                                         </div>
                                     </form>
                                 </div>
