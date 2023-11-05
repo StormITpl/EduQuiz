@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.category;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +43,15 @@ class CategoryServiceTest {
     }
 
     @Test
+    void shouldReturnEmptyListWhenNoCategoriesExist() {
+        // when
+        List<CategoryDto> categoriesDto = categoryService.getCategories();
+
+        // then
+        assertThat(categoriesDto).isEmpty();
+    }
+
+    @Test
     void shouldReturnOneCategoryFoundById() {
         // given
         Category category = new Category();
@@ -52,6 +63,17 @@ class CategoryServiceTest {
 
         // then
         assertEquals(categoryDtoFoundById.name(), category.getName());
+    }
+
+    @Test
+    void shouldReturnEntityNotFoundExceptionWhenCategoryNotFound() {
+        // given
+        UUID nonExistentCategoryId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            categoryService.getCategory(nonExistentCategoryId);
+        });
     }
 
     @Test
@@ -70,6 +92,24 @@ class CategoryServiceTest {
     }
 
     @Test
+    void shouldNotCreateCategoryWithExistingName() {
+        // given
+        Category category = new Category();
+        category.setName("Chemistry");
+        categoryRepository.save(category);
+
+        CategoryDto categoryRequestDto = new CategoryDto(category.getId(), category.getName());
+
+        // when
+        CategoryDto createdCategory = categoryService.createCategory(categoryRequestDto);
+
+        // then
+        List<Category> allCategories = categoryRepository.findAll();
+        assertEquals(1, allCategories.size());
+        assertEquals(category.getName(), allCategories.get(0).getName());
+    }
+
+    @Test
     void shouldUpdateCategory() {
         // given
         Category category = new Category();
@@ -85,6 +125,18 @@ class CategoryServiceTest {
     }
 
     @Test
+    void shouldNotUpdateNonExistentCategory() {
+        // given
+        UUID nonExistentCategoryId = UUID.randomUUID();
+        CategoryDto categoryToUpdate = new CategoryDto(nonExistentCategoryId, "Physics");
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            categoryService.updateCategory(nonExistentCategoryId, categoryToUpdate);
+        });
+    }
+
+    @Test
     void shouldDeleteCategory() {
         // given
         Category category = new Category();
@@ -96,5 +148,16 @@ class CategoryServiceTest {
 
         // then
         assertTrue(categoryRepository.findById(category.getId()).isEmpty());
+    }
+
+    @Test
+    void shouldNotDeleteNonExistentCategory() {
+        // given
+        UUID nonExistentCategoryId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            categoryService.deleteCategory(nonExistentCategoryId);
+        });
     }
 }

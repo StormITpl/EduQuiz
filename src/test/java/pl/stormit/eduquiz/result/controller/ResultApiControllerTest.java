@@ -22,8 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
@@ -64,6 +63,22 @@ class ResultApiControllerTest {
     }
 
     @Test
+    void shouldReturnErrorResponseWhenResultCreationFails() throws Exception {
+        // given
+        GameIdDto invalidGameIdDto = new GameIdDto(null);
+
+        // when
+        MockHttpServletRequestBuilder content = post("/api/v1/results")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidGameIdDto));
+
+        // then
+        mockMvc.perform(content)
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("message", "Invalid input data"));
+    }
+
+    @Test
     void shouldReturn200WhenFoundResultByIdCorrectly() throws Exception {
         // given
         Quiz exemplaryQuiz = new Quiz();
@@ -83,6 +98,21 @@ class ResultApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenResultNotFound() throws Exception {
+        // given
+        UUID nonExistentResultId = UUID.randomUUID();
+        given(resultService.getResult(nonExistentResultId)).willReturn(null);
+
+        // when
+        MockHttpServletRequestBuilder request = get("/api/v1/results/" + nonExistentResultId);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").doesNotHaveJsonPath());
+    }
+
+    @Test
     void shouldReturn204WhenResultDeletedCorrectly() throws Exception {
         // given
         ResultDto exemplaryResultDto = new ResultDto(EXEMPLARY_ID, null);
@@ -92,5 +122,19 @@ class ResultApiControllerTest {
 
         // then
         mockMvc.perform(content).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturn204WhenResultNotFoundDuringDeletion() throws Exception {
+        // given
+        UUID nonExistentResultId = UUID.randomUUID();
+        given(resultService.getResult(nonExistentResultId)).willReturn(null);
+
+        // when
+        MockHttpServletRequestBuilder request = delete("/api/v1/results/" + nonExistentResultId);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
     }
 }

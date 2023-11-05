@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.quizcreator.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -64,6 +66,20 @@ class QuestionApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenQuestionsNotFound() throws Exception {
+        // given
+        given(questionService.getQuestions()).willThrow(new EntityNotFoundException("Questions not found"));
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Questions not found")));
+    }
+
+    @Test
     void shouldReturn200WhenFoundQuestionByIdCorrectly() throws Exception {
         //given
         QuestionDto firstQuestion = new QuestionDto(FIRST_QUESTION_ID, "In what year did World War II begin?", null, null);
@@ -77,6 +93,22 @@ class QuestionApiControllerTest {
         //then
         result.andExpect(status().isOk());
         result.andExpect(content().string(containsString("In what year did World War II begin?")));
+    }
+
+    @Test
+    void shouldReturn404WhenQuestionNotFound() throws Exception {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        given(questionService.getQuestion(nonExistentQuestionId))
+                .willThrow(new EntityNotFoundException("Question not found"));
+
+        // when
+        ResultActions result = mockMvc.perform(get("/api/v1/questions/" + nonExistentQuestionId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Question not found")));
     }
 
     @Test
@@ -97,6 +129,23 @@ class QuestionApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenQuestionCreationFails() throws Exception {
+        // given
+        QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
+        given(questionService.createQuestion(questionRequestDto))
+                .willThrow(new EntityNotFoundException("Question creation failed"));
+
+        // when
+        ResultActions result = mockMvc.perform(post("/api/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(questionRequestDto))));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Question creation failed")));
+    }
+
+    @Test
     void shouldReturn200WhenQuestionUpdatedCorrectly() throws Exception {
         // given
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
@@ -114,6 +163,23 @@ class QuestionApiControllerTest {
     }
 
     @Test
+    void shouldReturn404WhenQuestionUpdateFails() throws Exception {
+        // given
+        QuestionRequestDto questionRequestDto = new QuestionRequestDto("In what year did World War II begin?", null, null);
+        given(questionService.updateQuestion(FIRST_QUESTION_ID, questionRequestDto))
+                .willThrow(new EntityNotFoundException("Question update failed"));
+
+        // when
+        ResultActions result = mockMvc.perform(put("/api/v1/questions/" + FIRST_QUESTION_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(questionRequestDto))));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Question update failed")));
+    }
+
+    @Test
     void shouldReturn204WhenQuestionDeletedCorrectly() throws Exception {
         // given
         QuestionDto firstQuestion = new QuestionDto(FIRST_QUESTION_ID, "In what year did World War II begin?", null, null);
@@ -125,5 +191,20 @@ class QuestionApiControllerTest {
 
         // then
         result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturn404WhenQuestionDeletionFails() throws Exception {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        doThrow(new EntityNotFoundException("Question deletion failed")).when(questionService).deleteQuestion(nonExistentQuestionId);
+
+        // when
+        ResultActions result = mockMvc.perform(delete("/api/v1/questions/" + nonExistentQuestionId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        result.andExpect(status().isNotFound());
+        result.andExpect(content().string(containsString("Question deletion failed")));
     }
 }
