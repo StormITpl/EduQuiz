@@ -48,17 +48,17 @@ public class ResultApiController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/quiz")
-    public String submitQuiz(Model model, @RequestParam("answers") List<String> answers){
-
-        Date endTime = new Date();
-        Date startTime = (Date) model.addAttribute("startTime");
-        long duration = endTime.getTime() - startTime.getTime();
-
-        Result result = new Result();
-        result.setQuizDuration(duration);
-
-        model.addAttribute("result", result);
-        return "result";
-    }
+//    @PostMapping("/quiz")
+//    public String submitQuiz(Model model, @RequestParam("answers") List<String> answers){
+//
+//        Date endTime = new Date();
+//        Date startTime = (Date) model.addAttribute("startTime");
+//        long duration = endTime.getTime() - startTime.getTime();
+//
+//        Result result = new Result();
+//        result.setQuizDuration(duration);
+//
+//        model.addAttribute("result", result);
+//        return "result";
+//    }
 }

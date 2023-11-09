@@ -17,6 +17,7 @@ import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.dto.ResultMapper;
+import pl.stormit.eduquiz.stats.service.QuizStatsService;
 
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class ResultService {
     private final ResultRepository resultRepository;
     private final GameRepository gameRepository;
     private final ResultMapper resultMapper;
+    private final QuizStatsService quizStatsService;
 
 
     @Transactional(readOnly = true)
@@ -56,6 +58,7 @@ public class ResultService {
 
 
         result.setScore(score.intValue());
+        result.setFinish(quizStatsService.getFinishTimestamp());
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }

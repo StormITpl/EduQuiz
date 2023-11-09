@@ -23,6 +23,7 @@ import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
+import pl.stormit.eduquiz.stats.service.QuizStatsService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +47,8 @@ public class IndexViewController {
 
     private final ResultService resultService;
     private final ResultRepository resultRepository;
+
+    private final QuizStatsService quizStatsService;
 
     @GetMapping
     public String indexView(Model model) {
@@ -82,6 +85,10 @@ public class IndexViewController {
         QuizDto quizDto = quizService.getQuiz(id);
         List<Question> questions = quizDto.questions();
         GameDto gameDto = gameService.createGame(quizDto);
+
+//        if (questionIndex==0){
+//
+//        }
 
         Question currentQuestion = questions.get(questionIndex);
         List<Answer> currentAnswers = currentQuestion.getAnswers();
@@ -141,6 +148,7 @@ public class IndexViewController {
         GameIdDto gameIdDto = gameIdMapper.mapGameEntityToGameIdDto(gameTest);
 
         ResultDto resultDto = resultService.createResult(gameIdDto);
+//        quizStatsService.getFinishTimestamp();
         Optional<Result> resultById = resultRepository.findById(resultDto.id());
         System.out.println(resultById.get().getScore());
         List<Question> questionList = gameTest.getQuiz().getQuestions();

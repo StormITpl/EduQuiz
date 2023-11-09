@@ -239,3 +239,20 @@ insert into users
         (gen_random_uuid(), 'user', CURRENT_TIMESTAMP, 'user@storm.it',
         '$2a$10$Ww13KQ2gy2w8IqmL2RKdfO4kST5rAraE1jIH0L8VYkhJSekHDX2.O',
         'ROLE_USER', 'VERIFIED');
+
+--changeset Magdalenacze:001_39
+insert into categories (id, name) values
+                                      (gen_random_uuid(), 'Music'),
+                                      (gen_random_uuid(), 'Animals'),
+                                      (gen_random_uuid(), 'Travels'),
+                                      (gen_random_uuid(), 'Sport'),
+                                      (gen_random_uuid(), 'Culinary'),
+                                      (gen_random_uuid(), 'Movie'),
+                                      (gen_random_uuid(), 'Computer games'),
+                                      (gen_random_uuid(), 'Mathematics');
+
+--changeset Weronika.K:001_40
+alter table results
+    add column start_at timestamp;
+alter table results
+    add column finish_at timestamp;

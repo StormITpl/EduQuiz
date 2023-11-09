@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +23,11 @@ public class Result {
     @OneToOne
     private Game game;
 
-    @NotNull
-    @Column(name = "quiz-duration")
-    private long quizDuration;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_at")
+    private Instant start;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "finish_at")
+    private Instant finish;
 }
