@@ -1,10 +1,6 @@
 package pl.stormit.eduquiz.result.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import pl.stormit.eduquiz.game.domain.entity.Game;
@@ -25,4 +21,8 @@ public class Result {
 
     @OneToOne
     private Game game;
+
+    @NotNull
+    @Column(name = "quiz-duration")
+    private long quizDuration;
 }
