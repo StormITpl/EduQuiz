@@ -23,4 +23,7 @@ public class Result {
     @OneToOne
     private Game game;
 
+    @Column(name ="duration_time")
+    private long duration;
+
 }
