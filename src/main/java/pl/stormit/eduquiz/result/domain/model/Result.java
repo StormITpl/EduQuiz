@@ -23,11 +23,4 @@ public class Result {
     @OneToOne
     private Game game;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "start_at")
-    private Instant start;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "finish_at")
-    private Instant finish;
 }
