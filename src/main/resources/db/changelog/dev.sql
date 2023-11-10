@@ -251,8 +251,8 @@ insert into categories (id, name) values
                                       (gen_random_uuid(), 'Computer games'),
                                       (gen_random_uuid(), 'Mathematics');
 
---changeset Weronika.K:001_40
-alter table results
+--changeset Slawek84PL:001_40
+alter table games
     add column start_at timestamp;
-alter table results
+alter table games
     add column finish_at timestamp;
