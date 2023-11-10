@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,17 +33,17 @@ public class Game {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start_at")
-    private Instant start;
+    private LocalDateTime start;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "finish_at")
-    private Instant finish;
+    private LocalDateTime finish;
 
     public void setStart() {
-        this.start = Instant.now();
+        this.start = LocalDateTime.now();
     }
 
     public void setFinish() {
-        this.finish = Instant.now();
+        this.finish = LocalDateTime.now();
     }
 }
