@@ -43,6 +43,7 @@ public class GameService {
             throw new EntityNotFoundException("The quiz by id: " + quizRequestDto.id() + ", does not exist.");
         });
         Game game = new Game(quiz);
+        game.setStart();
         game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
@@ -76,6 +77,7 @@ public class GameService {
                     throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
                 });
         updateGame.setUserAnswers(playGame.getUserAnswers());
+        updateGame.setFinish();
 
         return gameMapper.mapGameEntityToGameDto(updateGame);
     }
