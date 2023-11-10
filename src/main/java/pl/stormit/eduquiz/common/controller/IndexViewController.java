@@ -153,7 +153,7 @@ public class IndexViewController {
 
         model.addAttribute("results", resultById.get());
         model.addAttribute("questionList", questionList);
-        model.addAttribute("duration", quizStatsService.getDuration());
+        model.addAttribute("duration", quizStatsService.getDuration(gameTest));
 
         return "results";
     }
