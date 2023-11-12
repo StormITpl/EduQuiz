@@ -48,114 +48,8 @@
                                             href="https://rails-admin.fly.dev/admin/user/new" class="nav-link"><i
                                             class="fas fa-plus"></i> <span>Add new</span></a></li>
                                     <li class="nav-item icon export_collection_link"><a
-                                            href="https://rails-admin.fly.dev/admin/user/export" class="nav-link"><i
+                                            href="/api/v1/users/export" class="nav-link"><i
                                             class="fas fa-file-export"></i> <span>Export</span></a></li>
-                                    <li class="nav-item icon history_index_collection_link"><a
-                                            href="https://rails-admin.fly.dev/admin/user/history" class="nav-link"><i
-                                            class="fas fa-book"></i> <span>History</span></a></li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                                            Add filter
-                                            <b class="caret"></b>
-                                        </a>
-<!--                                        <ul class="dropdown-menu dropdown-menu-end" id="filters">-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Id&quot;,&quot;name&quot;:&quot;id&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">-->
-<!--                                                    Id-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
-<!--                                                    Login-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Email&quot;,&quot;name&quot;:&quot;email&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
-<!--                                                    Email-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Password&quot;,&quot;name&quot;:&quot;password&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">-->
-<!--                                                    Password-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Password confirmation&quot;,&quot;name&quot;:&quot;password_confirmation&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;password&quot;}">-->
-<!--                                                    Password confirmation-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Password salt&quot;,&quot;name&quot;:&quot;password_salt&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
-<!--                                                    Password salt-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Reset password token&quot;,&quot;name&quot;:&quot;reset_password_token&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,&quot;like&quot;,&quot;not_like&quot;,&quot;is&quot;,&quot;starts_with&quot;,&quot;ends_with&quot;,&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;string&quot;}">-->
-<!--                                                    Reset password token-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Reset password sent at&quot;,&quot;name&quot;:&quot;reset_password_sent_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
-<!--                                                    Reset password sent at-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Remember created at&quot;,&quot;name&quot;:&quot;remember_created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
-<!--                                                    Remember created at-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Sign in count&quot;,&quot;name&quot;:&quot;sign_in_count&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;integer&quot;}">-->
-<!--                                                    Sign in count-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Last sign in at&quot;,&quot;name&quot;:&quot;last_sign_in_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
-<!--                                                    Last sign in at-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Created at&quot;,&quot;name&quot;:&quot;created_at&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
-<!--                                                    Created at-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;default&quot;,&quot;between&quot;,&quot;today&quot;,&quot;yesterday&quot;,&quot;this_week&quot;,&quot;last_week&quot;,&quot;_separator&quot;,&quot;_not_null&quot;,&quot;_null&quot;],&quot;type&quot;:&quot;datetime&quot;,&quot;datetimepicker_options&quot;:{&quot;allowInput&quot;:true,&quot;enableTime&quot;:true,&quot;altFormat&quot;:&quot;F d, Y H:i&quot;}}">-->
-<!--                                                    Status-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                            <li>-->
-<!--                                                <a href="#" class="dropdown-item"-->
-<!--                                                   data-options="{&quot;label&quot;:&quot;Roles&quot;,&quot;name&quot;:&quot;roles&quot;,&quot;operator&quot;:null,&quot;operators&quot;:[&quot;_discard&quot;,{&quot;label&quot;:&quot;admin&quot;,&quot;value&quot;:&quot;admin&quot;},{&quot;label&quot;:&quot;user&quot;,&quot;value&quot;:&quot;user&quot;},&quot;_separator&quot;,&quot;_present&quot;,&quot;_blank&quot;],&quot;type&quot;:&quot;enum&quot;}">-->
-<!--                                                    Roles-->
-<!--                                                </a>-->
-<!--                                            </li>-->
-<!--                                        </ul>-->
-                                    </li>
-<!--                                    <li class="nav-item dropdown dropdown-menu-end"><a class="nav-link dropdown-toggle"-->
-<!--                                                                                       data-bs-toggle="dropdown" href="#">Selected-->
-<!--                                        items <b class="caret"></b></a>-->
-<!--                                        <ul class="dropdown-menu" style="left:auto; right:0;">-->
-<!--                                            <li><a class="dropdown-item bulk-link" data-action="export" href="#">Export selected-->
-<!--                                                Users</a></li>-->
-<!--                                            <li><a class="dropdown-item bulk-link" data-action="bulk_delete" href="#">Delete-->
-<!--                                                selected Users</a></li>-->
-<!--                                        </ul>-->
-<!--                                    </li>-->
-
                                 </ul>
                                 <div id="list">
                                     <form th:action="@{/admin/users}" accept-charset="UTF-8" method="get">
@@ -177,10 +71,6 @@
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-6 text-end">
-                                                    <a class="btn btn-info" href="/admin/user/export?model_name=user">Export
-                                                        found Users</a>
                                                 </div>
                                             </div>
                                         </div>
