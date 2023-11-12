@@ -14,6 +14,7 @@ import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,8 @@ public class UserService {
     private final UserMapper userMapper;
 
     private final CustomPasswordEncoder customPasswordEncoder;
+
+    private final UserXlsExporterService exportUsersToXLS;
 
     @Transactional(readOnly = true)
     public List<UserDto> getUsers() {
@@ -77,6 +80,11 @@ public class UserService {
         } else {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         }
+    }
+
+    public byte[] exportUsersToXLS() throws IOException {
+        List<User> foundUsers = userRepository.findAll();
+        return exportUsersToXLS.exportUsersToXLS(foundUsers);
     }
 
     public boolean comparePasswords(String password, String confirmPassword) {
