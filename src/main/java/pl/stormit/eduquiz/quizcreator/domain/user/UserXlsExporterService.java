@@ -1,10 +1,12 @@
 package pl.stormit.eduquiz.quizcreator.domain.user;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,7 +15,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class UserXmlExporterService {
+@Service
+@RequiredArgsConstructor
+public class UserXlsExporterService {
 
     public byte[] exportUsersToXLS(List<User> users) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
