@@ -258,5 +258,5 @@ alter table games
     add column finish_at timestamp;
 
 --changeset Slawek84PL:001_41
-alter table results
-    add column duration_time bigint;
+alter table games
+    add column duration bigint;

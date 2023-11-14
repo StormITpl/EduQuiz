@@ -39,6 +39,9 @@ public class Game {
     @Column(name = "finish_at")
     private LocalDateTime finish;
 
+    @Column(name ="duration")
+    private long duration;
+
     public void setStart() {
         this.start = LocalDateTime.now();
     }

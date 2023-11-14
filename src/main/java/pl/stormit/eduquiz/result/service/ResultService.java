@@ -17,7 +17,6 @@ import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.dto.ResultMapper;
-import pl.stormit.eduquiz.stats.service.DurationCounter;
 
 import java.util.UUID;
 
@@ -56,7 +55,6 @@ public class ResultService {
                 .count();
 
         result.setScore(score.intValue());
-        result.setDuration(new DurationCounter().getDurationAsLong(game.getStart(),game.getFinish()));
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }

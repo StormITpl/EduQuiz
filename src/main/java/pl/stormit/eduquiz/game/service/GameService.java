@@ -17,6 +17,7 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.stats.service.DurationCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,8 @@ public class GameService {
                 });
         updateGame.setUserAnswers(playGame.getUserAnswers());
         updateGame.setFinish();
+        updateGame.setDuration(new DurationCounter()
+                .getDurationAsLong(updateGame.getStart(), updateGame.getFinish()));
 
         return gameMapper.mapGameEntityToGameDto(updateGame);
     }
