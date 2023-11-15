@@ -35,11 +35,8 @@ public class QuizStatsService {
 
             Optional<Game> game = gameRepository.findTopByQuiz_IdOrderByDurationAsc(quiz.getId());
 
-            if (game.isPresent()) {
-
-                durations.add(String.format("%s time: %s", quiz.getName(),
-                        new DurationConverter().getDurationAsTime(game.get().getDuration())));
-            }
+            game.ifPresent(value -> durations.add(String.format("%s time: %s", quiz.getName(),
+                    new DurationConverter().getDurationAsTime(value.getDuration()))));
         }
 
         return durations;
