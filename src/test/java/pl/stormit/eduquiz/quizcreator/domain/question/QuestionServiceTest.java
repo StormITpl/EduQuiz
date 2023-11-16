@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -76,6 +76,21 @@ public class QuestionServiceTest {
     }
 
     @Test
+    void shouldNotCreateQuestionWithEmptyContent() {
+        // given
+        QuestionRequestDto questionRequestDto = new QuestionRequestDto(null, null, null);
+
+        // when
+        QuestionDto createdQuestionDto = questionService.createQuestion(questionRequestDto);
+
+        // then
+        assertNotNull(createdQuestionDto);
+        assertNull(createdQuestionDto.content());
+        assertNull(createdQuestionDto.quiz());
+        assertNull(createdQuestionDto.answers());
+    }
+
+    @Test
     void shouldReturnListOfQuestionsCorrectly() {
         // given
         List<Question> questions = questionRepository.findAll();
@@ -91,6 +106,23 @@ public class QuestionServiceTest {
     }
 
     @Test
+    void shouldNotReturnListOfQuestionsCorrectly() {
+        // given
+        List<Question> questions = questionRepository.findAll();
+        List<QuestionDto> expectedQuestions = questionMapper.mapQuestionEntityToQuestionDtoList(questions);
+
+        List<QuestionDto> actualQuestions = new ArrayList<>(expectedQuestions);
+
+        QuestionDto additionalQuestion = new QuestionDto(UUID.randomUUID(), "What was the name of the First Historical Era?", null, null);
+        actualQuestions.add(additionalQuestion);
+
+        // then
+        assertThat(actualQuestions).isNotNull();
+        assertThat(actualQuestions).hasSize(expectedQuestions.size() + 1);
+        assertThat(actualQuestions).isNotEqualTo(expectedQuestions);
+    }
+
+    @Test
     void shouldReturnQuestionByIdCorrectly() {
         // given
         UUID questionId = question.getId();
@@ -100,6 +132,17 @@ public class QuestionServiceTest {
 
         // then
         assertThat(foundQuestionDto.id()).isEqualTo(questionId);
+    }
+
+    @Test
+    void shouldThrowEntityNotFoundExceptionWhenQuestionNotFound() {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            questionService.getQuestion(nonExistentQuestionId);
+        });
     }
 
     @Test
@@ -119,6 +162,18 @@ public class QuestionServiceTest {
     }
 
     @Test
+    void shouldThrowEntityNotFoundExceptionWhenUpdatingNonExistentQuestion() {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+        QuestionRequestDto questionRequestDto = new QuestionRequestDto("What was the name of the First Historical Era?", null, null);
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            questionService.updateQuestion(nonExistentQuestionId, questionRequestDto);
+        });
+    }
+
+    @Test
     void shouldDeleteQuestionCorrectly() {
         // given
         Question savedQuestion = questionRepository.save(question);
@@ -129,5 +184,16 @@ public class QuestionServiceTest {
         // then
         assertThat(questionRepository.findById(question.getId())).isEmpty();
         assertThrows(EntityNotFoundException.class, () -> questionService.getQuestion(savedQuestion.getId()));
+    }
+
+    @Test
+    void shouldThrowEntityNotFoundExceptionWhenDeletingNonExistentQuestion() {
+        // given
+        UUID nonExistentQuestionId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            questionService.deleteQuestion(nonExistentQuestionId);
+        });
     }
 }

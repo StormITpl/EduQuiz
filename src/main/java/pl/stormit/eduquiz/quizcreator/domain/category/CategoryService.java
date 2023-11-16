@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryMapper;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,14 +22,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
+
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper  categoryMapper;
+    private final CategoryMapper categoryMapper;
 
     @Transactional(readOnly = true)
     public List<CategoryDto> getCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::mapCategoryEntityToCategoryDto)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Category> getCategories(Pageable pageable) {
+        return getCategories(null, pageable);
+    }
+    @Transactional(readOnly = true)
+    public Page<Category> getCategories(String search, Pageable pageable) {
+        if(search == null) {
+            return categoryRepository.findAll(pageable);
+        } else {
+            return categoryRepository.findByNameContainingIgnoreCase(search, pageable);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -39,10 +56,10 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryRequest) {
-        Category category = new Category();
-        category.setName(categoryRequest.name());
-        category.setId(categoryRequest.id());
-        return categoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
+            Category category = new Category();
+            category.setName(categoryRequest.name());
+            category.setId(categoryRequest.id());
+            return categoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
     }
 
     @Transactional
@@ -64,5 +81,8 @@ public class CategoryService {
         } else {
             throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
         }
+    }
+    public boolean checkIfCategoryNameAvailable(String categoryName) {
+        return categoryRepository.findByNameIgnoreCase(categoryName).isEmpty();
     }
 }

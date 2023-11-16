@@ -48,6 +48,8 @@ class UserServiceTest {
 
     @BeforeEach
     void SetUp() {
+        userRepository.deleteAll();
+
         firstUser = new User();
         firstUser.setNickname("Ananiasz");
         firstUser.setEmail("ananiasz@gmail.com");
@@ -84,6 +86,17 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldNotReturnUsers() {
+        userRepository.deleteAll();
+
+        // when
+        List<UserDto> actualUsers = userService.getUsers();
+
+        // then
+        assertThat(actualUsers).isEmpty();
+    }
+
+        @Test
     void shouldGetSingleUser() {
         // given
         UUID firstId = firstUser.getId();
@@ -93,6 +106,19 @@ class UserServiceTest {
 
         // then
         assertThat(foundUserDto.id()).isEqualTo(firstId);
+    }
+
+    @Test
+    void shouldThrowEntityNotFoundExceptionWhenUserNotFound() {
+        // given
+        UUID nonExistentUserId = UUID.randomUUID();
+
+        // when and then
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            userService.getUser(nonExistentUserId);
+        });
+
+        assertTrue(exception.getMessage().contains("User by id: " + nonExistentUserId + " does not exist."));
     }
 
     @Test
@@ -149,6 +175,8 @@ class UserServiceTest {
         assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }
 
+
+
     @Test
     void shouldDeleteUser() {
         // given
@@ -162,5 +190,19 @@ class UserServiceTest {
         // then
         assertThat(userRepository.findById(user.getId())).isEmpty();
         assertThrows(EntityNotFoundException.class, () -> userService.getUser(savedUser.getId()));
+    }
+
+    @Test
+    @Transactional
+    void shouldThrowEntityNotFoundExceptionWhenDeletingNonExistentUser() {
+        // given
+        UUID nonExistentUserId = UUID.randomUUID();
+
+        // when and then
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            userService.deleteUser(nonExistentUserId);
+        });
+
+        assertTrue(exception.getMessage().contains("User by id: " + nonExistentUserId + " does not exist."));
     }
 }

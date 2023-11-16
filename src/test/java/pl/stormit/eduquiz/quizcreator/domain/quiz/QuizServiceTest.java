@@ -6,11 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestMapper;
+import pl.stormit.eduquiz.quizcreator.domain.user.User;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,37 +26,48 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @SpringBootTest
 class QuizServiceTest {
+
     @Autowired
     private QuizService quizService;
+
     @Autowired
     private QuizRequestMapper quizRequestMapper;
 
-//    @Test
-//    void  shouldReturnTwoQuizzes() {
-//        // given
-//        Quiz firstQuiz = new Quiz();
-//        firstQuiz.setName("Gold");
-//        QuizRequestDto firstQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(firstQuiz);
-//        quizService.createQuiz(firstQuizRequestDto);
-//
-//        Quiz secondQuiz = new Quiz();
-//        secondQuiz.setName("Silver");
-//        QuizRequestDto secondQuizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(secondQuiz);
-//        quizService.createQuiz(secondQuizRequestDto);
-//
-//        // when
-//        List<QuizDto> quizzesDto = quizService.getQuizzes();
-//
-//        // then
-//        assertThat(quizzesDto).hasSize(2)
-//                .extracting(QuizDto::name).containsExactlyInAnyOrder("Gold", "Silver");
-//    }
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Test
+    void shouldReturnListOfQuizzesCorrectly() {
+        // given
+        Quiz firstQuiz = new Quiz();
+        firstQuiz.setName("Data Structure");
+        Quiz secondQuiz = new Quiz();
+        secondQuiz.setName("General knowledge of world history");
+        quizRepository.saveAll(List.of(firstQuiz, secondQuiz));
+
+        // when
+        List<QuizDto> quizzesDto = quizService.getQuizzes();
+
+        // then
+        assertThat(quizzesDto).isNotNull();
+        assertThat(quizzesDto).hasSize(2);
+        assertThat(quizzesDto).extracting(QuizDto::name).containsExactlyInAnyOrder("Data Structure", "General knowledge of world history");
+    }
+
+    @Test
+    void shouldNotReturnQuizzes() {
+        // when
+        List<QuizDto> quizzesDto = quizService.getQuizzes();
+
+        // then
+        assertThat(quizzesDto).isEmpty();
+    }
 
     @Test
     void shouldReturnOneQuizFoundById() {
         // given
         Quiz quiz = new Quiz();
-        quiz.setName("Special");
+        quiz.setName("Security");
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
 
@@ -66,10 +81,19 @@ class QuizServiceTest {
     }
 
     @Test
+    void shouldNotReturnQuizByIdWhenNotFound() {
+        // given
+        UUID nonExistentQuizId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> quizService.getQuiz(nonExistentQuizId));
+    }
+
+    @Test
     void shouldCreateQuiz() {
         // given
         Quiz quiz = new Quiz();
-        quiz.setName("Special");
+        quiz.setName("Security");
         QuizRequestDto quizRequestDto = new QuizRequestDto(
                 quiz.getName(),
                 quiz.getCategory(),
@@ -89,10 +113,10 @@ class QuizServiceTest {
     void shouldUpdateQuiz() {
         // given
         Quiz quiz = new Quiz();
-        quiz.setName("Special");
+        quiz.setName("Security");
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
-        QuizRequestDto quizToUpdate = new QuizRequestDto("Pro",
+        QuizRequestDto quizToUpdate = new QuizRequestDto("Security-Pro",
                 quiz.getCategory(),
                 quiz.getUser(),
                 quiz.getQuestions(),
@@ -102,16 +126,34 @@ class QuizServiceTest {
         QuizDto updatedQuiz = quizService.updateQuiz(createdQuiz.id(), quizToUpdate);
 
         // then
-        assertEquals(updatedQuiz.name(), "Pro");
+        assertEquals(updatedQuiz.name(), "Security-Pro");
         assertNull(updatedQuiz.category());
         assertNull(updatedQuiz.questions());
+    }
+
+    @Test
+    void shouldThrowEntityNotFoundExceptionWhenUpdatingNonExistentQuiz() {
+        // given
+        UUID nonExistentQuizId = UUID.randomUUID();
+        QuizRequestDto quizRequestDto = new QuizRequestDto(
+                "NonExistentQuiz",
+                new Category(),
+                new User(),
+                Collections.emptyList(),
+                Collections.emptyList()
+        );
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            quizService.updateQuiz(nonExistentQuizId, quizRequestDto);
+        });
     }
 
     @Test
     void shouldDeleteQuiz() {
         // given
         Quiz quiz = new Quiz();
-        quiz.setName("Special");
+        quiz.setName("Security");
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
 
@@ -120,5 +162,16 @@ class QuizServiceTest {
 
         // then
         assertThrows(EntityNotFoundException.class, () -> quizService.getQuiz(createdQuiz.id()));
+    }
+
+    @Test
+    void shouldThrowEntityNotFoundExceptionWhenDeletingNonExistentQuiz() {
+        // given
+        UUID nonExistentQuizId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            quizService.deleteQuiz(nonExistentQuizId);
+        });
     }
 }

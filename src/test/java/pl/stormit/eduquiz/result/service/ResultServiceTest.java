@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 @ActiveProfiles({"test"})
 @Transactional
 @SpringBootTest
@@ -55,6 +54,17 @@ class ResultServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenResultNotFound() {
+        // given
+        UUID nonExistentId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            resultService.getResult(nonExistentId);
+        });
+    }
+
+    @Test
     void shouldCreateResultUsingGameId() {
         // given
         Game game = new Game();
@@ -78,6 +88,18 @@ class ResultServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenGameNotFound() {
+        // given
+        UUID nonExistentGameId = UUID.randomUUID();
+        GameIdDto gameIdDto = new GameIdDto(nonExistentGameId);
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            resultService.createResult(gameIdDto);
+        });
+    }
+
+    @Test
     void shouldDeleteResult() {
         // given
         Result result = new Result();
@@ -91,5 +113,16 @@ class ResultServiceTest {
         // then
         assertTrue(resultRepository.findById(savedResult.getId()).isEmpty());
         assertThrows(EntityNotFoundException.class, () -> resultService.getResult(id));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenResultNotFoundDuringDeletion() {
+        // given
+        UUID nonExistentResultId = UUID.randomUUID();
+
+        // when and then
+        assertThrows(EntityNotFoundException.class, () -> {
+            resultService.deleteResult(nonExistentResultId);
+        });
     }
 }
