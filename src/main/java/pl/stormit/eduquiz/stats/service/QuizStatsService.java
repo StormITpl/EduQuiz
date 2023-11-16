@@ -62,8 +62,8 @@ public class QuizStatsService {
         return games;
     }
 
-    public long countAllPlayedGameForQuiz(UUID quizId) {
-        return gameRepository.countAllByQuiz_Id(quizId);
+    public String countAllPlayedGameForQuiz(UUID quizId) {
+        return String.format("%s %s", quizRepository.findById(quizId), gameRepository.countAllByQuiz_Id(quizId));
     }
 
 }
