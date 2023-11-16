@@ -63,7 +63,7 @@ public class QuizStatsService {
     }
 
     public String countAllPlayedGameForQuiz(UUID quizId) {
-        return String.format("%s %s", quizRepository.findById(quizId), gameRepository.countAllByQuiz_Id(quizId));
+        return String.format("%s %s", quizRepository.findById(quizId).get().getName(), gameRepository.countAllByQuiz_Id(quizId));
     }
 
 }

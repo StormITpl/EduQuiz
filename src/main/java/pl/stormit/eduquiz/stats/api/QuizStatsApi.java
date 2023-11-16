@@ -32,7 +32,7 @@ public class QuizStatsApi {
         return  service.getAllQuizzesWithShortestDuration();
     }
 
-    @GetMapping("/{quizId}")
+    @GetMapping("{quizId}")
     public String get(@PathVariable UUID quizId) {
         return service.countAllPlayedGameForQuiz(quizId);
     }
