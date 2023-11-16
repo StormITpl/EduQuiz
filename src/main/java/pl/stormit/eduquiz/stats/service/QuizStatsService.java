@@ -10,6 +10,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -41,4 +42,28 @@ public class QuizStatsService {
 
         return durations;
     }
+
+    public long countAllPlayedGame() {
+        return gameRepository.count();
+    }
+
+    public List<String> countAllPlayedGameSeparatedByQuiz() {
+
+        List<String> games = new ArrayList<>();
+
+        List<Quiz> quizzes = quizRepository.findAll();
+
+        for (Quiz quiz : quizzes) {
+
+            games.add(String.format("%s time: %s", quiz.getName(),
+                    gameRepository.countAllByQuiz_Id(quiz.getId())));
+        }
+
+        return games;
+    }
+
+    public long countAllPlayedGameForQuiz(UUID quizId) {
+        return gameRepository.countAllByQuiz_Id(quizId);
+    }
+
 }
