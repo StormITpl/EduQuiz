@@ -1,11 +1,14 @@
 package pl.stormit.eduquiz.result.domain.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +26,4 @@ public class Result {
     @OneToOne
     private Game game;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "start_at")
-    private Instant start;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "finish_at")
-    private Instant finish;
 }

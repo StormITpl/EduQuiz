@@ -17,6 +17,7 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.stats.service.DurationConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class GameService {
             throw new EntityNotFoundException("The quiz by id: " + quizRequestDto.id() + ", does not exist.");
         });
         Game game = new Game(quiz);
+        game.setStart();
         game.setUserAnswers(userAnswers);
 
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
@@ -76,6 +78,9 @@ public class GameService {
                     throw new EntityNotFoundException("The game by id: " + gameId + ", does not exist.");
                 });
         updateGame.setUserAnswers(playGame.getUserAnswers());
+        updateGame.setFinish();
+        updateGame.setDuration(new DurationConverter()
+                .getDurationAsLong(updateGame.getStart(), updateGame.getFinish()));
 
         return gameMapper.mapGameEntityToGameDto(updateGame);
     }

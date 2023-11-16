@@ -14,7 +14,6 @@ import pl.stormit.eduquiz.game.dto.*;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
@@ -25,7 +24,6 @@ import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
 import pl.stormit.eduquiz.stats.service.QuizStatsService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -148,7 +146,6 @@ public class IndexViewController {
         GameIdDto gameIdDto = gameIdMapper.mapGameEntityToGameIdDto(gameTest);
 
         ResultDto resultDto = resultService.createResult(gameIdDto);
-//        quizStatsService.getFinishTimestamp();
         Optional<Result> resultById = resultRepository.findById(resultDto.id());
         System.out.println(resultById.get().getScore());
         List<Question> questionList = gameTest.getQuiz().getQuestions();
@@ -156,6 +153,7 @@ public class IndexViewController {
 
         model.addAttribute("results", resultById.get());
         model.addAttribute("questionList", questionList);
+        model.addAttribute("duration", quizStatsService.getDurationAsString(gameTest));
 
         return "results";
     }
