@@ -20,6 +20,7 @@ import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
@@ -282,5 +284,37 @@ class UserApiControllerTest {
 
         // then
         mockMvc.perform(content).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturn200WhenExportUsersToXmlFileCorrectly() throws Exception {
+        // given
+        byte[] mockExcelBytes = "Mock Excel Content".getBytes();
+        given(userService.exportUsersToXLS()).willReturn(mockExcelBytes);
+
+        // when
+        MockHttpServletRequestBuilder content = get("/api/v1/users/export")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(content)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .andExpect(header().string("Content-Disposition", "form-data; name=\"attachment\"; filename=\"users.xlsx\""))
+                .andExpect(content().bytes(mockExcelBytes));
+    }
+
+    @Test
+    void shouldReturn404WhenExportUsersNotFound() throws Exception {
+        // given
+        given(userService.exportUsersToXLS()).willThrow(new EntityNotFoundException("No users found"));
+
+        // when
+        MockHttpServletRequestBuilder content = get("/api/v1/users/export")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(content)
+                .andExpect(status().isNotFound());
     }
 }
