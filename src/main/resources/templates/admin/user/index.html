@@ -35,11 +35,6 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-<!--                                <header class="py-2 m-2 border-bottom" data-model="user">-->
-<!--                                    <h1>-->
-<!--                                        List of Users-->
-<!--                                    </h1>-->
-<!--                                </header>-->
                                 <ul class="nav nav-tabs mb-3">
                                     <li class="nav-item icon index_collection_link"><a
                                             href="https://rails-admin.fly.dev/admin/user" class="nav-link active"><i
@@ -58,27 +53,26 @@
                                             <hr class="filters_box" style="display:none">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <div class="input-group">
-                                                        <input class="form-control" name="query" placeholder="Filter"
-                                                               type="search" value="">
-                                                        <button class="btn btn-primary"
-                                                                data-disable-with="<i class=&quot;fas fa-sync&quot;></i>Refresh"
-                                                                type="submit">
-                                                            <i class="fas fa-sync"></i>
-                                                            Refresh
-                                                        </button>
-                                                        <button class="btn btn-info" id="remove_filter" title="Reset filters">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
-                                                    </div>
+                                                    <form>
+                                                        <div class="input-group input-group-sm" style="width: 150px;">
+                                                            <input th:value="${search}" type="text" name="search"
+                                                                   class="form-control float-right"
+                                                                   placeholder="Search by login">
+                                                            <div class="input-group-append">
+                                                                <button type="submit" class="btn btn-default">
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                     <form id="bulk_form" class="form mb-3" th:action="@{/admin/users}" method="get">
-                                    <input type="hidden" name="authenticity_token"
-                                                                                      value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"
-                                                                                      autocomplete="off">
+                                        <input type="hidden" name="authenticity_token"
+                                               value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"
+                                               autocomplete="off">
                                         <input type="hidden" name="bulk_action" id="bulk_action" autocomplete="off">
                                         <div style="width: 1350px; overflow-x: auto;">
                                             <table class="table table-condensed table-striped table-hover">
@@ -88,17 +82,20 @@
                                                         <input class="toggle" type="checkbox">
                                                     </th>
                                                     <th class="header id_field integer_type"
-                                                        data-href="/admin/user?model_name=user&amp;sort=id" rel="tooltip"
+                                                        data-href="/admin/user?model_name=user&amp;sort=id"
+                                                        rel="tooltip"
                                                         title="">
                                                         Id
                                                     </th>
                                                     <th class="header email_field string_type"
-                                                        data-href="/admin/user?model_name=user&amp;sort=email" rel="tooltip"
+                                                        data-href="/admin/user?model_name=user&amp;sort=email"
+                                                        rel="tooltip"
                                                         title="">
                                                         Login
                                                     </th>
                                                     <th class="header email_field string_type"
-                                                        data-href="/admin/user?model_name=user&amp;sort=email" rel="tooltip"
+                                                        data-href="/admin/user?model_name=user&amp;sort=email"
+                                                        rel="tooltip"
                                                         title="">
                                                         Email
                                                     </th>
@@ -128,12 +125,14 @@
                                                         Updated at
                                                     </th>
                                                     <th class="header avatar_field paperclip_type"
-                                                        data-href="/admin/user?model_name=user&amp;sort=avatar" rel="tooltip"
+                                                        data-href="/admin/user?model_name=user&amp;sort=avatar"
+                                                        rel="tooltip"
                                                         title="">
                                                         Status
                                                     </th>
                                                     <th class="header roles_field enum_type"
-                                                        data-href="/admin/user?model_name=user&amp;sort=roles" rel="tooltip"
+                                                        data-href="/admin/user?model_name=user&amp;sort=roles"
+                                                        rel="tooltip"
                                                         title="">
                                                         Roles
                                                     </th>
@@ -143,15 +142,18 @@
                                                 <tbody class="table-group-divider">
                                                 <tr class="user_row " th:each="user : ${users}">
                                                     <td class="sticky" style="left: 0px;">
-                                                        <input type="checkbox" name="bulk_ids[]" id="bulk_ids_" value="1">
+                                                        <input type="checkbox" name="bulk_ids[]" id="bulk_ids_"
+                                                               value="1">
                                                     </td>
                                                     <td class="id_field integer_type" title="Id" th:text="${user.id()}">
 
                                                     </td>
-                                                    <td class="login_field string_type" title="Login" th:text="${user.nickname()}">
+                                                    <td class="login_field string_type" title="Login"
+                                                        th:text="${user.nickname()}">
 
                                                     </td>
-                                                    <td class="email_field string_type" title="Email" th:text="${user.email()}">
+                                                    <td class="email_field string_type" title="Email"
+                                                        th:text="${user.email()}">
                                                         -
                                                     </td>
                                                     <td class="reset_password_at_field datetime_type" title=" - ">
@@ -163,40 +165,32 @@
                                                     <td class="last_sign_in_at_field datetime_type" title="LastSign">
                                                         -
                                                     </td>
-                                                    <td class="created_at_field datetime_type" title="CreatedAt" th:text="${#dates.format(user.createdAt(), 'yyyy-MM-dd HH:mm:ss')}"    >
+                                                    <td class="created_at_field datetime_type" title="CreatedAt"
+                                                        th:text="${#dates.format(user.createdAt(), 'yyyy-MM-dd HH:mm:ss')}">
 
                                                     </td>
-                                                    <td class="updated_at_field datetime_type" title="UpdatedAt" >
+                                                    <td class="updated_at_field datetime_type" title="UpdatedAt">
 
                                                     </td>
-                                                    <td class="status_field string_type" title="Status" th:text="${user.status()}">
+                                                    <td class="status_field string_type" title="Status"
+                                                        th:text="${user.status()}">
                                                         -
                                                     </td>
-                                                    <td class="role_field string_type" title="Role" th:text="${user.role()}">
+                                                    <td class="role_field string_type" title="Role"
+                                                        th:text="${user.role()}">
 
                                                     </td>
                                                     <td class="last links ra-sidescroll-frozen">
-                                                        <ul class="nav d-inline list-inline" style="display: inline-flex; flex-direction: row;">
-                                                            <li class="nav-item icon show_member_link" title="Show" rel="tooltip">
-                                                                <a href="https://rails-admin.fly.dev/admin/user/1" class="nav-link">
-                                                                    <i class="fas fa-info-circle"></i> <span style="display:none">Show</span>
+                                                        <ul class="nav d-inline list-inline"
+                                                            style="display: inline-flex; flex-direction: row;">
+                                                            <li class="nav-item icon show_member_link" title="Show"
+                                                                rel="tooltip">
+                                                                <a href="https://rails-admin.fly.dev/admin/user/1"
+                                                                   class="nav-link">
+                                                                    <i class="fas fa-info-circle"></i> <span
+                                                                        style="display:none">Show</span>
                                                                 </a>
                                                             </li>
-<!--                                                            <li class="nav-item icon edit_member_link" title="Edit" rel="tooltip">-->
-<!--                                                                <a href="https://rails-admin.fly.dev/admin/user/1/edit" class="nav-link">-->
-<!--                                                                    <i class="fas fa-pencil-alt"></i> <span style="display:none">Edit</span>-->
-<!--                                                                </a>-->
-<!--                                                            </li>-->
-<!--                                                            <li class="nav-item icon delete_member_link" title="Delete" rel="tooltip">-->
-<!--                                                                <a href="https://rails-admin.fly.dev/admin/user/1/delete" class="nav-link">-->
-<!--                                                                    <i class="fas fa-times"></i> <span style="display:none">Delete</span>-->
-<!--                                                                </a>-->
-<!--                                                            </li>-->
-<!--                                                            <li class="nav-item icon history_show_member_link" title="History" rel="tooltip">-->
-<!--                                                            <a href="https://rails-admin.fly.dev/admin/user/1/history" class="nav-link">-->
-<!--                                                                <i class="fas fa-book"></i> <span style="display:none">History</span>-->
-<!--                                                            </a>-->
-<!--                                                            </li>-->
                                                         </ul>
                                                     </td>
                                                 </tr>
