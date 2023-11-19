@@ -45,30 +45,33 @@
                                     <li class="nav-item icon export_collection_link"><a
                                             href="/api/v1/users/export" class="nav-link"><i
                                             class="fas fa-file-export"></i> <span>Export</span></a></li>
-                                </ul>
-                                <div id="list">
-                                    <form th:action="@{/admin/users}" accept-charset="UTF-8" method="get">
-                                        <div class="card mb-3 p-3 bg-light">
-                                            <div class="row" data-options="[]" id="filters_box"></div>
-                                            <hr class="filters_box" style="display:none">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <form>
-                                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                                            <input th:value="${search}" type="text" name="search"
-                                                                   class="form-control float-right"
-                                                                   placeholder="Search by login">
-                                                            <div class="input-group-append">
-                                                                <button type="submit" class="btn btn-default">
-                                                                    <i class="fas fa-search"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                    <form>
+                                        <div class="input-group input-group-sm" style="width: 300px;">
+                                            <input th:value="${search}" type="text" name="search"
+                                                   class="form-control float-right"
+                                                   placeholder="Search by login">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
+                                    <div style="width: 10px;"></div>
+                                    <form>
+                                        <div class="input-group input-group-sm" style="width: 300px;">
+                                            <input th:value="${searchMail}" type="text" name="searchMail"
+                                                   class="form-control float-right"
+                                                   placeholder="Search by mail">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </ul>
+                                <div id="list">
                                     <form id="bulk_form" class="form mb-3" th:action="@{/admin/users}" method="get">
                                         <input type="hidden" name="authenticity_token"
                                                value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"

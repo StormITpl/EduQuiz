@@ -33,18 +33,20 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDto> getUsers() {
-        return getUsers(null);
+        return getUsers(null, null);
     }
 
     @Transactional(readOnly = true)
-    public List<UserDto> getUsers(String search) {
+    public List<UserDto> getUsers(String search, String searchMail) {
         List<User> foundUsers;
-        if (search == null) {
-            foundUsers = userRepository.findAll();
+        if (search != null) {
+            foundUsers = userRepository.findByNicknameContainingIgnoreCase(search)
+                    .orElseThrow(() -> new EntityNotFoundException("Users by search: " + search + " do not exist."));
+        } else if (searchMail != null) {
+            foundUsers = userRepository.findByEmailContainingIgnoreCase(searchMail)
+                    .orElseThrow(() -> new EntityNotFoundException("Users by searchMail: " + searchMail + " do not exist."));
         } else {
-            foundUsers = userRepository.findByNicknameContainingIgnoreCase(search).orElseThrow(() -> {
-                throw new EntityNotFoundException("Users by search: " + search + " does not exist.");
-            });
+            foundUsers = userRepository.findAll();
         }
         return userMapper.mapUserListOfEntityToUsersDtoList(foundUsers);
     }

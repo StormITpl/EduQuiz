@@ -18,9 +18,10 @@ public class UserAdminViewController {
     @GetMapping
     public String viewUsers(
             @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "searchMail", required = false) String searchMail,
             Model model) {
 
-        model.addAttribute("users", userService.getUsers(search));
+        model.addAttribute("users", userService.getUsers(search, searchMail));
 
         return "admin/user/index";
     }
