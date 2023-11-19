@@ -33,7 +33,19 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDto> getUsers() {
-        List<User> foundUsers = userRepository.findAll();
+        return getUsers(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDto> getUsers(String search) {
+        List<User> foundUsers;
+        if (search == null) {
+            foundUsers = userRepository.findAll();
+        } else {
+            foundUsers = userRepository.findByNicknameContainingIgnoreCase(search).orElseThrow(() -> {
+                throw new EntityNotFoundException("Users by search: " + search + " does not exist.");
+            });
+        }
         return userMapper.mapUserListOfEntityToUsersDtoList(foundUsers);
     }
 
