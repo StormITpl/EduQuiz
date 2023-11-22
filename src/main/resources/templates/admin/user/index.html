@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/template :: head(title = 'EduQuiz - Admin')}"></head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:replace="~{admin/template :: navbar}"/>
+
+    <th:block th:replace="~{admin/template :: sidebar(active='users')}"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">List of Users</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a>Home</a></li>
+                            <li class="breadcrumb-item active">Users</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs mb-3">
+                                    <li class="nav-item icon index_collection_link"><a
+                                            href="https://rails-admin.fly.dev/admin/user" class="nav-link active"><i
+                                            class="fas fa-th-list"></i> <span>List</span></a></li>
+                                    <li class="nav-item icon new_collection_link"><a
+                                            href="https://rails-admin.fly.dev/admin/user/new" class="nav-link"><i
+                                            class="fas fa-plus"></i> <span>Add new</span></a></li>
+                                    <li class="nav-item icon export_collection_link"><a
+                                            href="/api/v1/users/export" class="nav-link"><i
+                                            class="fas fa-file-export"></i> <span>Export</span></a></li>
+                                    <form>
+                                        <div class="input-group input-group-sm" style="width: 300px;">
+                                            <input th:value="${search}" type="text" name="search"
+                                                   class="form-control float-right"
+                                                   placeholder="Search by login">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div style="width: 10px;"></div>
+                                    <form>
+                                        <div class="input-group input-group-sm" style="width: 300px;">
+                                            <input th:value="${searchMail}" type="text" name="searchMail"
+                                                   class="form-control float-right"
+                                                   placeholder="Search by mail">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </ul>
+                                <div id="list">
+                                    <form id="bulk_form" class="form mb-3" th:action="@{/admin/users}" method="get">
+                                        <input type="hidden" name="authenticity_token"
+                                               value="CxBj5FrUoM8PpGBv6wcR-7VSPtFvbKa2ckaisAopTS1p0PdCNDt_sz23JSTAPjIj-gf38jLG8-U48_ndLduP-w"
+                                               autocomplete="off">
+                                        <input type="hidden" name="bulk_action" id="bulk_action" autocomplete="off">
+                                        <div style="width: 1350px; overflow-x: auto;">
+                                            <table class="table table-condensed table-striped table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th class="shrink sticky" style="left: 0px;">
+                                                        <input class="toggle" type="checkbox">
+                                                    </th>
+                                                    <th class="header id_field integer_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=id"
+                                                        rel="tooltip"
+                                                        title="">
+                                                        Id
+                                                    </th>
+                                                    <th class="header email_field string_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=email"
+                                                        rel="tooltip"
+                                                        title="">
+                                                        Login
+                                                    </th>
+                                                    <th class="header email_field string_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=email"
+                                                        rel="tooltip"
+                                                        title="">
+                                                        Email
+                                                    </th>
+                                                    <th class="header reset_password_sent_at_field datetime_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=reset_password_sent_at"
+                                                        rel="tooltip" title="">
+                                                        Reset password sent at
+                                                    </th>
+                                                    <th class="header sign_in_count_field integer_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=sign_in_count"
+                                                        rel="tooltip" title="">
+                                                        Sign in count
+                                                    </th>
+                                                    <th class="header last_sign_in_at_field datetime_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=last_sign_in_at"
+                                                        rel="tooltip" title="">
+                                                        Last sign in at
+                                                    </th>
+                                                    <th class="header created_at_field datetime_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=created_at"
+                                                        rel="tooltip" title="">
+                                                        Created at
+                                                    </th>
+                                                    <th class="header updated_at_field datetime_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=updated_at"
+                                                        rel="tooltip" title="">
+                                                        Updated at
+                                                    </th>
+                                                    <th class="header avatar_field paperclip_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=avatar"
+                                                        rel="tooltip"
+                                                        title="">
+                                                        Status
+                                                    </th>
+                                                    <th class="header roles_field enum_type"
+                                                        data-href="/admin/user?model_name=user&amp;sort=roles"
+                                                        rel="tooltip"
+                                                        title="">
+                                                        Roles
+                                                    </th>
+                                                    <th class="last shrink"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="table-group-divider">
+                                                <tr class="user_row " th:each="user : ${users}">
+                                                    <td class="sticky" style="left: 0px;">
+                                                        <input type="checkbox" name="bulk_ids[]" id="bulk_ids_"
+                                                               value="1">
+                                                    </td>
+                                                    <td class="id_field integer_type" title="Id" th:text="${user.id()}">
+
+                                                    </td>
+                                                    <td class="login_field string_type" title="Login"
+                                                        th:text="${user.nickname()}">
+
+                                                    </td>
+                                                    <td class="email_field string_type" title="Email"
+                                                        th:text="${user.email()}">
+                                                        -
+                                                    </td>
+                                                    <td class="reset_password_at_field datetime_type" title=" - ">
+                                                        -
+                                                    </td>
+                                                    <td class="sign_in_count_field integer_type" title="Count">
+                                                        0
+                                                    </td>
+                                                    <td class="last_sign_in_at_field datetime_type" title="LastSign">
+                                                        -
+                                                    </td>
+                                                    <td class="created_at_field datetime_type" title="CreatedAt"
+                                                        th:text="${#dates.format(user.createdAt(), 'yyyy-MM-dd HH:mm:ss')}">
+
+                                                    </td>
+                                                    <td class="updated_at_field datetime_type" title="UpdatedAt">
+
+                                                    </td>
+                                                    <td class="status_field string_type" title="Status"
+                                                        th:text="${user.status()}">
+                                                        -
+                                                    </td>
+                                                    <td class="role_field string_type" title="Role"
+                                                        th:text="${user.role()}">
+
+                                                    </td>
+                                                    <td class="last links ra-sidescroll-frozen">
+                                                        <ul class="nav d-inline list-inline"
+                                                            style="display: inline-flex; flex-direction: row;">
+                                                            <li class="nav-item icon show_member_link" title="Show"
+                                                                rel="tooltip">
+                                                                <a href="https://rails-admin.fly.dev/admin/user/1"
+                                                                   class="nav-link">
+                                                                    <i class="fas fa-info-circle"></i> <span
+                                                                        style="display:none">Show</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix total-count" th:text="${users.size()} + ' users'">
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.content-wrapper -->
+
+    <th:block th:replace="~{admin/template :: rightbar}"/>
+
+    <th:block th:replace="~{admin/template :: footer}"/>
+</div>
+<!-- ./wrapper -->
+</body>
+</html>
