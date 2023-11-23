@@ -6,6 +6,7 @@ import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
+import pl.stormit.eduquiz.stats.QuizBasedStats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,15 @@ public class QuizStatsService {
     private final GameRepository gameRepository;
     private final QuizRepository quizRepository;
 
-    public String getDurationAsString(Game game){
+    public QuizBasedStats getQuizStats(Game game){
 
         DurationConverter durationConverter = new DurationConverter();
 
-        return durationConverter.getDurationAsString(game.getStart(), game.getFinish());
+        QuizBasedStats quizBasedStats = new QuizBasedStats();
+        long duration = durationConverter.getDurationAsLong(game.getStart(), game.getFinish());
+         quizBasedStats.setQuizDuration(durationConverter.getDurationAsTime(duration));
+         quizBasedStats.setQuizName(game.getQuiz().getName());
+         return quizBasedStats;
     }
 
     public List<String> getAllQuizzesWithShortestDuration() {
