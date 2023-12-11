@@ -5,13 +5,13 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 
 @Mapper(componentModel = "spring")
 public interface AnswerRequestMapper {
-//    AnswerRequestDto mapAnswerEntityToAnswerRequestDto(Answer answer);
 
 default AnswerRequestDto mapAnswerEntityToAnswerRequestDto(Answer answer){
+
     return AnswerRequestDto
             .builder()
             .content(answer.getContent())
-            .isCorrect(answer.isCorrect())
+            //.isCorrect(answer.isCorrect())
             .question(answer.getQuestion())
             .build();
 }

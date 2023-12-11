@@ -42,6 +42,22 @@ public class UserService {
         return userMapper.mapUserEntityToUserDto(user);
     }
 
+    @Transactional(readOnly = true)
+    public User getUser(@NotNull String nickname) {
+        User user = userRepository.findUserByNickname(nickname).orElseThrow(() -> {
+            throw new EntityNotFoundException("User by nickname: " + nickname + " does not exist.");
+        });
+        return user;
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserTest(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
+        });
+        return user;
+    }
+
     @Transactional
     public UserDto createUser(@Valid @RequestBody UserRequestDto userRequest) {
         User user = new User();

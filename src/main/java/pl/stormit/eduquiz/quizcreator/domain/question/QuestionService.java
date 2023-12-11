@@ -44,8 +44,10 @@ public class QuestionService {
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
+        question.setCorrectAnswer(questionRequestDto.correctAnswer());
         questionRepository.save(question);
-        return questionMapper.mapQuestionEntityToQuestionDto(question);
+        QuestionDto questionDto = new QuestionDto(question.getId(), question.getContent(), question.getCorrectAnswer(), question.getQuiz(), question.getAnswers());
+        return questionDto;
     }
 
     @Transactional
@@ -57,8 +59,10 @@ public class QuestionService {
         question.setContent(questionRequestDto.content());
         question.setQuiz(questionRequestDto.quiz());
         question.setAnswers(questionRequestDto.answers());
-        questionRepository.save(question);
-        return questionMapper.mapQuestionEntityToQuestionDto(question);
+        question.setCorrectAnswer(questionRequestDto.correctAnswer());
+        question=questionRepository.save(question);
+        QuestionDto questionDto = new QuestionDto(question.getId(), question.getContent(), question.getCorrectAnswer(), question.getQuiz(), question.getAnswers());
+        return questionDto;
     }
 
     @Transactional

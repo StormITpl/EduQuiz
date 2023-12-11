@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/template :: head(title = 'EduQuiz - Admin')}"></head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <th:block th:replace="~{admin/template :: navbar}" />
+
+  <th:block th:replace="~{admin/template :: sidebar(active='quizzes')}" />
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Quizzes</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a>Home</a></li>
+              <li class="breadcrumb-item active">Quizzes</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                 <h3 class="card-title" th:text="'Quizzes [count: '+${quizzesPage.totalElements}+${#strings.isEmpty(search) ? '' : ', search: '+search}+']'">Quizzes</h3>
+                 <div class="card-tools">
+                   <form>
+                     <div class="input-group input-group-sm" style="width: 150px;">
+                       <input th:value="${search}" type="text" name="search" class="form-control float-right" placeholder="Search">
+                       <div class="input-group-append">
+                         <button type="submit" class="btn btn-default">
+                           <i class="fas fa-search"></i>
+                         </button>
+                       </div>
+                     </div>
+                   </form>
+                 </div>
+               </div>
+               <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th><a th:class="'sort-'+${reverseSort}"
+                           th:href="@{'/admin/quizzes'(s=${search}, field='name', direction=${reverseSort})}">Name</a></th>
+                    <th><a th:class="'sort-'+${reverseSort}"
+                           th:href="@{'/admin/quizzes'(s=${search}, field='status', direction=${reverseSort})}">Status</a></th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="quiz, it : ${quizzesPage.content}">
+                    <td th:text="${it.index}+1"></td>
+                    <td th:text="${quiz.name}"></td>
+                    <td th:text="${quiz.status}"></td>
+                    <td th:text="${quiz.category.name}"></td>
+                    <td th:text="${quiz.user.nickname}"></td>
+                    <td>
+                      <a th:href="@{'/admin/quizzes/'+${quiz.id}}" class="btn btn-info btn-sm">
+                        <i class="fas fa-pencil-alt"></i> Edit
+                      </a>
+                      <a th:href="@{'/admin/quizzes/'+${quiz.id}+'/delete'}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this quiz?')">
+                        <i class="fas fa-trash"></i> Delete
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <br></br>
+                <td>
+                  <a th:href="@{'/admin/quizzes/add'}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Quiz
+                  </a>
+                </td>
+                <div class="card-footer clearfix">
+                  <span th:if="${message}" th:text="${message}" style="color:green; font-weight:bold" />
+                  <ul class="pagination pagination-sm m-0 float-right"
+                      th:if="${quizzesPage.totalPages > 0}">
+                    <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                      <a class="page-link"
+                         th:href="@{'/admin/quizzes'(size=${quizzesPage.size}, page=${pageNumber}-1)}"
+                         th:text="${pageNumber}"></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <th:block th:replace="~{admin/template :: rightbar}" />
+
+  <th:block th:replace="~{admin/template :: footer}" />
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

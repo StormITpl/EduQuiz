@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 public record QuestionDto(UUID id,
                           String content,
+                          String correctAnswer,
                           Quiz quiz,
                           List<Answer> answers) {
 }

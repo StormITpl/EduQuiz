@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
-import pl.stormit.eduquiz.quizcreator.domain.category.CategoryRepository;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
 
@@ -124,7 +123,7 @@ public class CategoryAdminViewController {
                     categoryService.updateCategory(id, categoryDto);
                     redirectAttributes.addFlashAttribute("message", "Category successfully saved");
 
-                } catch (Exception e) {
+                } catch (Exception ex) {
                     model.addAttribute("message", "An error occured. Category not saved");
 
                     return "admin/category/edit";

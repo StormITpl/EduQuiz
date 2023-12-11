@@ -1,12 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.question;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,13 +23,16 @@ public class Question {
     @GeneratedValue
     private UUID id;
 
-    @NotBlank(message = "Content can't be empty")
-    @Size(min = 5, max = 255, message = "Content must be between 5 and 255 characters")
+    @NotBlank(message = "Question content must not be blank")
+    @Size(min = 3, max = 255, message = "Question content must be 3 to 255 characters")
     private String content;
+
+    private String correctAnswer;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
+
 }

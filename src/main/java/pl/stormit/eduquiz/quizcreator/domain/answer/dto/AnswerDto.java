@@ -8,6 +8,6 @@ import java.util.UUID;
 @Builder
 public record AnswerDto(UUID id,
                         String content,
-                        boolean isCorrect,
+                        //boolean isCorrect,
                         Question question) {
 }

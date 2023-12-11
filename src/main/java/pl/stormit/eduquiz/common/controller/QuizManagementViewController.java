@@ -43,7 +43,7 @@ public class QuizManagementViewController {
                              @RequestParam("questions") List questions,
                              @RequestParam("games") List games) {
 
-        QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, null, questions, games);
+        QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, null, questions, null, null, games);
 
         quizService.createQuiz(quizRequest);
 

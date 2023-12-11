@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/template :: head(title = 'EduQuiz - Admin')}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:replace="~{admin/template :: navbar}" />
+
+    <th:block th:replace="~{admin/template :: sidebar(active='quizzes')}" />
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Quizzes</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Quizzes</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <form method="post" th:object="${quiz}">
+                    <!--
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-tools">
+                                        <div class="input-group input-group-sm" style="width: 150px;">
+                                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-se
+                                                    arch"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                    <!-- /.card-header -->
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Edit Quiz</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="categoryName">Category name:</label>
+                                <input list="names" class="form-control" id="categoryName"  th:field="*{category.name}">
+                                <datalist id="names">
+                                    <option th:each="row : ${categoryList}" th:value="${row.name}">
+                                </datalist>
+                                <input th:field="*{id}" type="hidden" />
+                                <span class="error" th:if="${message}" th:text="${message}" th:class="${message}" />
+                                <span class="error" th:if="${#fields.hasErrors('category.name')}" th:errors="*{category.name}" style="color:red">Name Error</span>
+                                <span th:text="${sameCategory}" style="color:red"></span>
+
+                                <label for="quizName">Quiz name:</label>
+                                <input th:field="*{name}" type="text" class="form-control" id="quizName" />
+                                <input th:field="*{id}" type="hidden" />
+                                <span class="error" th:if="${message}" th:text="${message}" th:class="${message}" />
+                                <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red">Name Error</span>
+                                <span th:text="${sameQuiz}" style="color:red"></span>
+                                <input th:field="*{user.nickname}" type="hidden"/>
+                                <input th:field="*{user.id}" type="hidden"/>
+                                <div class="col-md-7 col-lg-8">
+                                    <div class="row gy-3" th:each="question, itemStat : *{questions}">
+                                        <div class="row gy-3">
+                                                        <pre style="font-size: 11px">
+                                                        </pre>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label th:for="*{questions[__${itemStat.index}__].content}" class="form-label bold-label" th:text="${itemStat.index+1} + '. Question' "></label>
+                                            <input type="text" class="form-control" th:field="*{questions[__${itemStat.index}__].content}" placeholder="">
+                                            <input type="hidden" class="form-control" th:field="*{questions[__${itemStat.index}__].id}" placeholder="">
+                                            <span class="error" th:if="${#fields.hasErrors('questions[__${itemStat.index}__].content')}" th:errors="*{questions[__${itemStat.index}__].content}" style="color:red">Name Error</span>
+                                            <div class="invalid-feedback">
+                                                Question is required
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6" th:each="answer, itemStat2 : *{questions[__${itemStat.index}__].answers}">
+                                            <label th:for="*{questions[__${itemStat.index}__].answers[__${itemStat2.index}__].content}" class="form-label" th:text="${itemStat2.index+1} + '. answer'"></label>
+                                            <input type="text" class="form-control" th:field="*{questions[__${itemStat.index}__].answers[__${itemStat2.index}__].content}"
+                                                   placeholder="">
+                                            <input type="hidden" class="form-control" th:field="*{questions[__${itemStat.index}__].answers[__${itemStat2.index}__].id}"
+                                                   placeholder="">
+                                            <div class="form-check">
+                                                <input th:value="*{questions[__${itemStat.index}__].answers[__${itemStat2.index}__].id}"
+                                                       th:field="*{questions[__${itemStat.index}__].correctAnswer}"
+
+                                                       type="radio" class="form-check-input"
+                                                >
+
+                                                <label class="form-check-label" th:for="*{questions[__${itemStat.index}__].correctAnswer}">Correct Answer</label>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Answer is required
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="col-md-6">
+                                             <label for="2answer" class="form-label">2. Answer</label>
+                                             <input type="text" class="form-control" id="2answer" placeholder="" required>
+                                             <div class="form-check">
+                                                 <input id="2correctAnswer" name="answer_firstQuestion" type="radio" class="form-check-input" checked
+                                                        required>
+                                                 <label class="form-check-label" for="2correctAnswer">Correct Answer</label>
+                                             </div>
+                                             <div class="invalid-feedback">
+                                                 Answer is required
+                                             </div>
+                                         </div>
+
+                                         <div class="col-md-6">
+                                             <label for="3answer" class="form-label">3. Answer</label>
+                                             <input type="text" class="form-control" id="3answer" placeholder="" required>
+                                             <div class="form-check">
+                                                 <input id="3correctAnswer" name="answer_firstQuestion" type="radio" class="form-check-input" checked
+                                                        required>
+                                                 <label class="form-check-label" for="3correctAnswer">Correct Answer</label>
+                                             </div>
+                                             <div class="invalid-feedback">
+                                                 Answer is required
+                                             </div>
+                                         </div>
+
+                                         <div class="col-md-6">
+                                             <label for="4answer" class="form-label">4. Answer</label>
+                                             <input type="text" class="form-control" id="4answer" placeholder="" required>
+                                             <div class="form-check">
+                                                 <input id="4correctAnswer" name="answer_firstQuestion" type="radio" class="form-check-input" checked
+                                                        required>
+                                                 <label class="form-check-label" for="4correctAnswer">Correct Answer</label>
+                                             </div>
+                                             <div class="invalid-feedback">
+                                                 Answer is required
+                                             </div>
+                                         </div>-->
+
+                                    </div>
+                                </div>
+                                <!--</div>-->
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                            <!-- /.card -->
+                            <!-- /.card-body -->
+                            <!--</div> -->
+                            <!-- /.card -->
+                            <!-- </div>
+                         </div> -->
+                        </div>
+                    </div>
+                </form>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <th:block th:replace="~{admin/template :: rightbar}" />
+
+    <th:block th:replace="~{admin/template :: footer}" />
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

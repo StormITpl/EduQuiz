@@ -251,6 +251,14 @@ insert into categories (id, name) values
                                       (gen_random_uuid(), 'Computer games'),
                                       (gen_random_uuid(), 'Mathematics');
 
+--changeset Magdalenacze:001_40
+alter table quizzes
+    add column status varchar(255);
 
+alter table quizzes
+add column created_at timestamp;
 
+--changeset Magdalenacze:001_41
+alter table answers drop column is_correct;
 
+alter table questions add column correct_answer varchar;

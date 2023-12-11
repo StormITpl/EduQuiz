@@ -29,7 +29,7 @@ public class Category {
     private UUID id;
 
     @NotBlank(message = "Category name must not be blank")
-    @Size(min =  3, max = 20, message = "Category name must be 3 to 20 characters")
+    @Size(min =  3, max = 255, message = "Category name must be 3 to 255 characters")
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)

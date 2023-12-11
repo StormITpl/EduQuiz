@@ -38,7 +38,7 @@ public class AnswerService {
         });
         Answer answer = new Answer();
         answer.setContent(answerRequestDto.content());
-        answer.setCorrect(answerRequestDto.isCorrect());
+        //answer.setCorrect(answerRequestDto.isCorrect());
         answer.setQuestion(question);
         return answerMapper.mapAnswerEntityToAnswerDto(answerRepository.save(answer));
     }
@@ -66,7 +66,7 @@ public class AnswerService {
             throw new EntityNotFoundException("The answer by id: " + answerId + ", does not exist.");
         });
         answer.setContent(answerRequestDto.content());
-        answer.setCorrect(answerRequestDto.isCorrect());
+        //answer.setCorrect(answerRequestDto.isCorrect());
         answerRepository.save(answer);
         return answerMapper.mapAnswerEntityToAnswerDto(answer);
     }

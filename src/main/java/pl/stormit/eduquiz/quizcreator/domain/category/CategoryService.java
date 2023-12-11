@@ -1,11 +1,13 @@
 package pl.stormit.eduquiz.quizcreator.domain.category;
 
+import ch.qos.logback.core.model.Model;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -37,6 +39,7 @@ public class CategoryService {
     public Page<Category> getCategories(Pageable pageable) {
         return getCategories(null, pageable);
     }
+
     @Transactional(readOnly = true)
     public Page<Category> getCategories(String search, Pageable pageable) {
         if(search == null) {
@@ -52,6 +55,19 @@ public class CategoryService {
             throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
         });
         return categoryMapper.mapCategoryEntityToCategoryDto(category);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryDto getCategory(@NotNull @PathVariable("category-name") String categoryName) {
+        List<Category> category = categoryRepository.findByNameIgnoreCase(categoryName);
+        if (category.isEmpty())
+        {
+            return new CategoryDto (null, categoryName);
+        }
+        else
+        {
+            return categoryMapper.mapCategoryEntityToCategoryDto(category.get(0));
+        }
     }
 
     @Transactional
@@ -82,6 +98,7 @@ public class CategoryService {
             throw new EntityNotFoundException("The category by id: " + categoryId + ", does not exist.");
         }
     }
+
     public boolean checkIfCategoryNameAvailable(String categoryName) {
         return categoryRepository.findByNameIgnoreCase(categoryName).isEmpty();
     }

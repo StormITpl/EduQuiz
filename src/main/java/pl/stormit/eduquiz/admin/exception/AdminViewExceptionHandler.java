@@ -6,8 +6,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.stormit.eduquiz.admin.controllers.CategoryAdminViewController;
+import pl.stormit.eduquiz.admin.controllers.QuizAdminViewController;
 
-@ControllerAdvice(basePackageClasses = {CategoryAdminViewController.class})
+@ControllerAdvice(basePackageClasses = {CategoryAdminViewController.class, QuizAdminViewController.class})
 public class AdminViewExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {Exception.class})

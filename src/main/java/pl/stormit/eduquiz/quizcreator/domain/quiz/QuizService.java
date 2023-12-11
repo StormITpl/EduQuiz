@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -20,43 +22,68 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class QuizService {
-    private final QuizRepository quizRepository;
 
+    private final QuizRepository quizRepository;
     private final QuizDtoMapper quizMapper;
 
     @Transactional(readOnly = true)
     public List<QuizDto> getQuizzes() {
+
         List<Quiz> foundQuizzes = quizRepository.findAll();
+
         return quizMapper.mapQuizListOfEntityToQuizDtoList(foundQuizzes);
     }
 
     @Transactional(readOnly = true)
+    public Page<Quiz> getQuizzes(Pageable pageable) {
+        return getQuizzes(null, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Quiz> getQuizzes(String search, Pageable pageable) {
+
+        if (search == null) {
+            return quizRepository.findAll(pageable);
+        } else {
+            return quizRepository.findByNameContainingIgnoreCase(search, pageable);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<QuizDto> getQuizzesByCategoryId(@NotNull @PathVariable("category-id") UUID categoryId) {
+
         List<Quiz> foundQuizzes = quizRepository.getAllByCategoryId(categoryId);
+
         return quizMapper.mapQuizListOfEntityToQuizDtoList(foundQuizzes);
     }
 
     @Transactional(readOnly = true)
     public QuizDto getQuiz(@NotNull @PathVariable("quiz-id") UUID quizId) {
+
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");
         });
+
         return quizMapper.mapQuizEntityToQuizDto(quiz);
     }
 
     @Transactional
     public QuizDto createQuiz(@Valid @RequestBody QuizRequestDto quizRequest) {
+
         Quiz quiz = new Quiz();
         quiz.setName(quizRequest.name());
         quiz.setCategory(quizRequest.category());
         quiz.setUser(quizRequest.user());
+        quiz.setStatus(quizRequest.status());
         quiz.setQuestions(quizRequest.questions());
+
         return quizMapper.mapQuizEntityToQuizDto(quizRepository.save(quiz));
     }
 
     @Transactional
     public QuizDto updateQuiz(@NotNull @PathVariable("quiz-id") UUID quizId,
                               @Valid @RequestBody QuizRequestDto quizRequest) {
+
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");
         });
@@ -65,15 +92,20 @@ public class QuizService {
         quiz.setUser(quizRequest.user());
         quiz.setQuestions(quizRequest.questions());
         Quiz savedQuiz = quizRepository.save(quiz);
+
         return quizMapper.mapQuizEntityToQuizDto(savedQuiz);
     }
 
     @Transactional
     public void deleteQuiz(@NotNull @PathVariable("quiz-id") UUID quizId) {
+
         if (quizRepository.existsById(quizId)) {
             quizRepository.deleteById(quizId);
         } else {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");
         }
+    }
+    public boolean checkIfQuizNameAvailable(String quizName) {
+        return quizRepository.findByNameIgnoreCase(quizName).isEmpty();
     }
 }

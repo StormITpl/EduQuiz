@@ -5,6 +5,6 @@ import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 
 @Builder
 public record AnswerRequestDto(String content,
-                               boolean isCorrect,
+                               //boolean isCorrect,
                                Question question) {
 }

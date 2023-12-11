@@ -49,7 +49,7 @@ public class ResultService {
         result.setGame(game);
         Long score = game.getQuiz().getQuestions().stream()
                 .flatMap(question -> question.getAnswers().stream())
-                .filter(Answer::isCorrect)
+                //.filter(Answer::isCorrect)
                 .map(Answer::getId)
                 .filter(correctId -> game.getUserAnswers().contains(correctId))
                 .count();
