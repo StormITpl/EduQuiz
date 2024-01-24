@@ -77,4 +77,9 @@ public class QuizService {
             throw new EntityNotFoundException("Quiz by id: " + quizId + " does not exist.");
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<Quiz> getThreeNewest() {
+        return quizRepository.getThreeNewest();
+    }
 }
