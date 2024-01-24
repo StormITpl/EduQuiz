@@ -25,4 +25,5 @@ public class Result {
 
     @OneToOne
     private Game game;
+
 }

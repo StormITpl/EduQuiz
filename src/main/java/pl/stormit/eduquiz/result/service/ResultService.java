@@ -54,7 +54,6 @@ public class ResultService {
                 .filter(correctId -> game.getUserAnswers().contains(correctId))
                 .count();
 
-
         result.setScore(score.intValue());
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
