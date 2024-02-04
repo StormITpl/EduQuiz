@@ -32,8 +32,8 @@ class UserStatistics {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @Column(name = "last_login")
-    private Instant lastLogin;
+    @Column(name = "last_login_date")
+    private Instant lastLoginDate;
 
     @Column(name = "login_count", nullable = false)
     private int loginCount;
