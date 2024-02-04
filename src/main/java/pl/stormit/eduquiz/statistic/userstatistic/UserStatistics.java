@@ -8,18 +8,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.domain.user.User;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_statistics")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user_statistics")
 class UserStatistics {
 
     @Id
