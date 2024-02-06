@@ -41,6 +41,6 @@ class UserStatistics {
     @Column(name = "created_quizzes_count", nullable = false)
     private int createdQuizzesCount;
 
-    @Column(name = "solved_quiz_count", nullable = false)
-    private int solvedQuizCount;
+    @Column(name = "solved_quizzes_count", nullable = false)
+    private int solvedQuizzesCount;
 }
