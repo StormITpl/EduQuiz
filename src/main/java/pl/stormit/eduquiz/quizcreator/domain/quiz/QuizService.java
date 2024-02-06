@@ -79,7 +79,7 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    public List<Quiz> getThreeNewest() {
-        return quizRepository.getThreeNewest();
+    public List<QuizDto> getThreeNewest() {
+        return quizMapper.mapQuizListOfEntityToQuizDtoList(quizRepository.getThreeNewest());
     }
 }
