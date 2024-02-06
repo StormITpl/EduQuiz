@@ -9,5 +9,5 @@ public interface QuizStatisticFacade {
 
     List<Quiz> getThreeNewest();
 
-    QuizStatistic add(Game game, int score, long duration);
+    QuizStatistic add(Game game, int score);
 }

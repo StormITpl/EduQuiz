@@ -48,8 +48,6 @@ public class GameService {
         Game game = new Game(quiz);
         game.setUserAnswers(userAnswers);
 
-        quizStatistic.add(game, 0, 0);
-
         return gameMapper.mapGameEntityToGameDto(gameRepository.save(game));
     }
 

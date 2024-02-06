@@ -60,7 +60,7 @@ public class ResultService {
 
         result.setScore(score.intValue());
 
-        quizStatistic.add(game, result.getScore(), LocalDateTime.now().getLong(ChronoField.NANO_OF_SECOND));
+        quizStatistic.add(game, result.getScore());
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }
