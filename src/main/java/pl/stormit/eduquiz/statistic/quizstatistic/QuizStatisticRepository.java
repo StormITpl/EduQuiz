@@ -8,5 +8,4 @@ import java.util.UUID;
 @Repository
 public interface QuizStatisticRepository extends JpaRepository<QuizStatistic, UUID> {
 
-    QuizStatistic findByGame_Id(UUID id);
 }

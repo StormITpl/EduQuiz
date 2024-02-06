@@ -17,7 +17,6 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.dto.AnswerDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
-import pl.stormit.eduquiz.statistic.quizstatistic.QuizStatisticFacadeImp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,6 @@ public class GameService {
     private final GameMapper gameMapper;
 
     private Game playGame;
-
-    private final QuizStatisticFacadeImp quizStatistic;
 
     List<UUID> userAnswers = new ArrayList<>();
 
