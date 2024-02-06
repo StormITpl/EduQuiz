@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/dev.sql
+
+
+  - include:
+      file: db/changelog/003-create-table-quiz_statistics.sql
