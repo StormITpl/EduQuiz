@@ -17,7 +17,10 @@ import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.dto.ResultMapper;
+import pl.stormit.eduquiz.statistic.quizstatistic.QuizStatisticFacadeImp;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.UUID;
 
 @Validated
@@ -28,6 +31,7 @@ public class ResultService {
     private final ResultRepository resultRepository;
     private final GameRepository gameRepository;
     private final ResultMapper resultMapper;
+    private final QuizStatisticFacadeImp quizStatistic;
 
 
     @Transactional(readOnly = true)
@@ -54,8 +58,9 @@ public class ResultService {
                 .filter(correctId -> game.getUserAnswers().contains(correctId))
                 .count();
 
-
         result.setScore(score.intValue());
+
+        quizStatistic.add(game, result.getScore(), LocalDateTime.now().getLong(ChronoField.NANO_OF_SECOND));
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }
