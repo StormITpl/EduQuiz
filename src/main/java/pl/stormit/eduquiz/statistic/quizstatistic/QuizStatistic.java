@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.quizcreator.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -23,27 +22,26 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "quiz_statistics")
-public class QuizStatistic {
+class QuizStatistic {
 
     @Id
     @GeneratedValue
     private UUID id;
 
     @OneToOne
-    Game game;
+    private Game game;
 
-    @OneToOne
-    User user;
+    private UUID userId;
 
-    int score;
+    private int score;
 
-    long duration;
+    private long duration;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void setCreatedAt() {
+    void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
     }
 
