@@ -10,8 +10,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 
 import java.util.UUID;
@@ -19,7 +20,8 @@ import java.util.UUID;
 @Entity
 @Builder
 @Table(name = "answers")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Answer {
