@@ -19,8 +19,6 @@ import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.dto.ResultMapper;
 import pl.stormit.eduquiz.statistic.quizstatistic.QuizStatisticFacadeImp;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.UUID;
 
 @Validated
@@ -46,9 +44,7 @@ public class ResultService {
 
     @Transactional
     public ResultDto createResult(@Valid @RequestBody GameIdDto gameIdDto) {
-        Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> {
-            throw new EntityNotFoundException("The game does not exist with ID: " + gameIdDto.id());
-        });
+        Game game = gameRepository.findById(gameIdDto.id()).orElseThrow(() -> new EntityNotFoundException("The game does not exist with ID: " + gameIdDto.id()));
         Result result = new Result();
         result.setGame(game);
         Long score = game.getQuiz().getQuestions().stream()
