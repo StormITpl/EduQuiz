@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
-    public QuizStatistic addStatisticToDB(Game game, int score) {
+    public QuizStatisticDto addStatisticToDB(Game game, int score) {
         return statisticService.addStatisticToDB(game, score);
     }
 

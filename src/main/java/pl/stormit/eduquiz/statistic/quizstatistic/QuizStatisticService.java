@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
+import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
@@ -17,8 +18,9 @@ class QuizStatisticService {
 
     private final QuizStatisticRepository quizStatisticRepository;
     private final UserRepository userRepository;
+    private final QuizStatisticMapper mapper;
 
-    QuizStatistic addStatisticToDB(Game game, int score) {
+    QuizStatisticDto addStatisticToDB(Game game, int score) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -31,6 +33,6 @@ class QuizStatisticService {
         statistic.setScore(score);
         statistic.setDuration(LocalDateTime.now().getLong(ChronoField.SECOND_OF_DAY) - game.getCreatedAt().getLong(ChronoField.SECOND_OF_DAY));
 
-        return quizStatisticRepository.save(statistic);
+        return mapper.mapQuizStatisticEntityToQuizStatisticDto(quizStatisticRepository.save(statistic));
     }
 }
