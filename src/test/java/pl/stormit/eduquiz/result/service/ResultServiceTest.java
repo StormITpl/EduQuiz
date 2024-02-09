@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
@@ -22,8 +23,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -60,12 +61,11 @@ class ResultServiceTest {
         UUID nonExistentId = UUID.randomUUID();
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.getResult(nonExistentId);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.getResult(nonExistentId));
     }
 
     @Test
+    @WithMockUser()
     void shouldCreateResultUsingGameId() {
         // given
         Game game = new Game();
@@ -95,9 +95,7 @@ class ResultServiceTest {
         GameIdDto gameIdDto = new GameIdDto(nonExistentGameId);
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.createResult(gameIdDto);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.createResult(gameIdDto));
     }
 
     @Test
@@ -122,8 +120,6 @@ class ResultServiceTest {
         UUID nonExistentResultId = UUID.randomUUID();
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.deleteResult(nonExistentResultId);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.deleteResult(nonExistentResultId));
     }
 }

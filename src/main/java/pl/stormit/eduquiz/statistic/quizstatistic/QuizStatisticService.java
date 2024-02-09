@@ -1,15 +1,14 @@
 package pl.stormit.eduquiz.statistic.quizstatistic;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.stormit.eduquiz.game.domain.entity.Game;
-import pl.stormit.eduquiz.quizcreator.domain.user.User;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -21,11 +20,9 @@ class QuizStatisticService {
 
     QuizStatistic save(Game game, int score) {
 
-        Optional<User> user = Optional.of(userRepository.findUserByNickname(
-                        SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElse(userRepository.findUserByNickname("anonim").get()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        UUID userId = user.get().getId();
+        UUID userId = userRepository.findUserByNickname(authentication.getName()).isPresent() ? userRepository.findUserByNickname(authentication.getName()).get().getId() : null;
 
         QuizStatistic statistic = new QuizStatistic();
 
