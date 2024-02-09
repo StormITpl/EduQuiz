@@ -22,8 +22,8 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
-    public QuizStatistic add(Game game, int score) {
-        return statisticService.save(game, score);
+    public QuizStatistic addStatisticToDB(Game game, int score) {
+        return statisticService.addStatisticToDB(game, score);
     }
 
 }

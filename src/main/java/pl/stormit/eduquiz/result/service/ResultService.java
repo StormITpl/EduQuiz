@@ -56,7 +56,7 @@ public class ResultService {
 
         result.setScore(score.intValue());
 
-        quizStatistic.add(game, result.getScore());
+        quizStatistic.addStatisticToDB(game, result.getScore());
 
         return resultMapper.mapResultEntityToResultDto(resultRepository.save(result));
     }

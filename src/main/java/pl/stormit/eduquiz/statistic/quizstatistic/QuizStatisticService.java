@@ -18,7 +18,7 @@ class QuizStatisticService {
     private final QuizStatisticRepository quizStatisticRepository;
     private final UserRepository userRepository;
 
-    QuizStatistic save(Game game, int score) {
+    QuizStatistic addStatisticToDB(Game game, int score) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
