@@ -18,6 +18,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,7 +57,7 @@ class GameServiceTest {
         quiz.setName("Quiz");
         quiz.setId(ID_1);
         QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
-        Game game = new Game(ID_2, null, quiz);
+        Game game = new Game(ID_2, null, quiz, LocalDateTime.now());
         GameDto gameDto = new GameDto(ID_2, null);
 
         // when
@@ -96,7 +97,7 @@ class GameServiceTest {
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
-        Game game = new Game(ID_2, null, quiz);
+        Game game = new Game(ID_2, null, quiz, LocalDateTime.now());
         GameDto gameDto = new GameDto(ID_2, null);
 
         // when
@@ -188,7 +189,7 @@ class GameServiceTest {
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
-        Game game = new Game(ID_2, null, quiz);
+        Game game = new Game(ID_2, null, quiz, LocalDateTime.now());
 
         // when
         when(gameRepository.existsById(any())).thenReturn(true);

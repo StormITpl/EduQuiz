@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
@@ -16,13 +17,14 @@ import pl.stormit.eduquiz.result.domain.model.Result;
 import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles({"test"})
 @Transactional
@@ -59,12 +61,11 @@ class ResultServiceTest {
         UUID nonExistentId = UUID.randomUUID();
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.getResult(nonExistentId);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.getResult(nonExistentId));
     }
 
     @Test
+    @WithMockUser()
     void shouldCreateResultUsingGameId() {
         // given
         Game game = new Game();
@@ -73,7 +74,7 @@ class ResultServiceTest {
         exemplaryAnswer.setId(FIRST_ID);
         exemplaryAnswer.setCorrect(true);
         exemplaryQuestion.setAnswers(List.of(exemplaryAnswer));
-        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null, null, List.of(exemplaryQuestion), List.of(game));
+        Quiz exemplaryQuiz = new Quiz(FIRST_ID, "Royal", null, null, List.of(exemplaryQuestion), List.of(game), LocalDateTime.now());
         game.setQuiz(exemplaryQuiz);
         game.setUserAnswers(List.of(UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82502")));
         Game savedGame = gameRepository.save(game);
@@ -94,9 +95,7 @@ class ResultServiceTest {
         GameIdDto gameIdDto = new GameIdDto(nonExistentGameId);
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.createResult(gameIdDto);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.createResult(gameIdDto));
     }
 
     @Test
@@ -121,8 +120,6 @@ class ResultServiceTest {
         UUID nonExistentResultId = UUID.randomUUID();
 
         // when and then
-        assertThrows(EntityNotFoundException.class, () -> {
-            resultService.deleteResult(nonExistentResultId);
-        });
+        assertThrows(EntityNotFoundException.class, () -> resultService.deleteResult(nonExistentResultId));
     }
 }
