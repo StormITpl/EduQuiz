@@ -8,7 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.User;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
 import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
@@ -40,6 +42,9 @@ class QuizStatisticFacadeImpIntegrationTest {
     @Autowired
     QuizStatisticFacadeImp quizStatisticFacadeImp;
 
+    @Autowired
+    QuizService quizService;
+
     private static int score;
     private static final String USER_NAME = "user";
     private static final UUID USER_UUID = UUID.randomUUID();
@@ -64,9 +69,17 @@ class QuizStatisticFacadeImpIntegrationTest {
     }
 
     @Test
-    void getThreeNewest() {
+    void shouldReturnListWithThreeNewestQuizes() {
+        // given
+        QuizRequestDto quizRequestDto = new QuizRequestDto("name", null, null, null, null);
+        quizService.createQuiz(quizRequestDto);
+        quizService.createQuiz(quizRequestDto);
+        quizService.createQuiz(quizRequestDto);
+
+        // when
         List<QuizDto> quizDtoList = quizStatisticFacadeImp.getThreeNewest();
 
+        // then
         assertNotNull(quizDtoList);
         assertEquals(quizDtoList.size(), 3);
     }
