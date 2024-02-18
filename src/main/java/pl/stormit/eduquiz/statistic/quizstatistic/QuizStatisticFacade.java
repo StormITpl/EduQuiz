@@ -11,5 +11,6 @@ public interface QuizStatisticFacade {
     List<QuizDto> getThreeNewest();
 
     QuizStatisticDto addStatisticToDB(Game game, int score);
-    
+
+    int getAllCount();
 }

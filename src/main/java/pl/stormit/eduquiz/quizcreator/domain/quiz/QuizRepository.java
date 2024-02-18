@@ -14,4 +14,7 @@ public interface QuizRepository extends JpaRepository<Quiz, UUID> {
 
     @Query("select q from Quiz q order by q.createdAt desc limit 3")
     List<Quiz> getThreeNewest();
+
+    @Query("select count(*) from Quiz q")
+    int getAllCount();
 }
