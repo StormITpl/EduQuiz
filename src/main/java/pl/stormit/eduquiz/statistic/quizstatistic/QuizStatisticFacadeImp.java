@@ -8,7 +8,6 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -24,8 +23,8 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
-    public int getLowestScore(UUID id) {return statisticService.getLowestScore(id);}
-    public int getHighestScore(UUID id) {return statisticService.getHighestScore(id);}
+    public int getLowestScore() {return statisticService.getLowestScore();}
+    public int getHighestScore() {return statisticService.getHighestScore();}
 
     @Override
     public QuizStatisticDto addStatisticToDB(Game game, int score) {

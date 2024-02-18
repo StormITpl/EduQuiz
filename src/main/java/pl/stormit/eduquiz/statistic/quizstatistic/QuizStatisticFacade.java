@@ -5,15 +5,14 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface QuizStatisticFacade {
 
     List<QuizDto> getThreeNewest();
 
-    int getLowestScore(UUID id);
+    int getLowestScore();
 
-    int getHighestScore(UUID id);
+    int getHighestScore();
 
     QuizStatisticDto addStatisticToDB(Game game, int score);
 

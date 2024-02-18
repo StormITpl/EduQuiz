@@ -8,7 +8,7 @@ import java.util.UUID;
 @Repository
 public interface QuizStatisticRepository extends JpaRepository<QuizStatistic, UUID> {
 
-    int findFirstByOrderByScoreDesc(UUID id);
-    int findFirstByOrderByScoreAsc(UUID id);
+    int findFirstByOrderByScoreDesc();
+    int findFirstByOrderByScoreAsc();
 
 }
