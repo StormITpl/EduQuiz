@@ -82,4 +82,9 @@ public class QuizService {
     public List<QuizDto> getThreeNewest() {
         return quizMapper.mapQuizListOfEntityToQuizDtoList(quizRepository.getThreeNewest());
     }
+
+    @Transactional(readOnly = true)
+    public int getAllCount() {
+        return quizRepository.getAllCount();
+    }
 }

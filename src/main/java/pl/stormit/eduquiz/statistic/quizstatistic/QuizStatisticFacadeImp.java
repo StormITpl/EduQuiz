@@ -27,4 +27,8 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
         return statisticService.addStatisticToDB(game, score);
     }
 
+    @Override
+    public int getAllCount() {
+        return quizService.getAllCount();
+    }
 }
