@@ -59,7 +59,7 @@ class QuizStatisticFacadeImpTest {
     }
 
     @Test
-    void shouldReturnDtoWIthCorrectData() {
+    void shouldReturnDtoWithCorrectData() {
         // given
         QuizStatisticDto quizStatisticDto = new QuizStatisticDto(UUID.randomUUID(), game, UUID.randomUUID(), 10,10, LocalDateTime.now());
         when(quizStatisticService.addStatisticToDB(any(Game.class), anyInt())).thenReturn(quizStatisticDto);
