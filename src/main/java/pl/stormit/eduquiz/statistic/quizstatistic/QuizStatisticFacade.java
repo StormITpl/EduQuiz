@@ -10,6 +10,11 @@ public interface QuizStatisticFacade {
 
     List<QuizDto> getThreeNewest();
 
+    int getLowestScore();
+
+    int getHighestScore();
+
     QuizStatisticDto addStatisticToDB(Game game, int score);
+
     
 }

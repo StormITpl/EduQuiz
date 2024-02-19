@@ -35,4 +35,13 @@ class QuizStatisticService {
 
         return mapper.mapQuizStatisticEntityToQuizStatisticDto(quizStatisticRepository.save(statistic));
     }
+
+    int getLowestScore(){
+        return quizStatisticRepository.findFirstByOrderByScoreAsc();
+    }
+
+    int getHighestScore(){
+        return quizStatisticRepository.findFirstByOrderByScoreDesc();
+    }
+
 }

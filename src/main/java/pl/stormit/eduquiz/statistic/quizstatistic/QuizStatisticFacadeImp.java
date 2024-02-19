@@ -23,6 +23,10 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
+    public int getLowestScore() {return statisticService.getLowestScore();}
+    public int getHighestScore() {return statisticService.getHighestScore();}
+
+    @Override
     public QuizStatisticDto addStatisticToDB(Game game, int score) {
         return statisticService.addStatisticToDB(game, score);
     }
