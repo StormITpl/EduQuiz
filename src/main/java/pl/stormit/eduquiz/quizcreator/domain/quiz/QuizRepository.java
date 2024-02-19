@@ -12,6 +12,6 @@ public interface QuizRepository extends JpaRepository<Quiz, UUID> {
 
     List<Quiz> getAllByCategoryId(UUID id);
 
-    @Query("select q from Quiz q order by q.createdAt desc limit 3")
+    @Query("select q from Quiz q left join fetch q.user left join fetch q.category order by q.createdAt desc limit 3")
     List<Quiz> getThreeNewest();
 }

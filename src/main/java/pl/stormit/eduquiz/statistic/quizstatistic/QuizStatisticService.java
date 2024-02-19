@@ -22,18 +22,19 @@ class QuizStatisticService {
 
     QuizStatisticDto addStatisticToDB(Game game, int score) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        UUID userId = userRepository.findUserByNickname(authentication.getName()).isPresent() ? userRepository.findUserByNickname(authentication.getName()).get().getId() : null;
-
         QuizStatistic statistic = new QuizStatistic();
-
         statistic.setGame(game);
-        statistic.setUserId(userId);
         statistic.setScore(score);
         statistic.setDuration(LocalDateTime.now().getLong(ChronoField.SECOND_OF_DAY) - game.getCreatedAt().getLong(ChronoField.SECOND_OF_DAY));
 
-        return mapper.mapQuizStatisticEntityToQuizStatisticDto(quizStatisticRepository.save(statistic));
+        if(SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UUID userId = userRepository.findUserByNickname(authentication.getName()).get().getId();
+            statistic.setUserId(userId);
+            quizStatisticRepository.save(statistic);
+        }
+
+        return mapper.mapQuizStatisticEntityToQuizStatisticDto(statistic);
     }
 
     int getLowestScore(){
