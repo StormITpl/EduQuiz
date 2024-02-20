@@ -108,4 +108,9 @@ public class UserService {
     public boolean checkIfNicknameAvailable(UserRequestDto userRequestDto) {
         return userRepository.findUserByNickname(userRequestDto.nickname()).isPresent();
     }
+
+    @Transactional(readOnly = true)
+    public long getTotalNumberOfUsers() {
+        return userRepository.count();
+    }
 }
