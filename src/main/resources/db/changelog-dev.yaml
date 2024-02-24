@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/001-create-tables.sql
   - include:
       file: db/changelog/002-create-table-user_statistics.sql
+  - include:
+      file: db/changelog/003-create-table-quiz_statistics.sql

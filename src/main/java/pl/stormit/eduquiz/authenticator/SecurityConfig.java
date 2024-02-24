@@ -13,9 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String[] AUTHENTICATED_LIST = {
-            "/category/**",
             "/quizzes/**",
-            "/quiz/**",
             "/quizManagement/**",
             "/categoryManagement"
     };

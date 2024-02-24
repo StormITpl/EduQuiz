@@ -251,6 +251,6 @@ insert into categories (id, name) values
                                       (gen_random_uuid(), 'Computer games'),
                                       (gen_random_uuid(), 'Mathematics');
 
-
-
+--changeset Slawek84PL:001_40
+alter table quizzes add column created_at timestamp;
 

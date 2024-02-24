@@ -1,45 +1,46 @@
-package pl.stormit.eduquiz.game.domain.entity;
+package pl.stormit.eduquiz.statistic.quizstatistic;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
+import pl.stormit.eduquiz.game.domain.entity.Game;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "games")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Game {
+@Table(name = "quiz_statistics")
+class QuizStatistic {
 
     @Id
     @GeneratedValue
     private UUID id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<UUID> userAnswers;
+    @OneToOne
+    @JoinColumn(name = "game_id", unique = true)
+    private Game game;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Quiz quiz;
+    @Column(name = "user_id")
+    private UUID userId;
 
-    public Game(Quiz quiz) {
-        this.quiz = quiz;
-    }
+    @Column(name = "score")
+    private int score;
+
+    @Column(name = "duration")
+    private long duration;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -48,4 +49,5 @@ public class Game {
     void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
     }
+
 }
