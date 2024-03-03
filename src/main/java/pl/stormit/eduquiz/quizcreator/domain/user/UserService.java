@@ -6,15 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import pl.stormit.eduquiz.authenticator.CustomPasswordEncoder;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
-import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserMapper;
+import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,5 +115,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public long getTotalNumberOfUsers() {
         return userRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public long getNewUsersCountLast30Days() {
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        ZonedDateTime zonedDateTime = thirtyDaysAgo.atStartOfDay(ZoneId.systemDefault());
+        return userRepository.countNewUsersLast30Days(zonedDateTime.toInstant());
     }
 }

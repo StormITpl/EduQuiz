@@ -7,6 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles({"test"})
@@ -19,7 +20,19 @@ class UserStatisticIntegrationTest {
     @Autowired
     private UserService userService;
 
+
     @Sql(scripts = "classpath:db/changelog/test.sql")
+    @Test
+    void integrationTestForNewUsersCount() {
+        // given
+
+        // when
+        long newUsersCount = userStatisticFacade.getNewUsersCountLast30Days();
+
+        // then
+        assertEquals(5, newUsersCount, "The total number of new users in 30 days");
+    }
+
     @Test
     void totalNumberOfUsersIntegrationTest() {
 
