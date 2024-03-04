@@ -72,3 +72,12 @@ insert into users (id, nickname, created_at, email, password, role, status)
 values
     (RANDOM_UUID(), 'TestUser1', CURRENT_TIMESTAMP, 'testuser1@gmail.com', '$2a$10$yUGAMyJTAfcJsvga0bf18esKYZw4pms4aMCxveyF8E6WXYj6EsMHe', 'ROLE_USER', 'VERIFIED'),
     (RANDOM_UUID(), 'TestUser2', CURRENT_TIMESTAMP, 'testuser2@gmail.com', '$2a$10$Ww13KQ2gy2w8IqmL2RKdfO4kST5rAraE1jIH0L8VYkhJSekHDX2.O', 'ROLE_ADMIN', 'VERIFIED');
+
+--changeset k4t:002_10 context:"test"
+insert into users (id, nickname, created_at, email, password, role, status)
+values
+    (RANDOM_UUID(), 'TestUser3', DATEADD('DAY', -2, CURRENT_DATE()), 'testuser2days@k4townia.com', 'password', 'ROLE_USER', 'VERIFIED'),
+    (RANDOM_UUID(), 'TestUser4', DATEADD('DAY', -10, CURRENT_DATE()), 'testuser10days@k4townia.com', 'password', 'ROLE_USER', 'VERIFIED'),
+    (RANDOM_UUID(), 'TestUser5', DATEADD('DAY', -20, CURRENT_DATE()), 'testuser20days@k4townia.com', 'password', 'ROLE_USER', 'VERIFIED'),
+    (RANDOM_UUID(), 'TestUser6', DATEADD('DAY', -32, CURRENT_DATE()), 'testuser32days@k4townia.com', 'password', 'ROLE_USER', 'VERIFIED');
+

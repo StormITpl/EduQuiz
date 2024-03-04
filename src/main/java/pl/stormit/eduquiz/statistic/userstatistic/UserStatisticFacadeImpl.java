@@ -13,4 +13,9 @@ public class UserStatisticFacadeImpl implements UserStatisticFacade {
     public long getTotalNumberOfUsers() {
         return userService.getTotalNumberOfUsers();
     }
+
+    @Override
+    public long getNewUsersCountLast30Days() {
+        return userService.getNewUsersCountLast30Days();
+    }
 }

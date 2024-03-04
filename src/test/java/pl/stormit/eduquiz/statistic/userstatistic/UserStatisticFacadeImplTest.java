@@ -31,4 +31,29 @@ class UserStatisticFacadeImplTest {
         // then
         assertEquals(expectedTotalUsers, actualTotalUsers, "The total number of users should match the expected value");
     }
+
+    @Test
+    void shouldReturnCorrectNumberOfNewUsers() {
+        // given
+        long expectedCount = 10L;
+        when(userService.getNewUsersCountLast30Days()).thenReturn(expectedCount);
+
+        // when
+        long actualCount = userStatisticFacade.getNewUsersCountLast30Days();
+
+        // then
+        assertEquals(expectedCount, actualCount, "Expected number of new users in the last 30 days should be " + expectedCount + " but got " + actualCount);
+    }
+
+    @Test
+    void shouldReturnZeroWhenNoNewUsers() {
+        // given
+        when(userService.getNewUsersCountLast30Days()).thenReturn(0L);
+
+        // when
+        long actualCount = userStatisticFacade.getNewUsersCountLast30Days();
+
+        // then
+        assertEquals(0, actualCount, "Expected number of new users in the last 30 days should be 0 but got " + actualCount);
+    }
 }

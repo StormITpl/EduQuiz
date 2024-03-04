@@ -4,4 +4,5 @@ public interface UserStatisticFacade {
 
     long getTotalNumberOfUsers();
 
+    long getNewUsersCountLast30Days();
 }

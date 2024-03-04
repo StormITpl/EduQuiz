@@ -253,7 +253,3 @@ insert into categories (id, name) values
 
 --changeset Slawek84PL:001_40
 alter table quizzes add column created_at timestamp;
-
---changeset Kisiel:001_41
-alter table games add column created_at timestamp;
-
