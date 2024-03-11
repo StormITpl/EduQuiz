@@ -253,4 +253,3 @@ insert into categories (id, name) values
 
 --changeset Slawek84PL:001_40
 alter table quizzes add column created_at timestamp;
-

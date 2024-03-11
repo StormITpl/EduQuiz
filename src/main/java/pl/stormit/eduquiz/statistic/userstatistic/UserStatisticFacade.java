@@ -7,4 +7,7 @@ public interface UserStatisticFacade {
 
     long getTotalNumberOfUsers();
 
-    Instant lastLoginByUser(UUID userId);}
+    long getNewUsersCountLast30Days();
+
+    Instant lastLoginByUser(UUID userId);
+}

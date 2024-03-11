@@ -23,6 +23,11 @@ public class UserStatisticFacadeImpl implements UserStatisticFacade {
     }
 
     @Override
+    public long getNewUsersCountLast30Days() {
+        return userService.getNewUsersCountLast30Days();
+    }
+
+    @Override
     public Instant lastLoginByUser(UUID userId) {
         UserStatistic userStatistics = userStatisticRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("The user statistics by id: " + userId + ", does not exist."));
