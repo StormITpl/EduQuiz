@@ -5,7 +5,7 @@ import pl.stormit.eduquiz.quizcreator.domain.user.User;
 import java.time.Instant;
 import java.util.UUID;
 
-public record UserStatisticsDto(
+public record UserStatisticDto(
         UUID id,
         User user,
         Instant lastLogin,

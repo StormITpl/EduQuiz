@@ -22,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_statistics")
-class UserStatistics {
+class UserStatistic {
 
     @Id
     @GeneratedValue
