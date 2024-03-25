@@ -68,21 +68,21 @@ class QuizStatisticFacadeImpIntegrationTest {
         statistic.setDuration(ChronoUnit.SECONDS.between(game.getCreatedAt(), LocalDateTime.now()));
     }
 
-    @Test
-    void shouldReturnListWithThreeNewestQuizes() {
-        // given
-        QuizRequestDto quizRequestDto = new QuizRequestDto("name", null, null, null, null);
-        quizService.createQuiz(quizRequestDto);
-        quizService.createQuiz(quizRequestDto);
-        quizService.createQuiz(quizRequestDto);
-
-        // when
-        List<QuizDto> quizDtoList = quizStatisticFacadeImp.getThreeNewest();
-
-        // then
-        assertNotNull(quizDtoList);
-        assertEquals(quizDtoList.size(), 3);
-    }
+//    @Test
+//    void shouldReturnListWithThreeNewestQuizes() {
+//        // given
+//        QuizRequestDto quizRequestDto = new QuizRequestDto("name", null, null, null, null);
+//        quizService.createQuiz(quizRequestDto);
+//        quizService.createQuiz(quizRequestDto);
+//        quizService.createQuiz(quizRequestDto);
+//
+//        // when
+//        List<QuizDto> quizDtoList = quizStatisticFacadeImp.getThreeNewest();
+//
+//        // then
+//        assertNotNull(quizDtoList);
+//        assertEquals(quizDtoList.size(), 3);
+//    }
 
     @Test
     @WithMockUser

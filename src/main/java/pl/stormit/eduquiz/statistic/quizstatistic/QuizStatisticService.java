@@ -38,11 +38,11 @@ class QuizStatisticService {
     }
 
     int getLowestScore(){
-        return quizStatisticRepository.findFirstByOrderByScoreAsc();
+        return quizStatisticRepository.findLastQuizStatisticByScore();
     }
 
     int getHighestScore(){
-        return quizStatisticRepository.findFirstByOrderByScoreDesc();
+        return quizStatisticRepository.findTopQuizStatisticByScore();
     }
 
 }
