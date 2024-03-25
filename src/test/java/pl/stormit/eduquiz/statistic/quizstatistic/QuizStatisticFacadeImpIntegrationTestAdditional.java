@@ -39,16 +39,6 @@ class QuizStatisticFacadeImpIntegrationTestAdditional {
     @Autowired
     private QuizStatisticService quizStatisticService;
 
-//    @Autowired
-//    private QuizStatisticFacadeImp quizStatisticFacadeImp;
-
-//    @Autowired
-//    private QuizService quizService;
-
-    private  int score;
-    private  int score2;
-//    private  final String USER_NAME = "user";
-//    private  final UUID USER_UUID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82501");
     private  final UUID STAT_UUID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82505");
     private  final UUID STAT_UUID2 = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82333");
     private  final UUID GAME_UUID = UUID.fromString("f825606e-c660-4675-9a3a-b19e77c82508");
@@ -63,9 +53,10 @@ class QuizStatisticFacadeImpIntegrationTestAdditional {
     @BeforeEach
     void SetUp(){
 
-        score = 10;
-        score2 = 5;
+        int score = 10;
+        int score2 = 5;
 
+        //Games set-up
         game.setId(GAME_UUID);
         game.setCreatedAt(LocalDateTime.now().minusSeconds(10));
 
@@ -88,47 +79,28 @@ class QuizStatisticFacadeImpIntegrationTestAdditional {
         secondUser.setRole(Role.ROLE_ADMIN);
         userRepository.save(secondUser);
 
+        //First statistic set-up
         statistic.setCreatedAt(LocalDateTime.now());
         statistic.setDuration(ChronoUnit.SECONDS.between(game.getCreatedAt(), LocalDateTime.now()));
         statistic.setScore(score);
-
         statistic.setUserId(firstUser.getId());
         statistic.setId(STAT_UUID);
 
+        //Second statistic set-up
         statistic2.setCreatedAt(LocalDateTime.now());
         statistic2.setDuration(ChronoUnit.SECONDS.between(game2.getCreatedAt(), LocalDateTime.now()));
         statistic2.setScore(score2);
         statistic2.setUserId(secondUser.getId());
         statistic2.setId(STAT_UUID2);
 
+        //Save both games
+        gameRepository.save(game);
+        gameRepository.save(game2);
     }
 
     @Test
     void shouldReturnHighestScore(){
         // given
-
-        userRepository.save(firstUser);
-        gameRepository.save(game);
-        List<Game> all = gameRepository.findAll();
-        UUID gameRepId = all.get(0).getId();
-        Optional<Game> byId = gameRepository.findById(gameRepId);
-        statistic.setGame(byId.get());
-        quizStatisticRepository.save(statistic);
-
-        int highestScore = quizStatisticService.getHighestScore();
-
-        assertEquals(10,highestScore);
-    }
-
-    @Test
-    void shouldReturnLowestScore(){
-        // given
-
-        userRepository.save(firstUser);
-        userRepository.save(secondUser);
-
-        gameRepository.save(game);
-        gameRepository.save(game2);
         List<Game> all = gameRepository.findAll();
         UUID gameRepId = all.get(0).getId();
         UUID gameRepId2 = all.get(1).getId();
@@ -139,8 +111,30 @@ class QuizStatisticFacadeImpIntegrationTestAdditional {
         statistic2.setGame(byId2.get());
         quizStatisticRepository.save(statistic2);
 
+        //When
+        int highestScore = quizStatisticService.getHighestScore();
+
+        //Then
+        assertEquals(10,highestScore);
+    }
+
+    @Test
+    void shouldReturnLowestScore(){
+        // given
+        List<Game> all = gameRepository.findAll();
+        UUID gameRepId = all.get(0).getId();
+        UUID gameRepId2 = all.get(1).getId();
+        Optional<Game> byId = gameRepository.findById(gameRepId);
+        Optional<Game> byId2 = gameRepository.findById(gameRepId2);
+        statistic.setGame(byId.get());
+        quizStatisticRepository.save(statistic);
+        statistic2.setGame(byId2.get());
+        quizStatisticRepository.save(statistic2);
+
+        //When
         int lowestScore = quizStatisticService.getLowestScore();
 
+        //Then
         assertEquals(5,lowestScore);
     }
 }
