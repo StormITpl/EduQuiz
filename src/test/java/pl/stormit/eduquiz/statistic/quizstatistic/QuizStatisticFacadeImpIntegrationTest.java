@@ -47,6 +47,7 @@ class QuizStatisticFacadeImpIntegrationTest {
     @Autowired
     QuizService quizService;
 
+    @Autowired
     private static QuizRepository quizRepository;
 
     private static int score;
