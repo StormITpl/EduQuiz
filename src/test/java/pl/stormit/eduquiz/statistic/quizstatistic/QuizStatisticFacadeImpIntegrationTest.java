@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.statistic.quizstatistic;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import pl.stormit.eduquiz.game.domain.entity.Game;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizRepository;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
@@ -45,6 +47,9 @@ class QuizStatisticFacadeImpIntegrationTest {
     @Autowired
     QuizService quizService;
 
+    @Autowired
+    QuizRepository quizRepository;
+
     private static int score;
     private static final String USER_NAME = "user";
     private static final UUID USER_UUID = UUID.randomUUID();
@@ -66,6 +71,11 @@ class QuizStatisticFacadeImpIntegrationTest {
         statistic.setUserId(user.getId());
         statistic.setScore(score);
         statistic.setDuration(ChronoUnit.SECONDS.between(game.getCreatedAt(), LocalDateTime.now()));
+    }
+
+    @AfterEach
+    void afterEach() {
+        quizRepository.deleteAll();
     }
 
     @Test
