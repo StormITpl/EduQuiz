@@ -1,6 +1,6 @@
 package pl.stormit.eduquiz.statistic.quizstatistic;
 
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ class QuizStatisticFacadeImpIntegrationTest {
     QuizService quizService;
 
     @Autowired
-    private static QuizRepository quizRepository;
+    QuizRepository quizRepository;
 
     private static int score;
     private static final String USER_NAME = "user";
@@ -73,8 +73,8 @@ class QuizStatisticFacadeImpIntegrationTest {
         statistic.setDuration(ChronoUnit.SECONDS.between(game.getCreatedAt(), LocalDateTime.now()));
     }
 
-    @AfterAll
-    static void afterAll() {
+    @AfterEach
+    void afterEach() {
         quizRepository.deleteAll();
     }
 
