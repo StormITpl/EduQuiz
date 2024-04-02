@@ -33,4 +33,9 @@ public class UserStatisticFacadeImpl implements UserStatisticFacade {
                 .orElseThrow(() -> new EntityNotFoundException("The user statistics by id: " + userId + ", does not exist."));
         return userStatistics.getLastLoginDate();
     }
+
+    @Override
+    public int getNumberOfLogins(UUID userId) {
+        return 0;
+    }
 }
