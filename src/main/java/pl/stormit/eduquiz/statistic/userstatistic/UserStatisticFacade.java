@@ -12,4 +12,6 @@ public interface UserStatisticFacade {
     Instant lastLoginByUser(UUID userId);
 
     int getNumberOfLogins(UUID userId);
+
+    void incrementLoginCount(String username);
 }

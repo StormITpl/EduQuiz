@@ -36,6 +36,16 @@ public class UserStatisticFacadeImpl implements UserStatisticFacade {
 
     @Override
     public int getNumberOfLogins(UUID userId) {
-        return 0;
+        UserStatistic userStatistic = userStatisticRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("The user statistics by id: " + userId + ", does not exist."));
+        return userStatistic.getLoginCount();
+    }
+
+    @Override
+    public void incrementLoginCount(String username) {
+        UserStatistic userStatistic = userStatisticRepository.findByUserNickname(username)
+                .orElseThrow(() -> new EntityNotFoundException("The user by nickname: " + username + ", does not exist."));
+        userStatistic.setLoginCount(userStatistic.getLoginCount() + 1);
+        userStatisticRepository.save(userStatistic);
     }
 }
