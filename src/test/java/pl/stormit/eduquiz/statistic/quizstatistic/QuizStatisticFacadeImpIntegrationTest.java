@@ -73,7 +73,6 @@ class QuizStatisticFacadeImpIntegrationTest {
         statistic.setDuration(ChronoUnit.SECONDS.between(game.getCreatedAt(), LocalDateTime.now()));
     }
 
-
     @AfterEach
     void afterEach() {
         quizRepository.deleteAll();
