@@ -8,6 +8,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -29,6 +30,11 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     @Override
     public QuizStatisticDto addStatisticToDB(Game game, int score) {
         return statisticService.addStatisticToDB(game, score);
+    }
+
+    @Override
+    public Map<String, Long> getDurationForEachQuizzes(boolean best) {
+        return statisticService.getDurationForEachQuizzes(best);
     }
 
 }

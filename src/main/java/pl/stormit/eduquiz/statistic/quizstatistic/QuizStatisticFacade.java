@@ -5,6 +5,7 @@ import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QuizStatisticFacade {
 
@@ -16,5 +17,5 @@ public interface QuizStatisticFacade {
 
     QuizStatisticDto addStatisticToDB(Game game, int score);
 
-    
+    Map<String, Long> getDurationForEachQuizzes(boolean best);
 }

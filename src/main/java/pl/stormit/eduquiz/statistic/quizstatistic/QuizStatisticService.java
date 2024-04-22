@@ -10,6 +10,9 @@ import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -45,4 +48,22 @@ class QuizStatisticService {
         return quizStatisticRepository.findTopQuizStatisticByScore();
     }
 
+    public Map<String, Long> getDurationForEachQuizzes(boolean best) {
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        if (best){
+            quizStatisticRepository.findAll().stream()
+                    .sorted(Comparator.comparing(QuizStatistic::getDuration).reversed())
+                    .forEach(quizStatistic -> {
+                        map.put(quizStatistic.getGame().getQuiz().getName(), quizStatistic.getDuration());
+                    });
+        } else {
+            quizStatisticRepository.findAll().stream()
+                    .sorted(Comparator.comparing(QuizStatistic::getDuration))
+                    .forEach(quizStatistic -> {
+                        map.put(quizStatistic.getGame().getQuiz().getName(), quizStatistic.getDuration());
+                    });
+        }
+        return map;
+    }
 }
