@@ -20,6 +20,8 @@ import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,11 +57,15 @@ class QuizStatisticFacadeImpIntegrationTest {
     private static final UUID USER_UUID = UUID.randomUUID();
     private static final Game game = new Game();
     private static final Game game2 = new Game();
+    private static final Game game3 = new Game();
+    private static final Game game4 = new Game();
     private static final Quiz quiz = new Quiz();
     private static final Quiz quiz2 = new Quiz();
     private static final User user = new User();
     private static final QuizStatistic statistic = new QuizStatistic();
     private static final QuizStatistic statistic2 = new QuizStatistic();
+    private static final QuizStatistic statistic3 = new QuizStatistic();
+    private static final QuizStatistic statistic4 = new QuizStatistic();
 
     @BeforeAll
     static void beforeAll() {
@@ -69,15 +75,23 @@ class QuizStatisticFacadeImpIntegrationTest {
         quiz.setName("Quiz1");
 
         quiz2.setId(UUID.randomUUID());
-        quiz2.setName("Quiz1");
+        quiz2.setName("Quiz2");
 
         game.setId(UUID.randomUUID());
         game.setQuiz(quiz);
         game.setCreatedAt(LocalDateTime.now().minusSeconds(10));
 
         game2.setId(UUID.randomUUID());
-        game2.setQuiz(quiz2);
+        game2.setQuiz(quiz);
         game2.setCreatedAt(LocalDateTime.now().minusSeconds(20));
+
+        game3.setId(UUID.randomUUID());
+        game3.setQuiz(quiz2);
+        game3.setCreatedAt(LocalDateTime.now().minusSeconds(11));
+
+        game4.setId(UUID.randomUUID());
+        game4.setQuiz(quiz2);
+        game4.setCreatedAt(LocalDateTime.now().minusSeconds(21));
 
         user.setId(USER_UUID);
         user.setNickname(USER_NAME);
@@ -91,6 +105,16 @@ class QuizStatisticFacadeImpIntegrationTest {
         statistic2.setUserId(user.getId());
         statistic2.setScore(score + 10);
         statistic2.setDuration(ChronoUnit.SECONDS.between(game2.getCreatedAt(), LocalDateTime.now()));
+
+        statistic3.setGame(game3);
+        statistic3.setUserId(user.getId());
+        statistic3.setScore(score);
+        statistic3.setDuration(ChronoUnit.SECONDS.between(game3.getCreatedAt(), LocalDateTime.now()));
+
+        statistic4.setGame(game4);
+        statistic4.setUserId(user.getId());
+        statistic4.setScore(score + 10);
+        statistic4.setDuration(ChronoUnit.SECONDS.between(game4.getCreatedAt(), LocalDateTime.now()));
     }
 
     @AfterEach
@@ -146,24 +170,74 @@ class QuizStatisticFacadeImpIntegrationTest {
 
     @Test
     void shouldReturnMapWithBestTime() {
-        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2));
+        // given
+        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
+        // when
         Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(true);
-        verify(quizStatisticRepository, times(1)).findAll();
 
+        //then
+        verify(quizStatisticRepository, times(1)).findAll();
         assertNotNull(durationForEachQuizzes);
+        assertEquals(2, durationForEachQuizzes.size());
         assertEquals(10L, durationForEachQuizzes.get("Quiz1"));
+        assertEquals(11L, durationForEachQuizzes.get("Quiz2"));
+        assertNotEquals(20L, durationForEachQuizzes.get("Quiz1"));
+        assertNotEquals(21L, durationForEachQuizzes.get("Quiz2"));
     }
 
     @Test
     void shouldReturnMapWithWorstTime() {
-        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2));
+        // given
+        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
+        // when
         Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(false);
-        verify(quizStatisticRepository, times(1)).findAll();
 
+        //then
+        verify(quizStatisticRepository, times(1)).findAll();
         assertNotNull(durationForEachQuizzes);
+        assertEquals(2, durationForEachQuizzes.size());
         assertEquals(20L, durationForEachQuizzes.get("Quiz1"));
+        assertEquals(21L, durationForEachQuizzes.get("Quiz2"));
+        assertNotEquals(10L, durationForEachQuizzes.get("Quiz1"));
+        assertNotEquals(20L, durationForEachQuizzes.get("Quiz2"));
     }
 
+    @Test
+    void shouldReturnMapWithCorrectOrderForBestDuration() {
+        // given
+        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
+
+        // when
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(true);
+        List<String> expectedKeys = Arrays.asList("Quiz1", "Quiz2");
+        List<String> actualKeys = new ArrayList<>(durationForEachQuizzes.keySet());
+        List<Long> expectedValues = Arrays.asList(10L, 11L);
+        List<Long> actualValues = new ArrayList<>(durationForEachQuizzes.values());
+
+        //then
+        verify(quizStatisticRepository, times(1)).findAll();
+        assertThat(expectedKeys).containsExactlyElementsOf(actualKeys);
+        assertThat(expectedValues).containsExactlyElementsOf(actualValues);
+        assertEquals(expectedKeys, actualKeys);
+    }
+
+    @Test
+    void shouldReturnMapWithCorrectOrderForWorstDuration() {
+        // given
+        given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
+
+        // when
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(false);
+        List<String> expectedKeys = Arrays.asList("Quiz2", "Quiz1");
+        List<String> actualKeys = new ArrayList<>(durationForEachQuizzes.keySet());
+        List<Long> expectedValues = Arrays.asList(21L, 20L);
+        List<Long> actualValues = new ArrayList<>(durationForEachQuizzes.values());
+
+        //then
+        verify(quizStatisticRepository, times(1)).findAll();
+        assertThat(expectedKeys).containsExactlyElementsOf(actualKeys);
+        assertThat(expectedValues).containsExactlyElementsOf(actualValues);
+    }
 }
