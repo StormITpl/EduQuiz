@@ -28,10 +28,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ActiveProfiles({"test"})
 @SpringBootTest
@@ -174,7 +180,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
         // when
-        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(true);
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(true);
 
         //then
         verify(quizStatisticRepository, times(1)).findAll();
@@ -192,7 +198,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
         // when
-        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(false);
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(false);
 
         //then
         verify(quizStatisticRepository, times(1)).findAll();
@@ -210,7 +216,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
         // when
-        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(true);
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(true);
         List<String> expectedKeys = Arrays.asList("Quiz1", "Quiz2");
         List<String> actualKeys = new ArrayList<>(durationForEachQuizzes.keySet());
         List<Long> expectedValues = Arrays.asList(10L, 11L);
@@ -229,7 +235,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         given(quizStatisticRepository.findAll()).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
 
         // when
-        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuizzes(false);
+        Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(false);
         List<String> expectedKeys = Arrays.asList("Quiz2", "Quiz1");
         List<String> actualKeys = new ArrayList<>(durationForEachQuizzes.keySet());
         List<Long> expectedValues = Arrays.asList(21L, 20L);
