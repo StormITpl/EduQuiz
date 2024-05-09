@@ -10,6 +10,9 @@ import pl.stormit.eduquiz.statistic.quizstatistic.dto.QuizStatisticDto;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ class QuizStatisticService {
         statistic.setScore(score);
         statistic.setDuration(LocalDateTime.now().getLong(ChronoField.SECOND_OF_DAY) - game.getCreatedAt().getLong(ChronoField.SECOND_OF_DAY));
 
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UUID userId = userRepository.findUserByNickname(authentication.getName()).get().getId();
             statistic.setUserId(userId);
@@ -37,12 +40,23 @@ class QuizStatisticService {
         return mapper.mapQuizStatisticEntityToQuizStatisticDto(statistic);
     }
 
-    int getLowestScore(){
+    int getLowestScore() {
         return quizStatisticRepository.findLastQuizStatisticByScore();
     }
 
-    int getHighestScore(){
+    int getHighestScore() {
         return quizStatisticRepository.findTopQuizStatisticByScore();
     }
 
+    public Map<String, Long> getDurationForEachQuiz(boolean best) {
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        quizStatisticRepository.findAll().stream()
+                .sorted(best ?
+                        Comparator.comparing(QuizStatistic::getDuration) :
+                        Comparator.comparing(QuizStatistic::getDuration).reversed())
+                .forEach(quizStatistic ->
+                        map.putIfAbsent(quizStatistic.getGame().getQuiz().getName(), quizStatistic.getDuration()));
+        return map;
+    }
 }
