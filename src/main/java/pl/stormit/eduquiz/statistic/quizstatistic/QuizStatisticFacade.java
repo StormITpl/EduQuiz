@@ -17,5 +17,5 @@ public interface QuizStatisticFacade {
 
     QuizStatisticDto addStatisticToDB(Game game, int score);
 
-    Map<String, Long> getDurationForEachQuizzes(boolean best);
+    Map<String, Long> getDurationForEachQuiz(boolean best);
 }

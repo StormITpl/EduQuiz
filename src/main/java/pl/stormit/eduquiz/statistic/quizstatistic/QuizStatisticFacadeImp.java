@@ -33,8 +33,8 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
-    public Map<String, Long> getDurationForEachQuizzes(boolean best) {
-        return statisticService.getDurationForEachQuizzes(best);
+    public Map<String, Long> getDurationForEachQuiz(boolean best) {
+        return statisticService.getDurationForEachQuiz(best);
     }
 
 }

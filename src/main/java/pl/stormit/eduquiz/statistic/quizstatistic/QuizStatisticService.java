@@ -48,7 +48,7 @@ class QuizStatisticService {
         return quizStatisticRepository.findTopQuizStatisticByScore();
     }
 
-    public Map<String, Long> getDurationForEachQuizzes(boolean best) {
+    public Map<String, Long> getDurationForEachQuiz(boolean best) {
         Map<String, Long> map = new LinkedHashMap<>();
 
         quizStatisticRepository.findAll().stream()
