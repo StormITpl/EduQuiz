@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -182,7 +183,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         // when
         Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(true);
 
-        //then
+        // then
         verify(quizStatisticRepository, times(1)).findAll();
         assertNotNull(durationForEachQuizzes);
         assertEquals(2, durationForEachQuizzes.size());
@@ -200,7 +201,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         // when
         Map<String, Long> durationForEachQuizzes = quizStatisticFacadeImp.getDurationForEachQuiz(false);
 
-        //then
+        // then
         verify(quizStatisticRepository, times(1)).findAll();
         assertNotNull(durationForEachQuizzes);
         assertEquals(2, durationForEachQuizzes.size());
@@ -222,7 +223,7 @@ class QuizStatisticFacadeImpIntegrationTest {
         List<Long> expectedValues = Arrays.asList(10L, 11L);
         List<Long> actualValues = new ArrayList<>(durationForEachQuizzes.values());
 
-        //then
+        // then
         verify(quizStatisticRepository, times(1)).findAll();
         assertThat(expectedKeys).containsExactlyElementsOf(actualKeys);
         assertThat(expectedValues).containsExactlyElementsOf(actualValues);
@@ -241,9 +242,86 @@ class QuizStatisticFacadeImpIntegrationTest {
         List<Long> expectedValues = Arrays.asList(21L, 20L);
         List<Long> actualValues = new ArrayList<>(durationForEachQuizzes.values());
 
-        //then
+        // then
         verify(quizStatisticRepository, times(1)).findAll();
         assertThat(expectedKeys).containsExactlyElementsOf(actualKeys);
         assertThat(expectedValues).containsExactlyElementsOf(actualValues);
+    }
+
+    @Test
+    void shouldReturnMostPopularQuizInLastSevenDays() {
+        // given
+        given(quizStatisticRepository.findDistinctByCreatedAtAfterOrderByGame_Quiz_NameAsc(any())).willReturn(quizStatisticList());
+
+        // when
+        Map<String, Long> lastPopularQuiz = quizStatisticFacadeImp.getPopularQuizInLastSevenDays();
+
+        // then
+        verify(quizStatisticRepository, times(1)).findDistinctByCreatedAtAfterOrderByGame_Quiz_NameAsc(any());
+        assertThat(lastPopularQuiz)
+                .hasSize(3)
+                .containsExactly(
+                        entry("Quiz4", 3L),
+                        entry(quiz.getName(), 2L),
+                        entry(quiz2.getName(), 2L));
+    }
+
+    @Test
+    void shouldReturnOnlyTwoPopularQuizInLastSevenDays() {
+        // given
+        given(quizStatisticRepository.findDistinctByCreatedAtAfterOrderByGame_Quiz_NameAsc(any())).willReturn(List.of(statistic, statistic2, statistic3, statistic4));
+
+        // when
+        Map<String, Long> lastPopularQuiz = quizStatisticFacadeImp.getPopularQuizInLastSevenDays();
+
+        // then
+        verify(quizStatisticRepository, times(1)).findDistinctByCreatedAtAfterOrderByGame_Quiz_NameAsc(any());
+        assertThat(lastPopularQuiz)
+                .hasSize(2)
+                .containsExactly(
+                        entry(quiz.getName(), 2L),
+                        entry(quiz2.getName(), 2L));
+    }
+
+    private List<QuizStatistic> quizStatisticList() {
+        Quiz quiz3 = new Quiz();
+        quiz3.setName("Quiz3");
+        Quiz quiz4 = new Quiz();
+        quiz4.setName("Quiz4");
+
+        Game game5 = new Game();
+        game5.setId(UUID.randomUUID());
+        game5.setQuiz(quiz4);
+
+        Game game6 = new Game();
+        game6.setId(UUID.randomUUID());
+        game6.setQuiz(quiz4);
+
+        Game game7 = new Game();
+        game7.setId(UUID.randomUUID());
+        game7.setQuiz(quiz3);
+
+        Game game8 = new Game();
+        game8.setId(UUID.randomUUID());
+        game8.setQuiz(quiz4);
+
+        QuizStatistic statistic5 = new QuizStatistic();
+        statistic5.setGame(game5);
+        statistic5.setUserId(user.getId());
+
+        QuizStatistic statistic6 = new QuizStatistic();
+        statistic6.setGame(game6);
+        statistic6.setUserId(user.getId());
+
+        QuizStatistic statistic7 = new QuizStatistic();
+        statistic7.setGame(game7);
+        statistic7.setUserId(user.getId());
+
+        QuizStatistic statistic8 = new QuizStatistic();
+        statistic8.setGame(game8);
+        statistic8.setUserId(user.getId());
+
+        return List.of(statistic, statistic2, statistic3, statistic4,
+                statistic5, statistic6, statistic7, statistic8);
     }
 }
