@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -58,5 +59,26 @@ class QuizStatisticService {
                 .forEach(quizStatistic ->
                         map.putIfAbsent(quizStatistic.getGame().getQuiz().getName(), quizStatistic.getDuration()));
         return map;
+    }
+
+    public Map<String, Long> getPopularQuizInLastSevenDays() {
+        Map<String, Long> map = new LinkedHashMap<>();
+        LocalDateTime sevenDays = LocalDateTime.now().minusDays(7);
+
+        quizStatisticRepository.findDistinctByCreatedAtAfterOrderByGame_Quiz_NameAsc(sevenDays)
+                .forEach(quizStatistic -> {
+                    map.merge(quizStatistic.getGame().getQuiz().getName(), 1L, Long::sum);
+                });
+
+        return map.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 }
