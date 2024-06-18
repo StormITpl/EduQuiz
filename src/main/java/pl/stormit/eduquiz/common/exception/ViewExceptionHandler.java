@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.stormit.eduquiz.common.controller.CategoryManagementViewController;
 import pl.stormit.eduquiz.common.controller.IndexViewController;
 import pl.stormit.eduquiz.common.controller.QuizManagementViewController;
 
-@ControllerAdvice(basePackageClasses= {CategoryManagementViewController.class, IndexViewController.class,
+@ControllerAdvice(basePackageClasses= {IndexViewController.class,
         QuizManagementViewController.class})
 public class ViewExceptionHandler extends ResponseEntityExceptionHandler {
 
