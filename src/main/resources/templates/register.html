@@ -188,8 +188,8 @@
         <label for="email">email</label>
         <input type="text" id="email" th:field="*{email}"><br>
 
-        <div class="alert-danger" th:if="${#fields.hasErrors('password')}">
-            <div th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" role="alert">
+            <p th:each="err : ${#fields.errors('password')}" th:utext="${err}"></p>
         </div>
         <i class='fas fa-key'></i>
         <label for="password">Password</label>
