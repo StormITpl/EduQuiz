@@ -17,14 +17,16 @@ public record UserRequestDto(@NotBlank(message = "Nickname must not be blank")
                              @NotBlank(message = "Email must not be blank")
                              @Email(message = "Invalid email address")
                              String email,
-                             @NotBlank(message = "Password must not be blank\n" +
-                                     "It must have at least 8 characters and at most 20 characters\n" +
-                                     "It must have at least one digit\n" +
-                                     "It must have at least one upper case alphabet\n" +
-                                     "It must have at least one lower case alphabet\n" +
-                                     "It must have at least one special character like !@#$%*&()-+=^\n" +
-                                     "It doesn`t contain any white space")
-                             @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%*&()-+=^])(?=\\S+$).{8,20}$")
+
+                             @NotBlank(message = "Password must not be blank")
+                             @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%*&()-+=^])(?=\\S+$).{8,20}$",
+                                     message = "<ul><li>Password must not be blank</li>" +
+                                             "<li>It must have at least 8 characters and at most 20 characters</li>" +
+                                             "<li>It must have at least one digit</li>" +
+                                             "<li>It must have at least one upper case alphabet</li>" +
+                                             "<li>It must have at least one lower case alphabet</li>" +
+                                             "<li>It must have at least one special character like !@#$%*&()-+=^</li>" +
+                                             "<li>It doesn`t contain any white space</li></ul>")
                              String password,
                              Status status,
                              Role role,
