@@ -72,23 +72,16 @@ public class IndexViewController {
     }
 
     @GetMapping("/quiz/{id}/{questionIndex}")
-    public String quiz(@PathVariable UUID id, @PathVariable int questionIndex, Model model, HttpSession httpSession) {
+    public String quiz(@PathVariable UUID id,
+                       @PathVariable int questionIndex,
+                       Model model, HttpSession httpSession) {
 
         QuizDto quizDto = quizService.getQuiz(id);
-        List<Question> questions = quizDto.questions();
         GameDto gameDto = gameService.createGame(quizDto);
+        UUID gameDtoUUID = gameDto.id();
+        Queue<Question> questionQueue = new LinkedList<>(quizDto.questions());
 
-        Queue<Question> questionQueue = new LinkedList<>(questions);
-
-        Question currentQuestion = questionQueue.poll();
-        List<Answer> currentAnswers = currentQuestion.getAnswers();
-
-        model.addAttribute("quiz", quizDto);
-        model.addAttribute("question", currentQuestion);
-        model.addAttribute("answers", currentAnswers);
-        model.addAttribute("questionIndex", ++questionIndex);
-        model.addAttribute("gameDtoId", gameDto.id());
-        httpSession.setAttribute("questionQueue", questionQueue);
+        addAttributes(questionIndex, model, httpSession, questionQueue, quizDto, gameDtoUUID);
 
         return "quiz";
     }
@@ -99,7 +92,8 @@ public class IndexViewController {
                                @RequestParam("radio") String selectedAnswerIdRequest,
                                @RequestParam("gameDtoId") String gameDtoId,
                                Model model, HttpSession httpSession) {
-        QuizDto quiz = quizService.getQuiz(id);
+
+        QuizDto quizDto = quizService.getQuiz(id);
         UUID selectedAnswerId = UUID.fromString(selectedAnswerIdRequest);
         UUID gameDtoUUID = UUID.fromString(gameDtoId);
         gameService.playGame(gameDtoUUID, answerService.getAnswer(selectedAnswerId));
@@ -107,23 +101,27 @@ public class IndexViewController {
         Queue<Question> questionQueue = (Queue<Question>) httpSession.getAttribute("questionQueue");
 
         if (questionQueue.isEmpty()) {
+            model.addAttribute("gameDtoId", gameDtoUUID);
             gameService.completeGame(gameDtoUUID);
             return "confirmAnswers";
         }
 
+        addAttributes(questionIndex, model, httpSession, questionQueue, quizDto, gameDtoUUID);
+
+        return "quiz";
+    }
+
+    private void addAttributes(int questionIndex, Model model, HttpSession httpSession, Queue<Question> questionQueue, QuizDto quizDto, UUID gameDtoUUID) {
         Question currentQuestion = questionQueue.poll();
 
         List<Answer> currentAnswers = currentQuestion.getAnswers();
 
-        model.addAttribute("quiz", quiz);
-        model.addAttribute("gameDtoId", gameDtoId);
+        model.addAttribute("quiz", quizDto);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers", currentAnswers);
         model.addAttribute("questionIndex", ++questionIndex);
-        model.addAttribute("gameDtoId", gameDtoId);
+        model.addAttribute("gameDtoId", gameDtoUUID);
         httpSession.setAttribute("questionQueue", questionQueue);
-
-        return "quiz";
     }
 
     @GetMapping("/quiz/{gameDtoId}/completeResults")
