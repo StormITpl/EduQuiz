@@ -1,6 +1,7 @@
 package pl.stormit.eduquiz.statistic.quizstatistic;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,9 @@ class QuizStatisticService {
         statistic.setScore(score);
         statistic.setDuration(LocalDateTime.now().getLong(ChronoField.SECOND_OF_DAY) - game.getCreatedAt().getLong(ChronoField.SECOND_OF_DAY));
 
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
             UUID userId = userRepository.findUserByNickname(authentication.getName()).get().getId();
             statistic.setUserId(userId);
             quizStatisticRepository.save(statistic);
