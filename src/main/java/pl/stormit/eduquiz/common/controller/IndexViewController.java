@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.common.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,6 @@ import pl.stormit.eduquiz.game.dto.*;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
-import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
@@ -24,10 +24,7 @@ import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -65,32 +62,33 @@ public class IndexViewController {
         return "showQuizzes";
     }
 
-
     @GetMapping("/category/{id}")
     public String viewQuiz(@PathVariable UUID id, Model model) {
 
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("quizzes", quizService.getQuizzesByCategoryId(id));
-//        model.addAttribute("quizzes", quizService.getQuizzes());
 
         return "showQuizzesByCategory";
     }
 
     @GetMapping("/quiz/{id}/{questionIndex}")
-    public String quiz(@PathVariable UUID id, @PathVariable int questionIndex, Model model) {
+    public String quiz(@PathVariable UUID id, @PathVariable int questionIndex, Model model, HttpSession httpSession) {
 
         QuizDto quizDto = quizService.getQuiz(id);
         List<Question> questions = quizDto.questions();
         GameDto gameDto = gameService.createGame(quizDto);
 
-        Question currentQuestion = questions.get(questionIndex);
+        Queue<Question> questionQueue = new LinkedList<>(questions);
+
+        Question currentQuestion = questionQueue.poll();
         List<Answer> currentAnswers = currentQuestion.getAnswers();
 
         model.addAttribute("quiz", quizDto);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers", currentAnswers);
-        model.addAttribute("questionIndex", questionIndex);
+        model.addAttribute("questionIndex", ++questionIndex);
         model.addAttribute("gameDtoId", gameDto.id());
+        httpSession.setAttribute("questionQueue", questionQueue);
 
         return "quiz";
     }
@@ -100,33 +98,30 @@ public class IndexViewController {
                                @PathVariable("questionIndex") int questionIndex,
                                @RequestParam("radio") String selectedAnswerIdRequest,
                                @RequestParam("gameDtoId") String gameDtoId,
-                               Model model) {
+                               Model model, HttpSession httpSession) {
         QuizDto quiz = quizService.getQuiz(id);
-        List<Question> questions = quiz.questions();
         UUID selectedAnswerId = UUID.fromString(selectedAnswerIdRequest);
         UUID gameDtoUUID = UUID.fromString(gameDtoId);
         gameService.playGame(gameDtoUUID, answerService.getAnswer(selectedAnswerId));
 
-        questionIndex++;
+        Queue<Question> questionQueue = (Queue<Question>) httpSession.getAttribute("questionQueue");
 
-        model.addAttribute("quiz", quiz);
-        model.addAttribute("gameDtoId", gameDtoId);
-
-        if(questions.size() == questionIndex){
+        if (questionQueue.isEmpty()) {
             gameService.completeGame(gameDtoUUID);
             return "confirmAnswers";
         }
 
-        Question currentQuestion = questions.get(questionIndex);
+        Question currentQuestion = questionQueue.poll();
+
         List<Answer> currentAnswers = currentQuestion.getAnswers();
 
         model.addAttribute("quiz", quiz);
+        model.addAttribute("gameDtoId", gameDtoId);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers", currentAnswers);
-        model.addAttribute("questionIndex", questionIndex);
+        model.addAttribute("questionIndex", ++questionIndex);
         model.addAttribute("gameDtoId", gameDtoId);
-
-
+        httpSession.setAttribute("questionQueue", questionQueue);
 
         return "quiz";
     }
@@ -145,11 +140,9 @@ public class IndexViewController {
         System.out.println(resultById.get().getScore());
         List<Question> questionList = gameTest.getQuiz().getQuestions();
 
-
         model.addAttribute("results", resultById.get());
         model.addAttribute("questionList", questionList);
 
         return "results";
     }
 }
-
