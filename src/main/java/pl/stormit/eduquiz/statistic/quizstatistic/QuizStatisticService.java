@@ -31,12 +31,13 @@ class QuizStatisticService {
         statistic.setScore(score);
         statistic.setDuration(LocalDateTime.now().getLong(ChronoField.SECOND_OF_DAY) - game.getCreatedAt().getLong(ChronoField.SECOND_OF_DAY));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            UUID userId = userRepository.findUserByNickname(authentication.getName()).get().getId();
-            statistic.setUserId(userId);
-            quizStatisticRepository.save(statistic);
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (!(authentication instanceof AnonymousAuthenticationToken)) {
+                UUID userId = userRepository.findUserByNickname(authentication.getName()).get().getId();
+                statistic.setUserId(userId);
+                quizStatisticRepository.save(statistic);
+            }
         }
 
         return mapper.mapQuizStatisticEntityToQuizStatisticDto(statistic);
