@@ -127,7 +127,6 @@
         <form th:action="@{/quiz/{id}/{questionIndex}(id=${quiz.id}, questionIndex=${questionIndex})}" method="post">
             <input type="hidden" name="questionIndex" th:value="${questionIndex}"/>
             <input type="hidden" name="gameDtoId" th:value="${gameDtoId}"/>
-            <input type="hidden" name="questionQueue" th:value="${questionQueue}">
             <div th:each="answer : ${answers}">
                 <label>
                     <input type="radio" name="radio" th:value="${answer.getId()}">
