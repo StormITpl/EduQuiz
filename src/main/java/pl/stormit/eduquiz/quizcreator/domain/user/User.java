@@ -59,6 +59,4 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Quiz> quizzes;
 }

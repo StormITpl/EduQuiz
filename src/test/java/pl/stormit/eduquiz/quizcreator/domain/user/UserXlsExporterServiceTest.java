@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pl.stormit.eduquiz.quizcreator.domain.user.Role.ROLE_USER;
 
 @ActiveProfiles({"test"})
@@ -39,9 +38,9 @@ class UserXlsExporterServiceTest {
 
     @BeforeEach
     void SetUp() {
-        User firstUser = new User(null, "user1", "user1@example.com", "FirstUser1!", Status.VERIFIED, ROLE_USER, Instant.now(), null);
-        User secondUser = new User(null, "user2", "user2@example.com", "SecondUser2!", Status.UNVERIFIED, ROLE_USER, Instant.now(), null);
-        User thirdUser = new User(null, "user3", "user3@example.com", "ThirdUser3!", Status.UNVERIFIED, ROLE_USER, Instant.now(), null);
+        User firstUser = new User(null, "user1", "user1@example.com", "FirstUser1!", Status.VERIFIED, ROLE_USER, Instant.now());
+        User secondUser = new User(null, "user2", "user2@example.com", "SecondUser2!", Status.UNVERIFIED, ROLE_USER, Instant.now());
+        User thirdUser = new User(null, "user3", "user3@example.com", "ThirdUser3!", Status.UNVERIFIED, ROLE_USER, Instant.now());
 
         userRepository.saveAll(List.of(firstUser, secondUser, thirdUser))
                 .forEach(user -> userMapper.mapUserEntityToUserDto(user));

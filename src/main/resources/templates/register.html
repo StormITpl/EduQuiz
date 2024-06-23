@@ -176,8 +176,6 @@
 
     <form action="#" th:action="@{/register}" th:object="${userRequestDto}" method="post">
 
-        <input type="hidden" name="quizzes" th:value="${quizzes}"/>
-
         <div class="alert-danger" th:if="${#fields.hasErrors('nickname')}" th:text="${#fields.errors('nickname')}"></div>
         <i class='fas fa-id-badge'></i>
         <label for="nickName">Nick Name</label>

@@ -68,8 +68,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         UserDto secondDtoUser = new UserDto(
                 SECOND_ID,
@@ -78,8 +77,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         UserDto thirdDtoUser = new UserDto(
                 THIRD_ID,
                 "Dajmiech",
@@ -87,8 +85,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
         given(userService.getUsers()).willReturn((expectedDtoUsers));
 
@@ -124,8 +121,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         String userUrl = "/api/v1/users/" + expectedDtoUser.id();
 
         // when
@@ -161,8 +157,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         // when
         MockHttpServletRequestBuilder content = post("/api/v1/users")
@@ -183,8 +178,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of()
+                null
         );
 
         given(userService.createUser(createUserRequest))
@@ -210,16 +204,14 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         UserRequestDto requestDto = new UserRequestDto(
                 "Dajmiech",
                 "dajmiech@gmail.com",
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         // then
         MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID)
@@ -242,8 +234,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of()
+                null
         );
 
         given(userService.updateUser(FIRST_ID, requestDto))

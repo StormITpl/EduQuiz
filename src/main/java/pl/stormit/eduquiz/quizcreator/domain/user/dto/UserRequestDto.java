@@ -4,12 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.user.Role;
 import pl.stormit.eduquiz.quizcreator.domain.user.Status;
 
 import java.time.Instant;
-import java.util.List;
 
 public record UserRequestDto(@NotBlank(message = "Nickname must not be blank")
                              @Size(min = 3, max = 13)
@@ -30,6 +28,5 @@ public record UserRequestDto(@NotBlank(message = "Nickname must not be blank")
                              String password,
                              Status status,
                              Role role,
-                             Instant createdAt,
-                             List<Quiz> quizzes) {
+                             Instant createdAt) {
 }

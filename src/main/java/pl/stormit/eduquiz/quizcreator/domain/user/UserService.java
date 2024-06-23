@@ -70,7 +70,6 @@ public class UserService {
         user.setPassword(customPasswordEncoder.encode(userRequest.password()));
         user.setStatus(Status.UNVERIFIED);
         user.setRole(Role.ROLE_USER);
-        user.setQuizzes(userRequest.quizzes());
         return userMapper.mapUserEntityToUserDto(userRepository.save(user));
     }
 
@@ -85,7 +84,6 @@ public class UserService {
         user.setPassword(customPasswordEncoder.encode(userRequest.password()));
         user.setStatus(userRequest.status());
         user.setRole(userRequest.role());
-        user.setQuizzes(userRequest.quizzes());
         User savedUser = userRepository.save(user);
         return userMapper.mapUserEntityToUserDto(savedUser);
     }
