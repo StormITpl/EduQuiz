@@ -40,10 +40,9 @@ public class QuizManagementViewController {
     @PostMapping("/createQuiz")
     public String createQuiz(@RequestParam("quizName") String quizName,
                              @RequestParam("categoryId") Category category,
-                             @RequestParam("questions") List questions,
-                             @RequestParam("games") List games) {
+                             @RequestParam("questions") List questions) {
 
-        QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, null, questions, games);
+        QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, null, questions);
 
         quizService.createQuiz(quizRequest);
 

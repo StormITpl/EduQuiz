@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.user.User;
@@ -48,9 +47,6 @@ public class Quiz {
 
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questions;
-
-    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
-    private List<Game> games;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

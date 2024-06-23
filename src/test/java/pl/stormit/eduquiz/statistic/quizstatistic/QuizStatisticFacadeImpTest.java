@@ -45,7 +45,7 @@ class QuizStatisticFacadeImpTest {
     @Test
     void shouldReturnThreeNewestQuizDtoList() {
         // given
-        QuizDto quizDto = new QuizDto(null, null, null, null, null, null);
+        QuizDto quizDto = new QuizDto(null, null, null, null, null);
         List<QuizDto> quizes = List.of(quizDto, quizDto, quizDto);
         when(quizService.getThreeNewest()).thenReturn(quizes);
 

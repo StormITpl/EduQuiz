@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.UUID;
 
 public record QuizDto(UUID id, String name, Category category, User user,
-                        List<Question> questions, List<Game> games) {
+                        List<Question> questions) {
 }

@@ -56,7 +56,7 @@ class GameServiceTest {
         Quiz quiz = new Quiz();
         quiz.setName("Quiz");
         quiz.setId(ID_1);
-        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of(), List.of());
+        QuizDto quizDto = new QuizDto(ID_1, "Quiz", null, null, List.of());
         Game game = new Game(ID_2, null, quiz, LocalDateTime.now());
         GameDto gameDto = new GameDto(ID_2, null);
 
@@ -79,7 +79,6 @@ class GameServiceTest {
                 "NonExistentQuiz",
                 null,
                 null,
-                List.of(),
                 List.of());
 
         // when

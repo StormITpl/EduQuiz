@@ -98,8 +98,7 @@ class QuizServiceTest {
                 quiz.getName(),
                 quiz.getCategory(),
                 quiz.getUser(),
-                quiz.getQuestions(),
-                quiz.getGames());
+                quiz.getQuestions());
 
         // when
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
@@ -119,8 +118,7 @@ class QuizServiceTest {
         QuizRequestDto quizToUpdate = new QuizRequestDto("Security-Pro",
                 quiz.getCategory(),
                 quiz.getUser(),
-                quiz.getQuestions(),
-                quiz.getGames());
+                quiz.getQuestions());
 
         // when
         QuizDto updatedQuiz = quizService.updateQuiz(createdQuiz.id(), quizToUpdate);
@@ -139,7 +137,6 @@ class QuizServiceTest {
                 "NonExistentQuiz",
                 new Category(),
                 new User(),
-                Collections.emptyList(),
                 Collections.emptyList()
         );
 

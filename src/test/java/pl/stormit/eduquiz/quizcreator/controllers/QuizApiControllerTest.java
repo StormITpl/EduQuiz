@@ -55,8 +55,8 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn200WhenFoundAllQuizzes() throws Exception {
         // given
-        QuizDto firstQuizDto = new QuizDto(FIRST_ID, "PL", null, null, List.of(), List.of());
-        QuizDto secondQuizDto = new QuizDto(SECOND_ID, "UK", null, null, List.of(), List.of());
+        QuizDto firstQuizDto = new QuizDto(FIRST_ID, "PL", null, null, List.of());
+        QuizDto secondQuizDto = new QuizDto(SECOND_ID, "UK", null, null, List.of());
         ArrayList<QuizDto> quizzesDtos = new ArrayList<>();
         quizzesDtos.add(firstQuizDto);
         quizzesDtos.add(secondQuizDto);
@@ -89,7 +89,7 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn200IfQuizIsFoundByIdCorrectly() throws Exception {
         // given
-        QuizDto firstQuizDto = new QuizDto(FIRST_ID, "PL", null, null, List.of(), List.of());
+        QuizDto firstQuizDto = new QuizDto(FIRST_ID, "PL", null, null, List.of());
         given(quizService.getQuiz(FIRST_ID)).willReturn(firstQuizDto);
 
         // when
@@ -119,7 +119,7 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn201WhenQuizCreatedCorrectly() throws Exception {
         // given
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, List.of(), List.of());
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, List.of());
         String dtoAsString = objectMapper.writeValueAsString(exemplaryQuizRequestDto);
 
         // when
@@ -135,7 +135,7 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn400WhenQuizCreationFails() throws Exception {
         // given
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, List.of(), List.of());
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, List.of());
         String dtoAsString = objectMapper.writeValueAsString(exemplaryQuizRequestDto);
 
         given(quizService.createQuiz(exemplaryQuizRequestDto)).willThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quiz creation failed"));
@@ -152,8 +152,8 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn200WhenQuizUpdatedCorrectly() throws Exception {
         // given
-        QuizDto quizDto = new QuizDto(FIRST_ID, "Beginner", null, null, null, null);
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, null, null);
+        QuizDto quizDto = new QuizDto(FIRST_ID, "Beginner", null, null, null);
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, null);
 
         // when
         MockHttpServletRequestBuilder content = put("/api/v1/quizzes/{quizId}", FIRST_ID)
@@ -170,7 +170,7 @@ class QuizApiControllerTest {
     @Test
     void shouldReturn404WhenQuizUpdateFails() throws Exception {
         // given
-        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, null, null);
+        QuizRequestDto exemplaryQuizRequestDto = new QuizRequestDto("Master", null, null, null);
 
         given(quizService.updateQuiz(eq(FIRST_ID), any(QuizRequestDto.class)))
                 .willThrow(new EntityNotFoundException("Quiz not found"));
