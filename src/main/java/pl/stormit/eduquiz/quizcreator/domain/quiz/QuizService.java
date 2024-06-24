@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDtoMapper;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizIndexDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Validated
 @RequiredArgsConstructor
@@ -34,9 +32,9 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuizIndexDto> getQuizzesByCategoryId(@NotNull @PathVariable("category-id") UUID categoryId) {
+    public List<QuizDto> getQuizzesByCategoryId(@NotNull @PathVariable("category-id") UUID categoryId) {
         List<Quiz> foundQuizzes = quizRepository.getAllByCategoryId(categoryId);
-        return foundQuizzes.stream().map(quizMapper::mapEntityToQuizIndexDto).collect(Collectors.toList());
+        return quizMapper.mapQuizListOfEntityToQuizDtoList(foundQuizzes);
     }
 
     @Transactional(readOnly = true)
