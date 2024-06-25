@@ -132,7 +132,7 @@ class QuizStatisticFacadeImpIntegrationTest {
     @Test
     void shouldReturnListWithThreeNewestQuizzes() {
         // given
-        QuizRequestDto quizRequestDto = new QuizRequestDto("name", null, null, null, null);
+        QuizRequestDto quizRequestDto = new QuizRequestDto("name", null, null, null);
         quizService.createQuiz(quizRequestDto);
         quizService.createQuiz(quizRequestDto);
         quizService.createQuiz(quizRequestDto);

@@ -14,8 +14,7 @@ public class SecurityConfig {
 
     private static final String[] AUTHENTICATED_LIST = {
             "/quizzes/**",
-            "/quizManagement/**",
-            "/categoryManagement"
+            "/quizManagement/**"
     };
 
     @Bean

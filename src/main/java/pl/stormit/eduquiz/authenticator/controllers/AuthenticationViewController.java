@@ -22,7 +22,7 @@ public class AuthenticationViewController {
 
     @GetMapping
     public String registerUser(final Model model) {
-        UserRequestDto userRequestDto = new UserRequestDto(null, null, null, null, null, null, null);
+        UserRequestDto userRequestDto = new UserRequestDto(null, null, null, null, null, null);
 
         model.addAttribute("userRequestDto", userRequestDto);
 
@@ -57,7 +57,7 @@ public class AuthenticationViewController {
         userService.createUser(userRequestDto);
 
         model.addAttribute("userRequestDto", new UserRequestDto(null,
-                null, null, null, null, null, null));
+                null, null, null, null, null));
         model.addAttribute("message", "User was successfully registered!");
 
         return "register";

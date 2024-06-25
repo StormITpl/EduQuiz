@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.stormit.eduquiz.game.domain.entity.Game;
 import pl.stormit.eduquiz.game.domain.repository.GameRepository;
-import pl.stormit.eduquiz.game.dto.*;
+import pl.stormit.eduquiz.game.dto.GameDto;
+import pl.stormit.eduquiz.game.dto.GameIdDto;
+import pl.stormit.eduquiz.game.dto.GameIdMapper;
 import pl.stormit.eduquiz.game.service.GameService;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.answer.AnswerService;
@@ -24,7 +26,9 @@ import pl.stormit.eduquiz.result.domain.repository.ResultRepository;
 import pl.stormit.eduquiz.result.dto.ResultDto;
 import pl.stormit.eduquiz.result.service.ResultService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -48,8 +52,6 @@ public class IndexViewController {
     public String indexView(Model model) {
 
         model.addAttribute("categories", categoryService.getCategories());
-        model.addAttribute("quizzes", quizService.getQuizzes());
-
         return "index";
     }
 

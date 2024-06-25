@@ -62,7 +62,7 @@ class PlayGameIntegrationTest {
         quiz.setName("First quiz");
         Quiz quizSaved = quizRepository.save(quiz);
         UUID quizId = quizSaved.getId();
-        QuizDto quizDto = new QuizDto(quizId, "First quiz", null, null, List.of(), List.of());
+        QuizDto quizDto = new QuizDto(quizId, "First quiz", null, null, List.of());
 
         // when
         HttpEntity<QuizDto> entity = new HttpEntity<>(quizDto);
@@ -84,7 +84,7 @@ class PlayGameIntegrationTest {
         quiz.setName("First quiz");
         Quiz quizSaved = quizRepository.save(quiz);
         UUID quizId = quizSaved.getId();
-        QuizDto quizDto = new QuizDto(quizId, "First quiz", null, null, List.of(), List.of());
+        QuizDto quizDto = new QuizDto(quizId, "First quiz", null, null, List.of());
 
         MockHttpSession session = new MockHttpSession();
         String sessionId = session.getId();
