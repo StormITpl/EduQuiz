@@ -16,7 +16,6 @@ public record UserRequestDto(@NotBlank(message = "Nickname must not be blank")
                              @Email(message = "Invalid email address")
                              String email,
 
-                             @NotBlank(message = "Password must not be blank")
                              @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%*&()-+=^])(?=\\S+$).{8,20}$",
                                      message = "<ul><li>Password must not be blank</li>" +
                                              "<li>It must have at least 8 characters and at most 20 characters</li>" +
