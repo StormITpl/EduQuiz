@@ -89,6 +89,7 @@
 
 <div class="container">
     <header th:insert="~{fragments/fragments :: header}" class="blog-header lh-1 py-3"></header>
+
 <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center">
         <h3 class="text-success" th:if="${message != null}" th:text="${message}"></h3>
@@ -130,7 +131,6 @@
         </form>
     </div>
 </div>
-
     <footer th:insert="~{fragments/fragments :: footer}"></footer>
 </div>
 

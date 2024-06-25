@@ -132,7 +132,6 @@ class UserServiceTest {
                 "Password123!",
                 null,
                 null,
-                null,
                 null);
 
         // when
@@ -142,7 +141,6 @@ class UserServiceTest {
         assertThat(createdUserDto.nickname()).isEqualTo(userRequestDto.nickname());
         assertThat(createdUserDto.email()).isEqualTo(userRequestDto.email());
         assertTrue(encoder.matches(userRequestDto.password(), createdUserDto.password()));
-        assertThat(createdUserDto.quizzes()).isNull();
     }
 
     @Test
@@ -161,8 +159,7 @@ class UserServiceTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                quizzesList);
+                null);
 
         // when
         UserDto updatedUserDto = userService.updateUser(firstId, userRequestDto);
@@ -172,7 +169,6 @@ class UserServiceTest {
         assertThat(updatedUserDto.email()).isEqualTo("gniewosz@gmail.com");
         assertTrue(encoder.matches(userRequestDto.password(), updatedUserDto.password()));
         assertThat(updatedUserDto.id()).isEqualTo(firstId);
-        assertThat(updatedUserDto.quizzes()).isEqualTo(quizzesList);
     }
 
 

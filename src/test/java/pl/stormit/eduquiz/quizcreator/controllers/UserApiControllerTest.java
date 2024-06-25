@@ -20,7 +20,6 @@ import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.dto.UserRequestDto;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -29,14 +28,16 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles({"test"})
 @SpringBootTest
@@ -68,8 +69,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         UserDto secondDtoUser = new UserDto(
                 SECOND_ID,
@@ -78,8 +78,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         UserDto thirdDtoUser = new UserDto(
                 THIRD_ID,
                 "Dajmiech",
@@ -87,8 +86,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         List<UserDto> expectedDtoUsers = Arrays.asList(firstDtoUser, secondDtoUser, thirdDtoUser);
         given(userService.getUsers()).willReturn((expectedDtoUsers));
 
@@ -124,8 +122,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         String userUrl = "/api/v1/users/" + expectedDtoUser.id();
 
         // when
@@ -161,8 +158,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         // when
         MockHttpServletRequestBuilder content = post("/api/v1/users")
@@ -183,8 +179,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of()
+                null
         );
 
         given(userService.createUser(createUserRequest))
@@ -210,16 +205,14 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
         UserRequestDto requestDto = new UserRequestDto(
                 "Dajmiech",
                 "dajmiech@gmail.com",
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of());
+                null);
 
         // then
         MockHttpServletRequestBuilder content = put("/api/v1/users/{userId}", FIRST_ID)
@@ -242,8 +235,7 @@ class UserApiControllerTest {
                 "Password123!",
                 null,
                 null,
-                null,
-                List.of()
+                null
         );
 
         given(userService.updateUser(FIRST_ID, requestDto))

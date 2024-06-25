@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -142,7 +142,6 @@ class UserStatisticFacadeImplTest {
                 PASSWORD,
                 Status.VERIFIED,
                 Role.ROLE_USER,
-                CREATED_AT,
-                null);
+                CREATED_AT);
     }
 }
