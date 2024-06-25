@@ -35,7 +35,7 @@ public class Question {
     @Size(min = 5, max = 255, message = "Content must be between 5 and 255 characters")
     private String content;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)

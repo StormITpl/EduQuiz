@@ -12,8 +12,9 @@ import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
 import pl.stormit.eduquiz.quizcreator.domain.category.dto.CategoryDto;
+import pl.stormit.eduquiz.quizcreator.domain.question.Question;
+import pl.stormit.eduquiz.quizcreator.domain.quiz.Quiz;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
-import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizDto;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 
 import java.util.List;
@@ -30,10 +31,14 @@ public class QuizManagementViewController {
     @GetMapping
     public String quizManagementView(Model model) {
         List<CategoryDto> categories = categoryService.getCategories();
-        model.addAttribute("categories", categories);
+        Quiz quiz = new Quiz();
+        Question question = new Question();
+        List<Answer> answers = List.of(new Answer(), new Answer(), new Answer(), new Answer());
 
-        List<QuizDto> quizzes = quizService.getQuizzes();
-        model.addAttribute("quizzes", quizzes);
+        model.addAttribute("categories", categories);
+        model.addAttribute("quizzes", quiz);
+        model.addAttribute("question", question);
+        model.addAttribute("answers", answers);
 
         return "quizManagement";
     }
