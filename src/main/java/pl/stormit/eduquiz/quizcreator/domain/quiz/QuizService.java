@@ -52,6 +52,7 @@ public class QuizService {
         quiz.setCategory(quizRequest.category());
         quiz.setUser(quizRequest.user());
         quiz.setQuestions(quizRequest.questions());
+        quiz.getQuestions().forEach(question -> question.setQuiz(quiz));
         return quizMapper.mapQuizEntityToQuizDto(quizRepository.save(quiz));
     }
 

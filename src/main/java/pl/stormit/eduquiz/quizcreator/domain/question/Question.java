@@ -1,5 +1,6 @@
 package pl.stormit.eduquiz.quizcreator.domain.question;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Question {
     @Size(min = 5, max = 255, message = "Content must be between 5 and 255 characters")
     private String content;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Answer> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)
