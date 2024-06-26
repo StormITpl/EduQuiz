@@ -37,56 +37,58 @@
             text-align: center;
         }
 
-        .options label {
-            display: block;
-            margin-bottom: 10px;
-            position: relative;
-            padding-left: 35px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        /*.options label {*/
+        /*    display: block;*/
+        /*    margin-bottom: 10px;*/
+        /*    position: relative;*/
+        /*    padding-left: 35px;*/
+        /*    cursor: pointer;*/
+        /*    font-size: 16px;*/
+        /*}*/
 
-        .options input {
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: pointer;
-        }
+        /*.options input {*/
+        /*    opacity: 0;*/
+        /*    position: absolute;*/
+        /*    height: 20px;*/
+        /*    width: 20px;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    cursor: pointer;*/
+        /*}*/
 
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: #eee;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-        }
+        /*.checkmark {*/
+        /*    position: absolute;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    height: 20px;*/
+        /*    width: 20px;*/
+        /*    background-color: #eee;*/
+        /*    border: 2px solid #ccc;*/
+        /*    border-radius: 50%;*/
+        /*}*/
 
-        .options input:checked ~ .checkmark {
-            background-color: #21bf73;
-            border-color: #21bf73;
-        }
+        /*.options input:checked ~ .checkmark {*/
+        /*    background-color: #21bf73;*/
+        /*    border-color: #21bf73;*/
+        /*}*/
 
-        .options .checkmark:after {
-            content: "";
-            width: 10px;
-            height: 10px;
-            display: block;
-            background: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            transition: 300ms ease-in-out 0s;
-        }
+        /*.options .checkmark:after {*/
+        /*    content: "";*/
+        /*    width: 50px;*/
+        /*    height: 50px;*/
+        /*    display: block;*/
+        /*    background: white;*/
+        /*    position: absolute;*/
+        /*    top: 50%;*/
+        /*    left: 50%;*/
+        /*    border-radius: 50%;*/
+        /*    transform: translate(-50%, -50%) scale(0);*/
+        /*    transition: 300ms ease-in-out 0s;*/
+        /*}*/
 
-        .options input[type="radio"]:checked ~ .checkmark:after {
-            transform: translate(-50%, -50%) scale(1);
-        }
+        /*.options input[type="radio"]:checked ~ .checkmark:after {*/
+        /*    transform: translate(-50%, -50%) scale(1);*/
+        /*}*/
 
         .btn-primary {
             background-color: #555;
@@ -119,40 +121,40 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="col-md-12">
-        <label for="category" class="form-label">Category</label>
-        <select class="form-select" id="category" required>
-            <option value="">Choose...</option>
-            <option th:each="category : ${categories}" th:value="${category.id}"
-                    th:text="${category.name}"></option>
-        </select>
-        <div class="invalid-feedback">
-            Please select a valid category.
-        </div>
-    </div>
-    <div class="col-md-12">
-        <label for="quizName" class="form-label">Quiz name</label>
-        <input type="text" class="form-control" id="quizName" placeholder="" value="" required>
-        <div class="invalid-feedback">
-            Valid quiz name is required.
-        </div>
-    </div>
-    <div class="question">
-        <div th:text="${quizzes.name}"></div>
-    </div>
-    <div class="options">
-        <form th:action="@{/quiz/{id}/{questionIndex}(id=${quizzes.id}, questionIndex=${questionIndex})}" method="post">
-            <input type="hidden" name="questionIndex" th:value="${questionIndex}"/>
-            <input type="hidden" name="gameDtoId" th:value="${gameDtoId}"/>
-            <div class="row" th:each="answer : ${answers}">
-                <label class="col-3">
-                    <input type="radio" name="radio" th:value="${answer.getId()}"/>
-                    <span class="checkmark"></span>
-                        <label type="text" name="answer">
-                            <input type="text" th:text="${answer.content}"/>
-                        </label>
-                </label>
+<div>
+    <div>
+        <form th:action="@{/quizManagement/addQuestion}" method="post">
+            <div class="col-md-5">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="categoryId" required>
+                    <option value="">Choose...</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}"
+                            th:text="${category.name}"></option>
+                </select>
+            </div>
+            <div class="col-md-7">
+                <label for="quizName" class="form-label">Quiz name</label>
+                <input type="text" class="form-control" id="quizName" name="quizName" th:value="${quizName}" required/>
+            </div>
+            <div class="col-md-7">
+                <label for="questionName" class="form-label">Qestion name</label>
+                <input type="text" class="form-control" id="questionName" placeholder="" value="" required>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="answer1" id="answer1">
+                <input type="text" class="form-control" aria-label="Text input with radio button">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="answer2" id="answer2">
+                <input type="text" class="form-control" aria-label="Text input with radio button">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="answer3" id="answer3">
+                <input type="text" class="form-control" aria-label="Text input with radio button">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="answer4" id="answer4">
+                <input type="text" class="form-control" aria-label="Text input with radio button">
             </div>
             <button class="btn-success" type="submit">Next</button>
         </form>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
@@ -31,16 +32,21 @@ public class QuizManagementViewController {
     @GetMapping
     public String quizManagementView(Model model) {
         List<CategoryDto> categories = categoryService.getCategories();
-        Quiz quiz = new Quiz();
-        Question question = new Question();
-        List<Answer> answers = List.of(new Answer(), new Answer(), new Answer(), new Answer());
 
         model.addAttribute("categories", categories);
-        model.addAttribute("quizzes", quiz);
-        model.addAttribute("question", question);
-        model.addAttribute("answers", answers);
 
         return "quizManagement";
+    }
+
+    @PostMapping("addQuestion")
+    public String addQuestion(Model model,
+                              @RequestParam("quizName") String quizName,
+                              @RequestParam("categorySelected") Category category,
+                              RedirectAttributes ra) {
+        ra.addFlashAttribute("quizName", quizName);
+        ra.addFlashAttribute("categorySelected", category);
+
+        return "redirect:/quizManagement";
     }
 
     @PostMapping("/createQuiz")
