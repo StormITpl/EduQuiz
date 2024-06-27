@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.stormit.eduquiz.quizcreator.domain.answer.Answer;
 import pl.stormit.eduquiz.quizcreator.domain.category.Category;
 import pl.stormit.eduquiz.quizcreator.domain.category.CategoryService;
@@ -34,7 +35,7 @@ public class QuizManagementViewController {
 
     private final QuizService quizService;
     private final CategoryService categoryService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping
     public String quizManagementView(Model model, HttpSession httpSession) {
@@ -77,30 +78,24 @@ public class QuizManagementViewController {
         Answer answer4 = new Answer();
         answer4.setContent(answer4Content);
 
+        model.addAttribute("categories", category);
+        model.addAttribute("categoryId", category);
+        model.addAttribute("quizName", quizName);
+
         switch (correctAnswer) {
-            case 0:
-                model.addAttribute("message", "Wybierz, która odpowiedź jest poprawna");
+            case 0 -> {
+                model.addAttribute("message", "Please select correct answer:");
                 model.addAttribute("questionContent", questionContent);
                 model.addAttribute("answer1Content", answer1Content);
                 model.addAttribute("answer2Content", answer2Content);
                 model.addAttribute("answer3Content", answer3Content);
                 model.addAttribute("answer4Content", answer4Content);
-                model.addAttribute("categories", category);
-                model.addAttribute("categoryId", category);
-                model.addAttribute("quizName", quizName);
                 return "quizManagement";
-            case 1:
-                answer1.setCorrect(true);
-                break;
-            case 2:
-                answer2.setCorrect(true);
-                break;
-            case 3:
-                answer3.setCorrect(true);
-                break;
-            case 4:
-                answer4.setCorrect(true);
-                break;
+            }
+            case 1 -> answer1.setCorrect(true);
+            case 2 -> answer2.setCorrect(true);
+            case 3 -> answer3.setCorrect(true);
+            case 4 -> answer4.setCorrect(true);
         }
 
         Queue<Question> questions = (Queue<Question>) httpSession.getAttribute("questionQueue");
@@ -110,9 +105,6 @@ public class QuizManagementViewController {
         questions.add(question);
 
         httpSession.setAttribute("questionQueue", questions);
-        model.addAttribute("categories", category);
-        model.addAttribute("categoryId", category);
-        model.addAttribute("quizName", quizName);
 
         return "quizManagement";
     }
@@ -120,7 +112,7 @@ public class QuizManagementViewController {
     @PostMapping("/createQuiz")
     public String createQuiz(@RequestParam("quizName") String quizName,
                              @ModelAttribute("categoryId") Category category,
-                             HttpSession httpSession) {
+                             HttpSession httpSession, RedirectAttributes rs) {
 
         List<Question> questions = (List<Question>) httpSession.getAttribute("questionQueue");
 
@@ -130,6 +122,7 @@ public class QuizManagementViewController {
         QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, user, questions);
 
         quizService.createQuiz(quizRequest);
+        rs.addFlashAttribute("success", "Quiz was successfully added");
 
         return "redirect:/quizManagement";
     }
