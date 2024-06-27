@@ -68,6 +68,7 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Security");
+        quiz.setQuestions(Collections.emptyList());
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
 
@@ -94,6 +95,7 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Security");
+        quiz.setQuestions(Collections.emptyList());
         QuizRequestDto quizRequestDto = new QuizRequestDto(
                 quiz.getName(),
                 quiz.getCategory(),
@@ -113,6 +115,7 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Security");
+        quiz.setQuestions(Collections.emptyList());
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
         QuizRequestDto quizToUpdate = new QuizRequestDto("Security-Pro",
@@ -126,7 +129,7 @@ class QuizServiceTest {
         // then
         assertEquals(updatedQuiz.name(), "Security-Pro");
         assertNull(updatedQuiz.category());
-        assertNull(updatedQuiz.questions());
+        assertEquals(updatedQuiz.questions().size(), 0);
     }
 
     @Test
@@ -151,6 +154,7 @@ class QuizServiceTest {
         // given
         Quiz quiz = new Quiz();
         quiz.setName("Security");
+        quiz.setQuestions(Collections.emptyList());
         QuizRequestDto quizRequestDto = quizRequestMapper.mapQuizEntityToQuizRequestDto(quiz);
         QuizDto createdQuiz = quizService.createQuiz(quizRequestDto);
 
