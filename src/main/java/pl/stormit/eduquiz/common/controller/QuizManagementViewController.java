@@ -44,8 +44,6 @@ public class QuizManagementViewController {
 
         model.addAttribute("categories", categories);
 
-        model.addAttribute("questin", new Question());
-
         return "quizManagement";
     }
 
@@ -77,7 +75,6 @@ public class QuizManagementViewController {
         answer4.setContent(answer4Content);
 
         model.addAttribute("categories", category);
-        model.addAttribute("categoryId", category);
         model.addAttribute("quizName", quizName);
 
         switch (correctAnswer) {
@@ -102,6 +99,7 @@ public class QuizManagementViewController {
         question.getAnswers().forEach(answer -> answer.setQuestion(question));
         questions.add(question);
 
+        model.addAttribute("categoryId", category);
         httpSession.setAttribute("questionQueue", questions);
 
         return "quizManagement";

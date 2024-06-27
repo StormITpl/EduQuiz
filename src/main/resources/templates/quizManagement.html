@@ -1,22 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <script src="../assets/js/color-modes.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
+    <title>Add quiz</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="/css/blog.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-image: linear-gradient(to bottom, #f2f2f2, #e0e0e0, #b8c6db, #8da3c4);
@@ -26,10 +17,12 @@
             align-items: center;
             height: 100vh;
         }
+
         label {
             padding-top: 20px;
         }
-        .input-group{
+
+        .input-group {
             padding: 10px 0px;
         }
     </style>
@@ -39,62 +32,75 @@
     <div class="row justify-content-center">
         <div class="card col-xl-10 shadow-lg">
             <div class="card-body">
-                <form th:action="@{/quizManagement/addQuestion}" method="post">
-                <div>
-                    <label for="category" class="form-label">Category:</label>
-                    <select class="form-select" id="category" name="categoryId">
-                        <option th:each="category : ${categories}" th:value="${category.id}"
-                                th:text="${category.name}"></option>
-                    </select>
-                </div>
-                <div>
-                    <label for="quizName" class="form-label">Quiz name:</label>
-                    <input type="text" class="form-control" id="quizName" name="quizName" th:value="${quizName}" required/>
-                </div>
-                <div>
-                    <label for="questionContent" class="form-label">Question name:</label>
-                    <input th:value="${questionContent}" type="text" class="form-control" id="questionContent" name="questionContent" placeholder="" value="" required>
-                </div>
-
-                <span th:if="${message}" class="btn btn-danger" th:text="${message}"></span>
-
-                <div class="input-group">
-                    <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="1" id="answer1" aria-label="Radio button for following text input">
+                <form th:action="@{/quizManagement/addQuestion}" method="post" class="mb-3">
+                    <div>
+                        <label for="category" class="form-label">Category:</label>
+                        <select class="form-select" id="category" name="categoryId">
+                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}"></option>
+                        </select>
                     </div>
-                    <input th:value="${answer1Content}" type="text" name="answer1Content" class="form-control" aria-label="Text input with radio button" required>
-                </div>
+                    <div>
+                        <label for="quizName" class="form-label">Quiz name:</label>
+                        <input type="text" class="form-control" id="quizName" name="quizName" th:value="${quizName}"
+                               required/>
+                    </div>
+                    <div>
+                        <label for="questionContent" class="form-label">Question name:</label>
+                        <input th:value="${questionContent}" type="text" class="form-control" id="questionContent"
+                               name="questionContent" placeholder="" value="" required>
+                    </div>
 
-                <div class="input-group">
-                    <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="2" id="answer2" aria-label="Radio button for following text input">
-                    </div>
-                    <input th:value="${answer2Content}" type="text" name="answer2Content" class="form-control" aria-label="Text input with radio button" required>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="3" id="answer3" aria-label="Radio button for following text input">
-                    </div>
-                    <input th:value="${answer3Content}" type="text" name="answer3Content" class="form-control" aria-label="Text input with radio button" required>
-                </div>
+                    <span th:if="${message}" class="btn btn-danger" th:text="${message}"></span>
 
-                <div class="input-group">
-                    <div class="input-group-text">
-                        <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="4" id="answer4" aria-label="Radio button for following text input">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="1"
+                                   id="answer1" aria-label="Radio button for following text input">
+                        </div>
+                        <input th:value="${answer1Content}" type="text" name="answer1Content" class="form-control"
+                               aria-label="Text input with radio button" required>
                     </div>
-                    <input th:value="${answer4Content}" type="text" name="answer4Content" class="form-control" aria-label="Text input with radio button" required>
-                </div>
-                <button class="btn btn-success p-2" type="submit">Next</button>
-            </form>
-                <form th:if="${categoryId}" th:action="@{/quizManagement/createQuiz}" method="POST" th:object="${categoryId}">
+
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="2"
+                                   id="answer2" aria-label="Radio button for following text input">
+                        </div>
+                        <input th:value="${answer2Content}" type="text" name="answer2Content" class="form-control"
+                               aria-label="Text input with radio button" required>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="3"
+                                   id="answer3" aria-label="Radio button for following text input">
+                        </div>
+                        <input th:value="${answer3Content}" type="text" name="answer3Content" class="form-control"
+                               aria-label="Text input with radio button" required>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="radio" name="correctAnswer" th:value="4"
+                                   id="answer4" aria-label="Radio button for following text input">
+                        </div>
+                        <input th:value="${answer4Content}" type="text" name="answer4Content" class="form-control"
+                               aria-label="Text input with radio button" required>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-success me-2" type="submit">Next</button>
+                    </div>
+                </form>
+                <form th:if="${categoryId}" th:action="@{/quizManagement/createQuiz}" method="POST"
+                      th:object="${categoryId}" class="d-grid gap-5">
                     <input type="hidden" name="quizName" th:value="${quizName}"/>
                     <input type="hidden" name="categoryId" th:value="${categoryId.id}"/>
-                    <button class="btn btn-warning p-2" type="submit">Finish</button>
+                    <button class="btn btn-danger" type="submit">Finish</button>
                 </form>
-            </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>
