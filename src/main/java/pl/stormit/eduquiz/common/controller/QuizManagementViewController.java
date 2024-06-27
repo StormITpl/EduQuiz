@@ -2,8 +2,6 @@ package pl.stormit.eduquiz.common.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +19,7 @@ import pl.stormit.eduquiz.quizcreator.domain.question.Question;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.QuizService;
 import pl.stormit.eduquiz.quizcreator.domain.quiz.dto.QuizRequestDto;
 import pl.stormit.eduquiz.quizcreator.domain.user.User;
-import pl.stormit.eduquiz.quizcreator.domain.user.UserRepository;
+import pl.stormit.eduquiz.quizcreator.domain.user.UserService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -116,15 +114,14 @@ public class QuizManagementViewController {
 
         List<Question> questions = (List<Question>) httpSession.getAttribute("questionQueue");
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByNickname(authentication.getName()).orElse(null);
+        User user = userService.getUserFromContext();
 
         QuizRequestDto quizRequest = new QuizRequestDto(quizName, category, user, questions);
 
         quizService.createQuiz(quizRequest);
         rs.addFlashAttribute("success", "Quiz was successfully added");
 
-        return "redirect:/quizManagement";
+        return "redirect:/";
     }
 
     @PostMapping("/deleteQuiz/{quizId}")

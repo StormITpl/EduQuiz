@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -60,6 +62,12 @@ public class UserService {
             throw new EntityNotFoundException("User by id: " + userId + " does not exist.");
         });
         return userMapper.mapUserEntityToUserDto(user);
+    }
+
+    public User getUserFromContext(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByNickname(authentication.getName()).orElse(null);
+        return user;
     }
 
     @Transactional
