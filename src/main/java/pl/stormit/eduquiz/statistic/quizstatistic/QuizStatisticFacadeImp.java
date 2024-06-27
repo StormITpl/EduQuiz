@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-public class QuizStatisticFacadeImp implements QuizStatisticFacade{
+public class QuizStatisticFacadeImp implements QuizStatisticFacade {
 
     private final QuizService quizService;
 
@@ -24,8 +24,13 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     }
 
     @Override
-    public int getLowestScore() {return statisticService.getLowestScore();}
-    public int getHighestScore() {return statisticService.getHighestScore();}
+    public int getLowestScore() {
+        return statisticService.getLowestScore();
+    }
+
+    public int getHighestScore() {
+        return statisticService.getHighestScore();
+    }
 
     @Override
     public QuizStatisticDto addStatisticToDB(Game game, int score) {
@@ -35,6 +40,11 @@ public class QuizStatisticFacadeImp implements QuizStatisticFacade{
     @Override
     public Map<String, Long> getDurationForEachQuiz(boolean best) {
         return statisticService.getDurationForEachQuiz(best);
+    }
+
+    @Override
+    public Map<String, Long> getPopularQuizInLastSevenDays() {
+        return statisticService.getPopularQuizInLastSevenDays();
     }
 
 }
