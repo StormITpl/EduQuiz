@@ -10,4 +10,8 @@ public interface UserStatisticFacade {
     long getNewUsersCountLast30Days();
 
     Instant lastLoginByUser(UUID userId);
+
+    int getNumberOfLogins(UUID userId);
+
+    void incrementLoginCount(String username);
 }
